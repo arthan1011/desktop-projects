@@ -22,7 +22,7 @@ import org.arthan.desktop.reversi.model.ReversiModel;
  */
 public class UIBuilder {
 
-    private StackPane createScore(OWNER owner) {
+    public StackPane createScore(OWNER owner) {
         Region background;
         Ellipse piece = new Ellipse(32, 20);
         piece.setFill(owner.getColor());
@@ -32,7 +32,7 @@ public class UIBuilder {
         piece.setEffect(pieceEffect);
 
         Text score = new Text();
-        score.setFont(Font.font(null, FontWeight.BOLD, 100));
+        score.setFont(Font.font("arial", FontWeight.BOLD, 100));
         score.setFill(owner.getColor());
 
         Text remaining = new Text();
