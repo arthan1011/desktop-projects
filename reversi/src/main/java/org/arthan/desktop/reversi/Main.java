@@ -7,6 +7,6 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main(String[] args) {
-        Application.launch(StackApp.class);
+        Application.launch(EdgesApp.class);
     }
 }
