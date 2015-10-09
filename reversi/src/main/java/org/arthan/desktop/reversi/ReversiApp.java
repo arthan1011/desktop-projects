@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.arthan.desktop.reversi.model.OWNER;
 import org.arthan.desktop.reversi.model.ReversiModel;
+import org.arthan.desktop.reversi.ui.UIBuilder;
 
 /**
  * Created by Arthur Shamsiev on 07.10.15.
@@ -38,7 +39,7 @@ public class ReversiApp extends Application {
     private Node createBackground() {
         Region answer = new Region();
         answer.setStyle("-fx-background-color: radial-gradient(radius 100%, white, gray)");
-        return answer;
+        return UIBuilder.getReversiSquare();
     }
 
     private Node createTitle() {
