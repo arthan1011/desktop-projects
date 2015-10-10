@@ -59,6 +59,16 @@ public class ReversiModel {
                 .otherwise(emptyCellCount.divide(2));
     }
 
+    public void restart() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                board[i][j].setValue(OWNER.NONE);
+            }
+        }
+        initBoard();
+        turn.setValue(OWNER.BLACK);
+    }
+
     private static class ReversiModelHolder {
         private static final ReversiModel INSTANCE = new ReversiModel();
     }
