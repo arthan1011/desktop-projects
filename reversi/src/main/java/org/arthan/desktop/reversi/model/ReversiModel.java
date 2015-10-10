@@ -1,10 +1,13 @@
 package org.arthan.desktop.reversi.model;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.NumberExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableBooleanValue;
 
 /**
  * Created by ashamsiev on 07.10.2015
@@ -36,8 +39,8 @@ public class ReversiModel {
 
         board[center_1][center_1].setValue(OWNER.WHITE);
         board[center_1][center_2].setValue(OWNER.BLACK);
-        board[center_2][center_1].setValue(OWNER.WHITE);
-        board[center_2][center_2].setValue(OWNER.BLACK);
+        board[center_2][center_1].setValue(OWNER.BLACK);
+        board[center_2][center_2].setValue(OWNER.WHITE);
     }
 
     public NumberExpression getScore(OWNER owner) {
@@ -57,6 +60,49 @@ public class ReversiModel {
         return Bindings.when(turn.isEqualTo(owner))
                 .then(emptyCellCount.add(1).divide(2))
                 .otherwise(emptyCellCount.divide(2));
+    }
+
+    public BooleanBinding legalMove(int x, int y) {
+        return board[x][y].isEqualTo(OWNER.NONE).and(
+                    canFlip(x, y, 1, 1).or(
+                    canFlip(x, y, 1, -1).or(
+                    canFlip(x, y, -1, 1).or(
+                    canFlip(x, y, -1, -1).or(
+                    canFlip(x, y, 1, 0).or(
+                    canFlip(x, y, 0, -1).or(
+                    canFlip(x, y, 0, 1).or(
+                    canFlip(x, y, -1, 0))))))))
+                );
+    }
+
+    private BooleanBinding canFlip(final int xCoord, final int yCoord, final int dirX, final int dirY) {
+        return new BooleanBinding() {
+            @Override
+            protected boolean computeValue() {
+                int x = xCoord + dirX;
+                int y = yCoord + dirY;
+                if (!(x >=0 && x < BOARD_SIZE && y >=0 && y < BOARD_SIZE)) {
+                    return false;
+                }
+
+
+                boolean adjacentCellIsOppositeColor = board[x][y].get() == turn.get().opposite();
+                if (!adjacentCellIsOppositeColor) {
+                    return false;
+                }
+                while (x >=0 && x < BOARD_SIZE && y >=0 && y < BOARD_SIZE) {
+                    x += dirX;
+                    y += dirY;
+                    if (board[x][y].get() == OWNER.NONE) {
+                        return false;
+                    }
+                    if (board[x][y].get() == turn.get()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
     }
 
     public void restart() {

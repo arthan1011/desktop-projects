@@ -62,7 +62,7 @@ public class ReversiApp extends Application {
             for (int j = 0; j < ReversiModel.BOARD_SIZE; j++) {
                 ReversiPiece piece = new ReversiPiece();
                 piece.ownerProperty().bind(model.board[i][j]);
-                board.add(new StackPane(UIBuilder.getReversiSquare(), piece), i, j);
+                board.add(new StackPane(UIBuilder.getReversiSquare(i, j), piece), i, j);
             }
         }
         return board;
@@ -71,14 +71,6 @@ public class ReversiApp extends Application {
     private Node createBackground() {
         Region answer = new Region();
         answer.setStyle("-fx-background-color: radial-gradient(radius 100%, white, gray)");
-
-
-        StackPane white = new StackPane(UIBuilder.getReversiSquare(), new ReversiPiece(OWNER.WHITE));
-        StackPane black = new StackPane(UIBuilder.getReversiSquare(), new ReversiPiece(OWNER.BLACK));
-        HBox hBox = new HBox(black, white);
-        hBox.setSnapToPixel(false);
-        HBox.setHgrow(white, Priority.ALWAYS);
-        HBox.setHgrow(black, Priority.ALWAYS);
         return answer;
     }
 

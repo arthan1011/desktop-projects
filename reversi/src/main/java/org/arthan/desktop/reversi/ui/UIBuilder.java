@@ -15,6 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.arthan.desktop.reversi.model.OWNER;
 import org.arthan.desktop.reversi.model.ReversiModel;
+import org.arthan.desktop.reversi.model.ReversiPiece;
 
 /**
  * Created by ashamsiev on 07.10.2015
@@ -22,6 +23,10 @@ import org.arthan.desktop.reversi.model.ReversiModel;
 public class UIBuilder {
     public static Region getReversiSquare() {
         return new ReversiSquare();
+    }
+
+    public static Region getReversiSquare(int x, int y) {
+        return new ReversiSquare(x, y);
     }
 
     private static class ReversiSquare extends Region {
@@ -33,6 +38,14 @@ public class UIBuilder {
 
             Lighting lighting = new Lighting(light);
             setEffect(lighting);
+        }
+
+        public ReversiSquare(int x, int y) {
+            this();
+            styleProperty().bind(Bindings.when(ReversiModel.getInstance().legalMove(x, y))
+                    .then("-fx-background-color: derive(dodgerblue, -60%)")
+                    .otherwise("-fx-background-color: burlywood")
+            );
         }
     }
 }
