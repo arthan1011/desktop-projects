@@ -69,7 +69,7 @@ public class UIBuilder {
 
         public ReversiSquare(int x, int y) {
             this();
-            styleProperty().bind(Bindings.when(ReversiModel.getInstance().legalMove(x, y))
+            styleProperty().bind(Bindings.when(model.legalMove(x, y))
                             .then("-fx-background-color: derive(dodgerblue, -60%)")
                             .otherwise("-fx-background-color: burlywood")
             );
@@ -86,6 +86,12 @@ public class UIBuilder {
                     hightlightTransition.setRate(-1);
                     hightlightTransition.play();
                 }
+            });
+
+            setOnMouseClicked(t -> {
+                model.play(x, y);
+                hightlightTransition.setRate(-1);
+                hightlightTransition.play();
             });
         }
     }

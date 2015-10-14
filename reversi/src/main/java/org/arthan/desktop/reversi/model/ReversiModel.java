@@ -77,6 +77,11 @@ public class ReversiModel {
 
     private BooleanBinding canFlip(final int xCoord, final int yCoord, final int dirX, final int dirY) {
         return new BooleanBinding() {
+
+            {
+                bind(turn);
+            }
+
             @Override
             protected boolean computeValue() {
                 int x = xCoord + dirX;
@@ -90,7 +95,7 @@ public class ReversiModel {
                 if (!adjacentCellIsOppositeColor) {
                     return false;
                 }
-                while (x >=0 && x < BOARD_SIZE && y >=0 && y < BOARD_SIZE) {
+                while (x > 0 && x < BOARD_SIZE-1 && y > 0 && y < BOARD_SIZE-1) {
                     x += dirX;
                     y += dirY;
                     if (board[x][y].get() == OWNER.NONE) {
@@ -113,6 +118,33 @@ public class ReversiModel {
         }
         initBoard();
         turn.setValue(OWNER.BLACK);
+    }
+
+    public void play(int x, int y) {
+        if (legalMove(x, y).get()) {
+            board[x][y].setValue(turn.get());
+            flip(x, y, 1, 1);
+            flip(x, y, 1, -1);
+            flip(x, y, -1, 1);
+            flip(x, y, -1, -1);
+            flip(x, y, 1, 0);
+            flip(x, y, 0, -1);
+            flip(x, y, 0, 1);
+            flip(x, y, -1, 0);
+            turn.setValue(turn.get().opposite());
+        }
+    }
+
+    private void flip(int xCoord, int yCoord, int dirX, int dirY) {
+        if (canFlip(xCoord, yCoord, dirX, dirY).get()) {
+            int x = xCoord + dirX;
+            int y = yCoord + dirY;
+            while (x >=0 && x < BOARD_SIZE && y >=0 && y < BOARD_SIZE && board[x][y].get() != turn.get()) {
+                board[x][y].setValue(turn.get());
+                x += dirX;
+                y += dirY;
+            }
+        }
     }
 
     private static class ReversiModelHolder {
