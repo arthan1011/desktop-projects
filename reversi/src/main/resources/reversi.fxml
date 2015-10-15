@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.arthan.desktop.reversi.controller.ReversiController">
+  <children>
+    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <TilePane fx:id="titlePane" prefTileHeight="40.0" snapToPixel="false" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane snapToPixel="false" style="-fx-background-color: black;">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="JavaFX" StackPane.alignment="CENTER_RIGHT">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reversi" TilePane.alignment="CENTER_RIGHT">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TilePane>
+         </top></BorderPane>
+  </children>
+</AnchorPane>
