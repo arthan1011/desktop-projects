@@ -39,7 +39,7 @@
                         <Text strokeType="OUTSIDE"
                               strokeWidth="0.0"
                               text="Reversi"
-                              TilePane.alignment="CENTER_RIGHT">
+                              TilePane.alignment="CENTER_LEFT">
                             <font>
                                 <Font name="System Bold"
                                       size="18.0"/>
