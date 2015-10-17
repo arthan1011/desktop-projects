@@ -11,5 +11,12 @@
 
     <artifactId>reversi</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.10.Final</version>
+        </dependency>
+    </dependencies>
 
 </project>
