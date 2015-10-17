@@ -1,7 +1,6 @@
 package org.arthan.desktop.reversi.controller;
 
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
@@ -16,7 +15,7 @@ import javafx.scene.text.Text;
 import org.arthan.desktop.reversi.model.OWNER;
 import org.arthan.desktop.reversi.model.ReversiModel;
 import org.arthan.desktop.reversi.model.ReversiPiece;
-import org.arthan.desktop.reversi.ui.UIBuilder;
+import org.arthan.desktop.reversi.model.ReversiSquare;
 
 /**
  * Created by ashamsiev on 15.10.2015
@@ -110,7 +109,7 @@ public class ReversiController {
         for (int i = 0; i < ReversiModel.BOARD_SIZE; i++) {
             for (int j = 0; j < ReversiModel.BOARD_SIZE; j++) {
                 ReversiPiece piece = new ReversiPiece();
-                Region square = UIBuilder.getReversiSquare(i, j);
+                Region square = new ReversiSquare(i, j);
                 piece.ownerProperty().bind(model.board[i][j]);
                 gridPane.add(new StackPane(square, piece), i, j);
             }
