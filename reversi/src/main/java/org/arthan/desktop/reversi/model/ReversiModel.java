@@ -9,8 +9,11 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -20,6 +23,7 @@ import java.io.InputStream;
 public class ReversiModel {
 
     public static final int BOARD_SIZE = 8;
+    public static final int BOARD_INFO_ARRAY_SIZE = BOARD_SIZE * BOARD_SIZE * 3;
 
     public ObjectProperty<OWNER> turn = new SimpleObjectProperty<>(OWNER.BLACK);
     @SuppressWarnings("unchecked")
@@ -39,13 +43,17 @@ public class ReversiModel {
     }
 
     private void refresh() {
-        populate(retrieveBoardInfo());
+        applyGameInfo(retrieveBoardInfo());
     }
 
     private byte[] retrieveBoardInfo() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080/wild/rest/reversi");
         Response response = target.request().get();
+        return readBoardInfo(response);
+    }
+
+    private byte[] readBoardInfo(Response response) {
         InputStream inputStream = response.readEntity(InputStream.class);
 
         byte[] bytes = new byte[response.getLength()];
@@ -57,7 +65,7 @@ public class ReversiModel {
         return bytes;
     }
 
-    public void populate(byte[] boardArray) {
+    public void applyGameInfo(byte[] boardArray) {
         for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
             int x = boardArray[i*3];
             int y = boardArray[i*3 + 1];
@@ -65,6 +73,8 @@ public class ReversiModel {
             OWNER owner = ownerCode == 0 ? OWNER.NONE : ownerCode == 1 ? OWNER.BLACK : OWNER.WHITE;
             board[x][y].setValue(owner);
         }
+        byte turnOwner = boardArray[boardArray.length - 1];
+        turn.setValue(turnOwner == 0 ? OWNER.NONE : turnOwner == 1 ? OWNER.BLACK : OWNER.WHITE);
     }
 
 
@@ -90,15 +100,15 @@ public class ReversiModel {
     public BooleanBinding legalMove(int x, int y) {
 
         return board[x][y].isEqualTo(OWNER.NONE).and(
-                    canFlip(x, y, 1, 1).or(
-                    canFlip(x, y, 1, -1).or(
-                    canFlip(x, y, -1, 1).or(
-                    canFlip(x, y, -1, -1).or(
-                    canFlip(x, y, 1, 0).or(
-                    canFlip(x, y, 0, -1).or(
-                    canFlip(x, y, 0, 1).or(
-                    canFlip(x, y, -1, 0))))))))
-                );
+                canFlip(x, y, 1, 1).or(
+                        canFlip(x, y, 1, -1).or(
+                                canFlip(x, y, -1, 1).or(
+                                        canFlip(x, y, -1, -1).or(
+                                                canFlip(x, y, 1, 0).or(
+                                                        canFlip(x, y, 0, -1).or(
+                                                                canFlip(x, y, 0, 1).or(
+                                                                        canFlip(x, y, -1, 0))))))))
+        );
     }
 
     private BooleanBinding canFlip(final int xCoord, final int yCoord, final int dirX, final int dirY) {
@@ -146,18 +156,23 @@ public class ReversiModel {
     }
 
     public void play(int x, int y) {
+
         if (legalMove(x, y).get()) {
-            board[x][y].setValue(turn.get());
-            flip(x, y, 1, 1);
-            flip(x, y, 1, -1);
-            flip(x, y, -1, 1);
-            flip(x, y, -1, -1);
-            flip(x, y, 1, 0);
-            flip(x, y, 0, -1);
-            flip(x, y, 0, 1);
-            flip(x, y, -1, 0);
-            turn.setValue(turn.get().opposite());
+            sendPlayInfo(x, y);
         }
+    }
+
+    private void sendPlayInfo(int x, int y) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi/play");
+        byte[] bytes = {(byte) x, (byte) y, turn.get().getCode()};
+        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+        Response response = target.request()
+                .post(Entity.entity(in, MediaType.APPLICATION_OCTET_STREAM_TYPE));
+
+        byte[] boardInfo = readBoardInfo(response);
+        applyGameInfo(boardInfo);
+
     }
 
     private void flip(int xCoord, int yCoord, int dirX, int dirY) {
