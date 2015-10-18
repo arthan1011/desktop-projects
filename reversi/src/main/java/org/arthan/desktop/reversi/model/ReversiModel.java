@@ -6,16 +6,8 @@ import javafx.beans.binding.NumberExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.arthan.desktop.reversi.Config;
+import org.arthan.desktop.reversi.service.RemoteService;
 
 /**
  * Created by ashamsiev on 07.10.2015
@@ -43,26 +35,7 @@ public class ReversiModel {
     }
 
     private void refresh() {
-        applyGameInfo(retrieveBoardInfo());
-    }
-
-    private byte[] retrieveBoardInfo() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi");
-        Response response = target.request().get();
-        return readBoardInfo(response);
-    }
-
-    private byte[] readBoardInfo(Response response) {
-        InputStream inputStream = response.readEntity(InputStream.class);
-
-        byte[] bytes = new byte[response.getLength()];
-        try {
-            inputStream.read(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bytes;
+        applyGameInfo(RemoteService.retrieveBoardInfo());
     }
 
     public void applyGameInfo(byte[] boardArray) {
@@ -156,21 +129,14 @@ public class ReversiModel {
     }
 
     public void play(int x, int y) {
-
-        if (legalMove(x, y).get()) {
+        boolean turnAllowed = turn.get() == Config.getPlayerColor();
+        if (legalMove(x, y).get() && turnAllowed) {
             sendPlayInfo(x, y);
         }
     }
 
     private void sendPlayInfo(int x, int y) {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi/play");
-        byte[] bytes = {(byte) x, (byte) y, turn.get().getCode()};
-        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-        Response response = target.request()
-                .post(Entity.entity(in, MediaType.APPLICATION_OCTET_STREAM_TYPE));
-
-        byte[] boardInfo = readBoardInfo(response);
+        byte[] boardInfo = RemoteService.postPlayInfo((byte) x, (byte) y);
         applyGameInfo(boardInfo);
 
     }

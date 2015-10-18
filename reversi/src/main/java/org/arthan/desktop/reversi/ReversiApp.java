@@ -6,6 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.arthan.desktop.reversi.model.ReversiModel;
+import org.arthan.desktop.reversi.service.RemoteService;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Arthur Shamsiev on 07.10.15.

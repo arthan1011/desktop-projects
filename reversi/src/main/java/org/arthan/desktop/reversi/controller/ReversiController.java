@@ -12,10 +12,15 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
+import org.arthan.desktop.reversi.Config;
 import org.arthan.desktop.reversi.model.OWNER;
 import org.arthan.desktop.reversi.model.ReversiModel;
 import org.arthan.desktop.reversi.model.ReversiPiece;
 import org.arthan.desktop.reversi.model.ReversiSquare;
+import org.arthan.desktop.reversi.service.RemoteService;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by ashamsiev on 15.10.2015
@@ -79,15 +84,35 @@ public class ReversiController {
         DropShadow dropShadow = createDropShadow();
         blackEllipse.setEffect(dropShadow);
         blackEllipse.effectProperty().bind(Bindings.when(model.turn.isEqualTo(OWNER.BLACK))
-                .then(dropShadow)
-                .otherwise((DropShadow) null)
+                        .then(dropShadow)
+                        .otherwise((DropShadow) null)
         );
         whiteEllipse.effectProperty().bind(Bindings.when(model.turn.isEqualTo(OWNER.WHITE))
                 .then(dropShadow)
                 .otherwise((DropShadow) null)
         );
 
+        checkUpdates(model);
+    }
 
+    private static void checkUpdates(ReversiModel model) {
+        Timer timer = new Timer(true);
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (model.turn.get() != Config.getPlayerColor()) {
+                            System.out.println("checking for updates..");
+                            byte[] bytes = RemoteService.checkForUpdates();
+                            if (bytes != null) {
+                                model.applyGameInfo(bytes);
+                            }
+                        }
+                    }
+                },
+                0,
+                500
+        );
     }
 
     private DropShadow createDropShadow() {
