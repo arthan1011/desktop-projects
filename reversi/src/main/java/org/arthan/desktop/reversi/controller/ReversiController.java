@@ -1,5 +1,6 @@
 package org.arthan.desktop.reversi.controller;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -101,13 +102,15 @@ public class ReversiController {
                 new TimerTask() {
                     @Override
                     public void run() {
-                        if (model.turn.get() != Config.getPlayerColor()) {
-                            System.out.println("checking for updates..");
-                            byte[] bytes = RemoteService.checkForUpdates();
-                            if (bytes != null) {
-                                model.applyGameInfo(bytes);
+                        Platform.runLater(() -> {
+                            if (model.turn.get() != Config.getPlayerColor()) {
+                                System.out.println("checking for updates..");
+                                byte[] bytes = RemoteService.checkForUpdates();
+                                if (bytes != null) {
+                                    model.applyGameInfo(bytes);
+                                }
                             }
-                        }
+                        });
                     }
                 },
                 0,
@@ -144,6 +147,7 @@ public class ReversiController {
 
     @FXML
     public void restart() {
-        model.restart();
+        byte[] restartInfo = RemoteService.restart();
+        model.applyGameInfo(restartInfo);
     }
 }

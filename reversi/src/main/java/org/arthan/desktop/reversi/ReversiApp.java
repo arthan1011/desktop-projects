@@ -28,5 +28,9 @@ public class ReversiApp extends Application {
         primaryStage.show();
     }
 
+    public static void main(String[] args) {
+        Application.launch();
+    }
+
 
 }

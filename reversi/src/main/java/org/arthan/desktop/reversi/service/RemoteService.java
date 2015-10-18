@@ -1,5 +1,7 @@
 package org.arthan.desktop.reversi.service;
 
+import org.arthan.desktop.reversi.Config;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -16,9 +18,12 @@ import java.io.InputStream;
  * Project - desktop
  */
 public class RemoteService {
+
+    public static final String REST_URL = Config.getRestURL();
+
     public static byte[] checkForUpdates() {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi");
+        WebTarget target = client.target(REST_URL);
         Response response = target.request().get();
         if (response.getStatus() == 200) {
             return readBoardInfo(response);
@@ -29,7 +34,7 @@ public class RemoteService {
 
     public static byte[] postPlayInfo(byte x, byte y) {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi/play");
+        WebTarget target = client.target(REST_URL + "/play");
         byte[] bytes = {x, y};
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         Response response = target.request()
@@ -39,7 +44,7 @@ public class RemoteService {
 
     public static byte[] retrieveBoardInfo() {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/wild/rest/reversi");
+        WebTarget target = client.target(REST_URL);
         Response response = target.request().get();
         return readBoardInfo(response);
     }
@@ -54,5 +59,12 @@ public class RemoteService {
             e.printStackTrace();
         }
         return bytes;
+    }
+
+    public static byte[] restart() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(REST_URL + "/restart");
+        Response response = target.request().get();
+        return readBoardInfo(response);
     }
 }
