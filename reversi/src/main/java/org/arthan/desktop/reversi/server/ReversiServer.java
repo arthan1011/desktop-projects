@@ -10,7 +10,7 @@ import java.net.Socket;
  * Created by ashamsiev on 21.10.2015
  */
 public class ReversiServer {
-    public static final String INITIAL_GAME_STATE_INFO_STRING = "00000000000000000000000000021000000120000000000000000000000000001";
+    private ServerModel model = ServerModel.getInstance();
 
     public ReversiServer(int testServerPort) {
 
@@ -29,7 +29,7 @@ public class ReversiServer {
                 InputStream in = socket.getInputStream();
 
                 int requestCode = in.read();
-                out.write(INITIAL_GAME_STATE_INFO_STRING.getBytes());
+                out.write(model.getBoardInfo());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

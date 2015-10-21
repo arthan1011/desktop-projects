@@ -13,14 +13,11 @@ import java.net.Socket;
  */
 public class ReversiClient {
 
-    private final InputStream in;
-    private final OutputStream out;
+    private final Socket socket;
 
     public ReversiClient(String host, int port) {
         try {
-            Socket socket = new Socket(host, port);
-            out = socket.getOutputStream();
-            in = socket.getInputStream();
+            socket = new Socket(host, port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -30,13 +27,17 @@ public class ReversiClient {
     public GameInfo retriveInfo() {
         byte[] retrievedBytes = new byte[65];
 
-        try {
+        try (
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream()
+        ){
             out.write(1);
             in.read(retrievedBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return new GameInfo(retrievedBytes);
+        GameInfo gameInfo = new GameInfo(retrievedBytes);
+        return gameInfo;
     }
 }

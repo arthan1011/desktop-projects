@@ -10,7 +10,12 @@ public class GameInfo {
     private byte[] gameInfo;
 
     public GameInfo(String gameInfoString) {
-        gameInfo = gameInfoString.getBytes();
+        gameInfo = new byte[65];
+
+        int byteIndex = 0;
+        for (char c : gameInfoString.toCharArray()) {
+            gameInfo[byteIndex++] = (byte) Character.getNumericValue(c);
+        }
     }
 
     public GameInfo(byte[] bytesInfo) {
@@ -36,7 +41,7 @@ public class GameInfo {
     @Override
     public String toString() {
         return "GameInfo{" +
-                "gameInfo='" + new String(gameInfo) + '\'' +
+                "gameInfo='" + Arrays.toString(gameInfo) + '\'' +
                 '}';
     }
 }
