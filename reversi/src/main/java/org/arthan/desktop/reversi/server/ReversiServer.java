@@ -11,10 +11,10 @@ import java.net.Socket;
  */
 public class ReversiServer {
     private ServerModel model = ServerModel.getInstance();
+    private ServerSocket serverSocket;
 
     public ReversiServer(int testServerPort) {
 
-        ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(testServerPort);
         } catch (IOException e) {
@@ -29,13 +29,31 @@ public class ReversiServer {
                 InputStream in = socket.getInputStream();
 
                 int requestCode = in.read();
-                out.write(model.getBoardInfo());
-                serverSocket.close();
+                if (requestCode == 1) {
+                    out.write(model.getBoardInfo());
+                } else if (requestCode == 2) {
+                    int x = in.read();
+                    int y = in.read();
+                    System.out.println(x + " " + y);
+                    model.play(x, y);
+                    out.write(model.getBoardInfo());
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }).start();
     }
 
+    public void close() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+
+    public void reset() {
+        model.restart();
+    }
 }

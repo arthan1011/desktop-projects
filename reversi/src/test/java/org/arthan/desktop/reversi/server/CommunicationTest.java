@@ -64,4 +64,11 @@ public class CommunicationTest {
                 gameInfo
         );
     }
+
+    @After
+    public void tearDown() throws Exception {
+        reversiServer.reset();
+        reversiServer.close();
+
+    }
 }
