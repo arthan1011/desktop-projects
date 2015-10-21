@@ -52,7 +52,7 @@ public class RemoteService {
     private static byte[] readBoardInfo(Response response) {
         InputStream inputStream = response.readEntity(InputStream.class);
 
-        byte[] bytes = new byte[response.getLength()];
+        byte[] bytes = new byte[193];
         try {
             inputStream.read(bytes);
         } catch (IOException e) {

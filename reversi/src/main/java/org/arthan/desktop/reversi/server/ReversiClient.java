@@ -31,13 +31,29 @@ public class ReversiClient {
             OutputStream out = socket.getOutputStream();
             InputStream in = socket.getInputStream()
         ){
-            out.write(1);
+            out.write(1); // 1 means retrieve Info
             in.read(retrievedBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        GameInfo gameInfo = new GameInfo(retrievedBytes);
-        return gameInfo;
+        return new GameInfo(retrievedBytes);
     }
+
+    public GameInfo play(int x, int y) {
+        byte[] retrievedBytes = new byte[65];
+
+        try (
+                OutputStream out = socket.getOutputStream();
+                InputStream in = socket.getInputStream()
+        ){
+            out.write(new byte[] {2, (byte) x, (byte) y}); // 2 means play
+            in.read(retrievedBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new GameInfo(retrievedBytes);
+    }
+
 }

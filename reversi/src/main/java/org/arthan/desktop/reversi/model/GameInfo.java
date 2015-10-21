@@ -54,11 +54,13 @@ public class GameInfo {
             if (cell == 0)
                 result.append("-");
             if (cell == 1)
-                result.append("8");
+                result.append("1");
             if (cell == 2)
-                result.append("0");
+                result.append("2");
             if (i % 8 == 0)
                 result.append("\n");
+            else
+                result.append(" ");
         }
         return result.toString();
     }

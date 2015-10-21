@@ -30,9 +30,12 @@ public class ReversiServer {
 
                 int requestCode = in.read();
                 out.write(model.getBoardInfo());
+                serverSocket.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }).start();
     }
+
+
 }
