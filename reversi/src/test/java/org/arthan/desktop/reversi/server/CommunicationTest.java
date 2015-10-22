@@ -13,7 +13,7 @@ public class CommunicationTest {
     private static final int TEST_SERVER_PORT = 48888;
     private static final String TEST_SERVER_HOST = "localhost";
     private static final String INITIAL_GAME_STATE_INFO_STRING = "00000000000000000000000000021000000120000000000000000000000000001";
-    private static final String GAME_STATE_AFTER_FIRST_PLAY = "00000000000000000000000000021000000111000000000000000000000000002";
+    private static final String GAME_STATE_AFTER_FIRST_PLAY = "00000000000000000000000000021000000110000000100000000000000000002";
 
     private ReversiClient reversiClient;
     private ReversiServer reversiServer;

@@ -25,29 +25,21 @@ public class ReversiClient {
     }
 
     public GameInfo retriveInfo() {
-        byte[] retrievedBytes = new byte[65];
-
-        try (
-            OutputStream out = socket.getOutputStream();
-            InputStream in = socket.getInputStream()
-        ){
-            out.write(1); // 1 means retrieve Info
-            in.read(retrievedBytes);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return new GameInfo(retrievedBytes);
+        return sendSignal(ReversiProtocol.updateSignal());
     }
 
     public GameInfo play(int x, int y) {
+        return sendSignal(ReversiProtocol.playSignal(x, y));
+    }
+
+    private GameInfo sendSignal(ReversiProtocol.Signal signal) {
         byte[] retrievedBytes = new byte[65];
 
         try (
                 OutputStream out = socket.getOutputStream();
                 InputStream in = socket.getInputStream()
         ){
-            out.write(new byte[] {2, (byte) x, (byte) y}); // 2 means play
+            out.write(signal.getBytes());
             in.read(retrievedBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,5 +47,4 @@ public class ReversiClient {
 
         return new GameInfo(retrievedBytes);
     }
-
 }
