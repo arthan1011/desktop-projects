@@ -21,7 +21,6 @@ public class ReversiClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("client created");
     }
 
     public GameInfo retriveInfo() {

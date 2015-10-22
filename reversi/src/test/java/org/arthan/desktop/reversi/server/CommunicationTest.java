@@ -14,14 +14,24 @@ public class CommunicationTest {
     private static final String TEST_SERVER_HOST = "localhost";
     private static final String INITIAL_GAME_STATE_INFO_STRING = "00000000000000000000000000021000000120000000000000000000000000001";
     private static final String GAME_STATE_AFTER_FIRST_PLAY = "00000000000000000000000000021000000110000000100000000000000000002";
+    private static final String GAME_STATE_AFTER_SECOND_PLAY =
+                    "00000000" +
+                    "00000000" +
+                    "00000000" +
+                    "00022200" +
+                    "00011000" +
+                    "00001000" +
+                    "00000000" +
+                    "000000001";
 
-    private ReversiClient reversiClient;
+    private ReversiClient firstReversiClient;
     private ReversiServer reversiServer;
+    private ReversiClient secondReversiClient;
 
     @Test
     public void testSingleClientConnection() throws Exception {
         startServer(); // starts server with initial game state
-        startAndConnectClient(); // creates client object and connect it to server
+        startAndConnectFirstClient(); // creates client object and connect it to server
         GameInfo retrievedGameInfo = requestGameInfoFromServer(); // make client do request for game info
         checkClientReceivedInitialGameState(retrievedGameInfo);
     }
@@ -29,25 +39,49 @@ public class CommunicationTest {
     @Test
     public void testSingleClientPlay() throws Exception {
         startServer();
-        startAndConnectClient();
-        GameInfo gameInfo = playAndRetrieveInfo();
-        checkClientReceivedGameStateAfterPlay(gameInfo);
+        startAndConnectFirstClient();
+        GameInfo gameInfo = playAndRetrieveInfo(firstReversiClient, 5, 4);
+        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
     }
 
-    private GameInfo playAndRetrieveInfo() {
-        return reversiClient.play(5, 4);
+    @Test
+    public void testTwoClientsPlayTwoTurns() throws Exception {
+        startServer();
+        startAndConnectFirstClient();
+        startAndConnectSecondClient();
+        GameInfo gameInfo = playAndRetrieveInfo(firstReversiClient, 5, 4);
+        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
+        gameInfo = playAndRetrieveInfo(secondReversiClient, 3, 5);
+        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_SECOND_PLAY);
+
+    }
+
+    private void startAndConnectSecondClient() {
+        secondReversiClient = new ReversiClient(TEST_SERVER_HOST, TEST_SERVER_PORT);
+    }
+
+    private void checkGameStateAfterFirstClientPlay(GameInfo gameInfo, String gameStateAfterFirstPlay) {
+        Assert.assertEquals(
+                "Expected board state after first player turn",
+                new GameInfo(gameStateAfterFirstPlay),
+                gameInfo
+        );
+    }
+
+    private GameInfo playAndRetrieveInfo(ReversiClient reversiClient, int x, int y) {
+        return reversiClient.play(x, y);
     }
 
     private void startServer() {
         reversiServer = new ReversiServer(TEST_SERVER_PORT);
     }
 
-    private void startAndConnectClient() {
-        reversiClient = new ReversiClient(TEST_SERVER_HOST, TEST_SERVER_PORT);
+    private void startAndConnectFirstClient() {
+        firstReversiClient = new ReversiClient(TEST_SERVER_HOST, TEST_SERVER_PORT);
     }
 
     private GameInfo requestGameInfoFromServer() {
-        return reversiClient.retriveInfo();
+        return firstReversiClient.retriveInfo();
     }
 
     private void checkClientReceivedInitialGameState(GameInfo retrievedGameInfo) {
@@ -55,14 +89,6 @@ public class CommunicationTest {
                 "Expected initial board state",
                 new GameInfo(INITIAL_GAME_STATE_INFO_STRING),
                 retrievedGameInfo);
-    }
-
-    private void checkClientReceivedGameStateAfterPlay(GameInfo gameInfo) {
-        Assert.assertEquals(
-                "Expected board state after first player turn",
-                new GameInfo(GAME_STATE_AFTER_FIRST_PLAY),
-                gameInfo
-        );
     }
 
     @After
