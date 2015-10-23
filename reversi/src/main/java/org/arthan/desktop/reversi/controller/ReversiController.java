@@ -12,6 +12,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.arthan.desktop.reversi.Config;
 import org.arthan.desktop.reversi.model.OWNER;
@@ -65,6 +68,9 @@ public class ReversiController {
 
         // set board
         centerPane.getChildren().add(tiles());
+        StackPane maskPane = maskPane();
+        maskPane.visibleProperty().bind(model.turn.isNotEqualTo(Config.getPlayerColor()));
+        centerPane.getChildren().add(maskPane);
 
         // score bindings
         scoreBlack.textProperty().bind(model.getScore(OWNER.BLACK).asString());
@@ -94,6 +100,15 @@ public class ReversiController {
         );
 
         checkUpdates(model);
+    }
+
+    private StackPane maskPane() {
+        Text maskText = new Text("Ожидание хода соперника");
+        maskText.setFont(Font.font("Arial", FontWeight.BOLD, 44));
+        maskText.setStroke(Color.WHITE);
+        maskText.setStrokeType(StrokeType.OUTSIDE);
+        maskText.setStrokeWidth(1.8);
+        return new StackPane(maskText);
     }
 
     private static void checkUpdates(ReversiModel model) {
