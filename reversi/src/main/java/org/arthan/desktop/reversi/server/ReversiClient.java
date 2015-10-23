@@ -46,8 +46,4 @@ public class ReversiClient {
 
         return new GameInfo(retrievedBytes);
     }
-
-    public GameInfo getCurrentGameState() {
-        return null;
-    }
 }

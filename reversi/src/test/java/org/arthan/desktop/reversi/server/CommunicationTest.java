@@ -74,7 +74,7 @@ public class CommunicationTest {
     }
 
     private GameInfo askForGameInfo(ReversiClient reversiClient) {
-        return reversiClient.getCurrentGameState();
+        return reversiClient.retriveInfo();
     }
 
     private void startAndConnectSecondClient() {
