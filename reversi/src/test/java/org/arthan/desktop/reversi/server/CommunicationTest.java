@@ -41,7 +41,7 @@ public class CommunicationTest {
         startServer();
         startAndConnectFirstClient();
         GameInfo gameInfo = playAndRetrieveInfo(firstReversiClient, 5, 4);
-        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
+        checkGameStateAfterClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
     }
 
     @Test
@@ -50,17 +50,38 @@ public class CommunicationTest {
         startAndConnectFirstClient();
         startAndConnectSecondClient();
         GameInfo gameInfo = playAndRetrieveInfo(firstReversiClient, 5, 4);
-        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
+        checkGameStateAfterClientPlay(gameInfo, GAME_STATE_AFTER_FIRST_PLAY);
         gameInfo = playAndRetrieveInfo(secondReversiClient, 3, 5);
-        checkGameStateAfterFirstClientPlay(gameInfo, GAME_STATE_AFTER_SECOND_PLAY);
+        checkGameStateAfterClientPlay(gameInfo, GAME_STATE_AFTER_SECOND_PLAY);
+    }
 
+    @Test
+    public void secondClientShouldReceiveInfoAfterFirstClientPlay() throws Exception {
+        startServer();
+        startAndConnectFirstClient();
+        startAndConnectSecondClient();
+        GameInfo gameInfo = playAndRetrieveInfo(firstReversiClient, 5, 4);
+        GameInfo gameInfoRetrievedBySecondClient = askForGameInfo(secondReversiClient);
+        checkSecondClientReceivedUpdatedInfo(gameInfo, gameInfoRetrievedBySecondClient);
+    }
+
+    private void checkSecondClientReceivedUpdatedInfo(GameInfo gameInfo, GameInfo gameInfoRetrievedBySecondClient) {
+        Assert.assertEquals(
+                "Second player should have received updated board state after first player turn",
+                gameInfo,
+                gameInfoRetrievedBySecondClient
+        );
+    }
+
+    private GameInfo askForGameInfo(ReversiClient reversiClient) {
+        return reversiClient.getCurrentGameState();
     }
 
     private void startAndConnectSecondClient() {
         secondReversiClient = new ReversiClient(TEST_SERVER_HOST, TEST_SERVER_PORT);
     }
 
-    private void checkGameStateAfterFirstClientPlay(GameInfo gameInfo, String gameStateAfterFirstPlay) {
+    private void checkGameStateAfterClientPlay(GameInfo gameInfo, String gameStateAfterFirstPlay) {
         Assert.assertEquals(
                 "Expected board state after first player turn",
                 new GameInfo(gameStateAfterFirstPlay),
