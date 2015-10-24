@@ -65,6 +65,29 @@ public class CommunicationTest {
         checkSecondClientReceivedUpdatedInfo(gameInfo, gameInfoRetrievedBySecondClient);
     }
 
+    @Test
+    public void anyClientShouldBeAbleToResetGameState() throws Exception {
+        startServer();
+        startAndConnectFirstClient();
+        startAndConnectSecondClient();
+        firstReversiClient.play(5, 4);
+        secondReversiClient.play(3, 5);
+
+        GameInfo gameStateAfterReset = firstReversiClient.reset();
+
+        Assert.assertEquals(
+                "First player should receive initial game info after reset",
+                new GameInfo(INITIAL_GAME_STATE_INFO_STRING),
+                gameStateAfterReset
+        );
+
+        Assert.assertEquals(
+                "Second player should receive initial game info after reset",
+                new GameInfo(INITIAL_GAME_STATE_INFO_STRING),
+                secondReversiClient.retriveInfo()
+        );
+    }
+
     private void checkSecondClientReceivedUpdatedInfo(GameInfo gameInfo, GameInfo gameInfoRetrievedBySecondClient) {
         Assert.assertEquals(
                 "Second player should have received updated board state after first player turn",

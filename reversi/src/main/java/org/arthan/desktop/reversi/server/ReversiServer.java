@@ -24,8 +24,8 @@ public class ReversiServer {
         }
     }
 
-    private void initServer(int testServerPort) throws IOException {
-        serverSocket = new ServerSocket(testServerPort);
+    private void initServer(int serverPort) throws IOException {
+        serverSocket = new ServerSocket(serverPort);
 
         new Thread(() -> {
             while (true) {
@@ -57,6 +57,8 @@ public class ReversiServer {
                 int x = in.read();
                 int y = in.read();
                 model.play(x, y);
+            } else if (requestCode == 3) {
+                model.restart();
             }
             out.write(model.getBoardInfo());
         }

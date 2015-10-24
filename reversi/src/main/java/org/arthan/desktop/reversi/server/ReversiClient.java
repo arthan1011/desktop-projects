@@ -1,6 +1,5 @@
 package org.arthan.desktop.reversi.server;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.arthan.desktop.reversi.model.GameInfo;
 
 import java.io.IOException;
@@ -14,30 +13,35 @@ import java.net.Socket;
 public class ReversiClient {
 
     private final Socket socket;
+    private final OutputStream out;
+    private final InputStream in;
 
     public ReversiClient(String host, int port) {
         try {
             socket = new Socket(host, port);
+            out = socket.getOutputStream();
+            in = socket.getInputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public GameInfo retriveInfo() {
-        return sendSignal(ReversiProtocol.updateSignal());
+        return sendSignal(ReversiProtocol.update());
     }
 
     public GameInfo play(int x, int y) {
-        return sendSignal(ReversiProtocol.playSignal(x, y));
+        return sendSignal(ReversiProtocol.play(x, y));
+    }
+
+    public GameInfo reset() {
+        return sendSignal(ReversiProtocol.reset());
     }
 
     private GameInfo sendSignal(ReversiProtocol.Signal signal) {
         byte[] retrievedBytes = new byte[65];
 
-        try (
-                OutputStream out = socket.getOutputStream();
-                InputStream in = socket.getInputStream()
-        ){
+        try {
             out.write(signal.getBytes());
             in.read(retrievedBytes);
         } catch (IOException e) {

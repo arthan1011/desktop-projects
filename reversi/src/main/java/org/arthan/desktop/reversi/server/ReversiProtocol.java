@@ -9,13 +9,18 @@ public class ReversiProtocol {
 
     private static final byte UPDATE_CODE = 1;
     private static final byte PLAY_CODE = 2;
+    private static final byte RESET_CODE = 3;
 
-    public static Signal updateSignal() {
+    public static Signal update() {
         return new Signal(new byte[] {UPDATE_CODE});
     }
 
-    public static Signal playSignal(int x, int y) {
+    public static Signal play(int x, int y) {
         return new Signal(new byte[] {PLAY_CODE, (byte) x, (byte) y});
+    }
+
+    public static Signal reset() {
+        return new Signal(new byte[] {RESET_CODE});
     }
 
     public static class Signal {
