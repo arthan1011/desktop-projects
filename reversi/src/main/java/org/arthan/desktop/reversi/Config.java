@@ -31,4 +31,12 @@ public class Config {
     public static String getRestURL() {
         return properties.getProperty("rest.url");
     }
+
+    public static String getServerHost() {
+        return "localhost";
+    }
+
+    public static int getServerPort() {
+        return 18088;
+    }
 }

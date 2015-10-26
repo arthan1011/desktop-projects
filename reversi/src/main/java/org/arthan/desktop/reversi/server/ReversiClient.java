@@ -1,5 +1,6 @@
 package org.arthan.desktop.reversi.server;
 
+import org.arthan.desktop.reversi.Config;
 import org.arthan.desktop.reversi.model.GameInfo;
 
 import java.io.IOException;
@@ -16,7 +17,9 @@ public class ReversiClient {
     private final OutputStream out;
     private final InputStream in;
 
-    public ReversiClient(String host, int port) {
+    private static final ReversiClient clientInstance = new ReversiClient(Config.getServerHost(), Config.getServerPort());
+
+    private ReversiClient(String host, int port) {
         try {
             socket = new Socket(host, port);
             out = socket.getOutputStream();
@@ -49,5 +52,9 @@ public class ReversiClient {
         }
 
         return new GameInfo(retrievedBytes);
+    }
+
+    public static ReversiClient getInstance() {
+        return clientInstance;
     }
 }

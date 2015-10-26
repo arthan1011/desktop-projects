@@ -64,4 +64,8 @@ public class GameInfo {
         }
         return result.toString();
     }
+
+    public byte[] getBytes() {
+        return gameInfo;
+    }
 }

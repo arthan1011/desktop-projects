@@ -1,3 +1,4 @@
+/*
 package org.arthan.desktop.reversi.server;
 
 import org.arthan.desktop.reversi.model.GameInfo;
@@ -5,9 +6,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
+*/
 /**
  * Created by ashamsiev on 21.10.2015
- */
+ *//*
+
 public class CommunicationTest {
 
     private static final int TEST_SERVER_PORT = 48888;
@@ -142,3 +145,4 @@ public class CommunicationTest {
 
     }
 }
+*/

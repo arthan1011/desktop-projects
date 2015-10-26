@@ -7,7 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.arthan.desktop.reversi.Config;
-import org.arthan.desktop.reversi.service.RemoteService;
+import org.arthan.desktop.reversi.server.ReversiClient;
 
 /**
  * Created by ashamsiev on 07.10.2015
@@ -20,6 +20,7 @@ public class ReversiModel {
     public ObjectProperty<OWNER> turn = new SimpleObjectProperty<>(OWNER.BLACK);
     @SuppressWarnings("unchecked")
     public ObjectProperty<OWNER>[][] board = new ObjectProperty[BOARD_SIZE][BOARD_SIZE];
+    private final ReversiClient reversiClient = ReversiClient.getInstance();
 
     public static ReversiModel getInstance() {
         return ReversiModelHolder.INSTANCE;
@@ -35,19 +36,21 @@ public class ReversiModel {
     }
 
     private void refresh() {
-        applyGameInfo(RemoteService.retrieveBoardInfo());
+        applyGameInfo(reversiClient.retriveInfo());
     }
 
-    public void applyGameInfo(byte[] boardArray) {
-        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-            int x = boardArray[i*3];
-            int y = boardArray[i*3 + 1];
-            byte ownerCode = boardArray[i*3 + 2];
-            OWNER owner = ownerCode == 0 ? OWNER.NONE : ownerCode == 1 ? OWNER.BLACK : OWNER.WHITE;
-            board[x][y].setValue(owner);
+    public void applyGameInfo(GameInfo gameInfo) {
+        int byteIndex = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                byte cell = gameInfo.getBytes()[byteIndex++];
+                OWNER cellOwner = cell == 0 ? OWNER.NONE : cell == 1 ? OWNER.BLACK : OWNER.WHITE;
+                board[i][j].setValue(cellOwner);
+            }
         }
-        byte turnOwner = boardArray[boardArray.length - 1];
-        turn.setValue(turnOwner == 0 ? OWNER.NONE : turnOwner == 1 ? OWNER.BLACK : OWNER.WHITE);
+        byte turnCode = gameInfo.getBytes()[byteIndex];
+        OWNER turnOwner = turnCode == 1 ? OWNER.BLACK : OWNER.WHITE;
+        turn.setValue(turnOwner);
     }
 
 
@@ -136,8 +139,7 @@ public class ReversiModel {
     }
 
     private void sendPlayInfo(int x, int y) {
-        byte[] boardInfo = RemoteService.postPlayInfo((byte) x, (byte) y);
-        applyGameInfo(boardInfo);
+        applyGameInfo(reversiClient.play(x, y));
 
     }
 

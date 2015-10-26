@@ -17,11 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.arthan.desktop.reversi.Config;
-import org.arthan.desktop.reversi.model.OWNER;
-import org.arthan.desktop.reversi.model.ReversiModel;
-import org.arthan.desktop.reversi.model.ReversiPiece;
-import org.arthan.desktop.reversi.model.ReversiSquare;
-import org.arthan.desktop.reversi.service.RemoteService;
+import org.arthan.desktop.reversi.model.*;
+import org.arthan.desktop.reversi.server.ReversiClient;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,6 +57,7 @@ public class ReversiController {
     Text remainingBlack;
     @FXML
     Text remainingWhite;
+    private static ReversiClient reversiClient;
 
     public void initialize() {
         // top and bottom sizing
@@ -112,6 +110,7 @@ public class ReversiController {
     }
 
     private static void checkUpdates(ReversiModel model) {
+        reversiClient = ReversiClient.getInstance();
         Timer timer = new Timer(true);
         timer.schedule(
                 new TimerTask() {
@@ -120,16 +119,14 @@ public class ReversiController {
                         Platform.runLater(() -> {
                             if (model.turn.get() != Config.getPlayerColor()) {
                                 System.out.println("checking for updates..");
-                                byte[] bytes = RemoteService.checkForUpdates();
-                                if (bytes != null) {
-                                    model.applyGameInfo(bytes);
-                                }
+                                GameInfo gameInfo = reversiClient.retriveInfo();
+                                model.applyGameInfo(gameInfo);
                             }
                         });
                     }
                 },
                 0,
-                500
+                1000
         );
     }
 
@@ -162,7 +159,6 @@ public class ReversiController {
 
     @FXML
     public void restart() {
-        byte[] restartInfo = RemoteService.restart();
-        model.applyGameInfo(restartInfo);
+        model.applyGameInfo(reversiClient.reset());
     }
 }
