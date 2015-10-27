@@ -3,6 +3,7 @@ package org.arthan.desktop.reversi.controller;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
@@ -68,6 +69,7 @@ public class ReversiController {
         centerPane.getChildren().add(tiles());
         StackPane maskPane = maskPane();
         maskPane.visibleProperty().bind(model.turn.isNotEqualTo(Config.getPlayerColor()));
+        maskPane.setCursor(Cursor.WAIT);
         centerPane.getChildren().add(maskPane);
 
         // score bindings
