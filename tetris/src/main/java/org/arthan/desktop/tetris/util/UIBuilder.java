@@ -1,10 +1,13 @@
 package org.arthan.desktop.tetris.util;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.io.IOException;
 
 /**
  * Created by Arthur Shamsiev on 27.11.15.
@@ -12,7 +15,7 @@ import javafx.scene.shape.Rectangle;
  * Project - desktop
  */
 public class UIBuilder {
-    public static Parent createRoot() {
+    public static Parent createGameScreen() {
         GridPane mainScreen = new GridPane();
         mainScreen.setId("screen");
         mainScreen.setVgap(4);
@@ -20,6 +23,20 @@ public class UIBuilder {
         fillWithSquares(mainScreen);
 
         return new BorderPane(mainScreen);
+    }
+
+    public static Parent createTitleScreen() {
+        Parent titleScreenRoot;
+        try {
+            FXMLLoader loader = new FXMLLoader(UIBuilder.class.getResource("/title_screen.fxml"));
+            titleScreenRoot = loader.load();
+            loader.getController();
+
+        } catch (IOException e) {
+            throw new RuntimeException("title_screen.fxml was not loaded", e);
+        }
+
+        return titleScreenRoot;
     }
 
     public static void fillWithSquares(GridPane mainScreen) {

@@ -21,7 +21,7 @@ public class SimpleTest extends GuiTest {
     @Override
     protected Parent getRootNode() {
         Parent parent;
-        parent = UIBuilder.createRoot();
+        parent = UIBuilder.createGameScreen();
 
         return parent;
     }

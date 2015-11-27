@@ -14,7 +14,7 @@ public class TetrisApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(UIBuilder.createRoot());
+        Scene scene = new Scene(UIBuilder.createTitleScreen());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
