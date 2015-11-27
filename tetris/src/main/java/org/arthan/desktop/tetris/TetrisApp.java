@@ -2,6 +2,8 @@ package org.arthan.desktop.tetris;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
@@ -14,7 +16,7 @@ public class TetrisApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Scene scene = new Scene(UIBuilder.createTitleScreen());
+        Scene scene = new Scene(UIBuilder.createRoot());
         primaryStage.setScene(scene);
         primaryStage.show();
     }

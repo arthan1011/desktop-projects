@@ -1,13 +1,11 @@
 package org.arthan.desktop.tetris.util;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.io.IOException;
 
 /**
  * Created by Arthur Shamsiev on 27.11.15.
@@ -16,27 +14,16 @@ import java.io.IOException;
  */
 public class UIBuilder {
     public static Parent createGameScreen() {
-        GridPane mainScreen = new GridPane();
-        mainScreen.setId("screen");
-        mainScreen.setVgap(4);
-        mainScreen.setHgap(4);
-        fillWithSquares(mainScreen);
+        BorderPane gameScreen = UILoader.loadGameScreen();
 
-        return new BorderPane(mainScreen);
+        GridPane gameGrid = (GridPane) gameScreen.getCenter();
+        fillWithSquares(gameGrid);
+
+        return gameScreen;
     }
 
     public static Parent createTitleScreen() {
-        Parent titleScreenRoot;
-        try {
-            FXMLLoader loader = new FXMLLoader(UIBuilder.class.getResource("/title_screen.fxml"));
-            titleScreenRoot = loader.load();
-            loader.getController();
-
-        } catch (IOException e) {
-            throw new RuntimeException("title_screen.fxml was not loaded", e);
-        }
-
-        return titleScreenRoot;
+        return UILoader.loadTitleScreen();
     }
 
     public static void fillWithSquares(GridPane mainScreen) {
@@ -51,5 +38,12 @@ public class UIBuilder {
         Rectangle rectangle = new Rectangle(20, 20);
         rectangle.setFill(Color.LIGHTGREY);
         return rectangle;
+    }
+
+    public static Parent createRoot() {
+        Pane root = new Pane();
+        root.setId("root");
+        root.getChildren().add(UIBuilder.createTitleScreen());
+        return root;
     }
 }

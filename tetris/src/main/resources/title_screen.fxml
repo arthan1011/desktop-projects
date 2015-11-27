@@ -21,6 +21,7 @@
       xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Button fx:id="startButton"
+                onAction="#startGame"
                 mnemonicParsing="false"
                 prefWidth="50.0"
                 text="Start"/>
