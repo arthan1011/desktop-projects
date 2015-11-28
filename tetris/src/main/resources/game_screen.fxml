@@ -13,8 +13,8 @@
             xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <GridPane fx:id="gameScreen"
-                  hgap="4.0"
-                  vgap="4.0"
+                  hgap="2.0"
+                  vgap="2.0"
                   BorderPane.alignment="CENTER">
         </GridPane>
     </center>

@@ -13,6 +13,10 @@ import javafx.scene.shape.Rectangle;
  * Project - desktop
  */
 public class UIBuilder {
+
+    public static final int GAME_SCREEN_WIDTH = 10;
+    public static final int GAME_SCREEN_HEIGHT = 20;
+
     public static Parent createGameScreen() {
         BorderPane gameScreen = UILoader.loadGameScreen();
 
@@ -27,9 +31,14 @@ public class UIBuilder {
     }
 
     public static void fillWithSquares(GridPane mainScreen) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < GAME_SCREEN_WIDTH; i++) {
+            for (int j = 0; j < GAME_SCREEN_HEIGHT; j++) {
                 mainScreen.add(createCell(), i, j);
+                if (i == 1 && j == 4) {
+                    Rectangle rectangle = new Rectangle(20, 20);
+                    rectangle.setFill(Color.RED);
+                    mainScreen.add(rectangle, i, j);
+                }
             }
         }
     }
