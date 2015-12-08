@@ -20,10 +20,25 @@ import static org.arthan.desktop.tetris.util.UIBuilder.GAME_SCREEN_WIDTH;
 public class TetrisTest extends TestGui {
 
     public static final String SQUARE_ON_TOP_PATH = "/square_on_top.txt";
+    private static final String BLANK_PATH = "/blank.txt";
+
+    @Test
+    public void shouldStartGameWithBlankScreen() throws Exception {
+        click(START_BUTTON_ID, MouseButton.PRIMARY);
+        GridPane screen = find(GAME_SCREEN_ID);
+
+        int[][] screenArray = getArrayFromScreen(screen);
+
+        String actualScreenArray = stringifyScreenArray(screenArray);
+        String expectedScreenArray = readFile(BLANK_PATH);
+
+        Assert.assertEquals("Game screen on start wasn't blank", expectedScreenArray, actualScreenArray);
+    }
 
     @Test
     public void shouldShowSquareOnGameScreen() throws Exception {
         click(START_BUTTON_ID, MouseButton.PRIMARY);
+        click(TEST_LAUNCH_SQUARE_BUTTON, MouseButton.PRIMARY);
         GridPane screen = find(GAME_SCREEN_ID);
 
         int[][] screenArray = getArrayFromScreen(screen);

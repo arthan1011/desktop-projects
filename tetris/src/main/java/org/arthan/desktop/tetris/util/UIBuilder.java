@@ -20,7 +20,8 @@ public class UIBuilder {
     public static Parent createGameScreen() {
         BorderPane gameScreen = UILoader.loadGameScreen();
 
-        GridPane gameGrid = (GridPane) gameScreen.getCenter();
+        Pane pane = (Pane) gameScreen.getCenter();
+        GridPane gameGrid = (GridPane) pane.getChildren().get(0);
         fillWithSquares(gameGrid);
 
         return gameScreen;
@@ -34,11 +35,11 @@ public class UIBuilder {
         for (int i = 0; i < GAME_SCREEN_WIDTH; i++) {
             for (int j = 0; j < GAME_SCREEN_HEIGHT; j++) {
                 mainScreen.add(createCell(), i, j);
-                if (i == 1 && j == 4) {
-                    Rectangle rectangle = new Rectangle(20, 20);
-                    rectangle.setFill(Color.RED);
-                    mainScreen.add(rectangle, i, j);
-                }
+//                if (i == 1 && j == 4) {
+//                    Rectangle rectangle = new Rectangle(20, 20);
+//                    rectangle.setFill(Color.RED);
+//                    mainScreen.add(rectangle, i, j);
+//                }
             }
         }
     }
@@ -54,5 +55,11 @@ public class UIBuilder {
         root.setId("root");
         root.getChildren().add(UIBuilder.createTitleScreen());
         return root;
+    }
+
+    public static Rectangle createPixel() {
+        Rectangle rect = new Rectangle(20, 20);
+        rect.setFill(Color.RED);
+        return rect;
     }
 }

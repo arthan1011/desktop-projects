@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
 /**
@@ -31,6 +32,9 @@ public class TitleScreenController {
 
         tetrisAppRoot.getChildren().clear();
         tetrisAppRoot.getChildren().add(UIBuilder.createGameScreen());
+        Stage window = (Stage) tetrisAppRoot.getScene().getWindow();
+        window.setHeight(600);
+        window.setWidth(800);
     }
 
     private Pane getRootFromEvent(ActionEvent event) {
