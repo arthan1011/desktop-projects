@@ -40,8 +40,4 @@ public class TitleScreenController {
     private Pane getRootFromEvent(ActionEvent event) {
         return (Pane) ((Node)event.getSource()).getScene().getRoot();
     }
-
-    public void initialize() {
-        System.out.println("title screen controller initialized");
-    }
 }

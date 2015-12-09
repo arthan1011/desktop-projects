@@ -1,7 +1,7 @@
 package org.arthan.desktop.tetris.controller;
 
 import javafx.animation.AnimationTimer;
-import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
@@ -14,6 +14,7 @@ import org.arthan.desktop.tetris.model.GameScreen;
  */
 public class GameScreenController {
 
+    public static final long ONE_SECOND = 1000000000;
     @FXML
     private GridPane gameGrid;
     private GameScreen gameScreen;
@@ -25,40 +26,25 @@ public class GameScreenController {
     @FXML
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
-        updateGame(square);
 
-        /*Task<FigureOnScreen> task =  new Task<FigureOnScreen>() {
-            @Override
-            protected FigureOnScreen call() throws Exception {
-                FigureOnScreen figure = square;
-                long startTime = System.nanoTime();
-                while (figure.getPixels()[0].y < 20) {
-                    if ((System.nanoTime() / 1000000000.0) - (startTime / 1000000000.0) > 1.0) {
-                        figure = figure.goDown();
-                        break;
-                    }
-                }
-                return figure;
-            }
-        };
+        launch(square);
+    }
 
-        task.setOnSucceeded(event -> {
-            updateGame(task.getValue());
-        });
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();*/
-
-        final FigureOnScreen[] figure = {square};
+    private void launch(FigureOnScreen shape) {
+        updateGame(shape);
+        final FigureOnScreen[] figure = {shape};
         final long[] start = {System.nanoTime()};
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if ((now - start[0]) / 1000000000.0 > 1.0) {
+                if ((now - start[0]) / ONE_SECOND >= 1) {
                     figure[0] = figure[0].goDown();
                     updateGame(figure[0]);
-                    start[0] += 1000000000;
+                    start[0] += ONE_SECOND;
+
+                    if (figure[0].isInTheBottom()) {
+                        stop();
+                    }
                 }
             }
         }.start();
@@ -73,5 +59,10 @@ public class GameScreenController {
             gameScreen = new GameScreen(gameGrid);
         }
         return gameScreen;
+    }
+
+    public void test_launchSquareNearBottom() {
+        FigureOnScreen square_near_bottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_NEAR_BOTTOM);
+        launch(square_near_bottom);
     }
 }

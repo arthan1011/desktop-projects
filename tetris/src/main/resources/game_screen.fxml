@@ -33,7 +33,10 @@
                 <Label text="Test"/>
                 <Hyperlink fx:id="test_LaunchSquareButton"
                            onAction="#launchSquare"
-                           text="Launch square"/>
+                           text="Launch square" />
+                <Hyperlink fx:id="test_LaunchSquareNearBottomButton"
+                           onAction="#test_launchSquareNearBottom"
+                           text="Launch square near bottom" />
             </children>
         </VBox>
     </left>

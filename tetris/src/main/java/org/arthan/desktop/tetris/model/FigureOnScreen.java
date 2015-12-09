@@ -13,6 +13,12 @@ public class FigureOnScreen {
             new Pixel(4, 1),
             new Pixel(5, 1)
     };
+    public static final Pixel[] TEST_SQUARE_NEAR_BOTTOM = new Pixel[]{
+            new Pixel(4, 16),
+            new Pixel(5, 16),
+            new Pixel(4, 17),
+            new Pixel(5, 17)
+    };
 
     private Pixel[] pixels;
 
@@ -35,5 +41,18 @@ public class FigureOnScreen {
         }
 
         return downFigure;
+    }
+
+    public boolean isInTheBottom() {
+        return findLowestY() == GameScreen.GAME_SCREEN_HEIGHT - 1;
+    }
+
+    int findLowestY() {
+        int result = 0;
+        for (int i = 0; i < pixels.length; i++) {
+            Pixel pixel = pixels[i];
+            result = Math.max(pixel.y, result);
+        }
+        return result;
     }
 }

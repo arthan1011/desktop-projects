@@ -19,9 +19,12 @@ import static org.arthan.desktop.tetris.model.GameScreen.GAME_SCREEN_WIDTH;
  */
 public class TetrisTest extends TestGui {
 
-    public static final String SQUARE_ON_TOP_PATH = "/square_on_top.txt";
+    private static final String SQUARE_ON_TOP_PATH = "/square_on_top.txt";
     private static final String BLANK_PATH = "/blank.txt";
-    public static final String SQUARE_1_PIXEL_BELOW_TOP = "/square_1_pixel_below_top.txt";
+    private static final String SQUARE_1_PIXEL_BELOW_TOP = "/square_1_pixel_below_top.txt";
+    private static final String SQUARE_2_PIXEL_BELOW_TOP = "/square_2_pixel_below_top.txt";
+    private static final String SQUARE_2_PIXEL_ABOVE_BOTTOM = "/square_2_pixel_above_bottom.txt";
+    private static final String SQUARE_IN_THE_BOTTOM = "/square_in_the_bottom.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -54,14 +57,43 @@ public class TetrisTest extends TestGui {
     public void shouldShowFallingSquare() throws Exception {
         click(START_BUTTON_ID, MouseButton.PRIMARY);
         click(TEST_LAUNCH_SQUARE_BUTTON, MouseButton.PRIMARY);
+
         waitFor(1500);
         GridPane screen = find(GAME_SCREEN_ID);
-
         int[][] gameArray = getArrayFromScreen(screen);
         String actualScreenArray = stringifyScreenArray(gameArray);
         String expectedScreenArray = readFile(SQUARE_1_PIXEL_BELOW_TOP);
-
         Assert.assertEquals("Square wasn't falling at expected speed", expectedScreenArray, actualScreenArray);
+
+        waitFor(1000);
+        screen = find(GAME_SCREEN_ID);
+        gameArray = getArrayFromScreen(screen);
+        actualScreenArray = stringifyScreenArray(gameArray);
+        expectedScreenArray = readFile(SQUARE_2_PIXEL_BELOW_TOP);
+        Assert.assertEquals("Square wasn't falling at expected speed", expectedScreenArray, actualScreenArray);
+    }
+
+    @Test
+    public void shouldStopInTheBottom() throws Exception {
+        click(START_BUTTON_ID, MouseButton.PRIMARY);
+        click(TEST_LAUNCH_SQUARE_BUTTON_NEAR_BOTTOM, MouseButton.PRIMARY);
+
+        GridPane screen = find(GAME_SCREEN_ID);
+        int[][] gameArray = getArrayFromScreen(screen);
+        String actualScreenArray = stringifyScreenArray(gameArray);
+        String expectedScreenArray = readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM);
+        Assert.assertEquals("Square didn't appear near bottom", expectedScreenArray, actualScreenArray);
+
+        waitFor(3500);
+        screen = find(GAME_SCREEN_ID);
+        try {
+            gameArray = getArrayFromScreen(screen);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Assert.fail("Square didn't stop in the bottom");
+        }
+        actualScreenArray = stringifyScreenArray(gameArray);
+        expectedScreenArray = readFile(SQUARE_IN_THE_BOTTOM);
+        Assert.assertEquals("Square didn't stop in the bottom", expectedScreenArray, actualScreenArray);
     }
 
     private void waitFor(int milliseconds) {
