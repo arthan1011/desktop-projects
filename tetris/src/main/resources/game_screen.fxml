@@ -16,7 +16,7 @@
             fx:controller="org.arthan.desktop.tetris.controller.GameScreenController">
     <center>
         <Pane>
-            <GridPane fx:id="gameScreen"
+            <GridPane fx:id="gameGrid"
                       hgap="2.0"
                       prefHeight="420.0"
                       prefWidth="220.0"

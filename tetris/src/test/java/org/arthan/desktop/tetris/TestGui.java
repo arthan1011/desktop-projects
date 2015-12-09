@@ -18,12 +18,14 @@ public class TestGui extends GuiTest {
     public static final String TEST_LAUNCH_SQUARE_BUTTON = "#test_LaunchSquareButton";
     protected static final String START_BUTTON_ID = "#startButton";
     protected static final String EXIT_BUTTON_ID = "#exitButton";
-    protected static final String GAME_SCREEN_ID = "#gameScreen";
+    protected static final String GAME_SCREEN_ID = "#gameGrid";
 
     protected String readFile(String path) {
         String expectedScreenArray;
         try {
             expectedScreenArray = FileUtils.readFileToString(new File(TestGui.class.getResource(path).toURI()));
+            // чтобы код был кроссплатформенным
+            expectedScreenArray = expectedScreenArray.replace("\r", "");
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
