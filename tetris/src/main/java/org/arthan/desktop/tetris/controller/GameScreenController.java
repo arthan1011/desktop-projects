@@ -1,5 +1,6 @@
 package org.arthan.desktop.tetris.controller;
 
+import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -26,13 +27,13 @@ public class GameScreenController {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
         updateGame(square);
 
-        Task<FigureOnScreen> task =  new Task<FigureOnScreen>() {
+        /*Task<FigureOnScreen> task =  new Task<FigureOnScreen>() {
             @Override
             protected FigureOnScreen call() throws Exception {
                 FigureOnScreen figure = square;
                 long startTime = System.nanoTime();
                 while (figure.getPixels()[0].y < 20) {
-                    if ((System.nanoTime() / 1000000000.0) - (startTime / 1000000000.0) > 1.5) {
+                    if ((System.nanoTime() / 1000000000.0) - (startTime / 1000000000.0) > 1.0) {
                         figure = figure.goDown();
                         break;
                     }
@@ -47,7 +48,20 @@ public class GameScreenController {
 
         Thread thread = new Thread(task);
         thread.setDaemon(true);
-        thread.start();
+        thread.start();*/
+
+        final FigureOnScreen[] figure = {square};
+        final long[] start = {System.nanoTime()};
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if ((now - start[0]) / 1000000000.0 > 1.0) {
+                    figure[0] = figure[0].goDown();
+                    updateGame(figure[0]);
+                    start[0] += 1000000000;
+                }
+            }
+        }.start();
     }
 
     private void updateGame(FigureOnScreen figure) {

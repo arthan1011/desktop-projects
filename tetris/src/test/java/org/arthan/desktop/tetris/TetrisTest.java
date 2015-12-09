@@ -54,7 +54,7 @@ public class TetrisTest extends TestGui {
     public void shouldShowFallingSquare() throws Exception {
         click(START_BUTTON_ID, MouseButton.PRIMARY);
         click(TEST_LAUNCH_SQUARE_BUTTON, MouseButton.PRIMARY);
-        waitFor(2000);
+        waitFor(1500);
         GridPane screen = find(GAME_SCREEN_ID);
 
         int[][] gameArray = getArrayFromScreen(screen);
