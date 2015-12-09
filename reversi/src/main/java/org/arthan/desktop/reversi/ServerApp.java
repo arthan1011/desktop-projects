@@ -16,6 +16,6 @@ import org.arthan.desktop.reversi.server.ReversiServer;
 public class ServerApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        new ReversiServer(Config.getServerPort());
+        ReversiServer.createServer(Config.getServerPort());
     }
 }

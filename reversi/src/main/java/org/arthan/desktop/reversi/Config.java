@@ -37,6 +37,6 @@ public class Config {
     }
 
     public static int getServerPort() {
-        return 18088;
+        return 48080;
     }
 }

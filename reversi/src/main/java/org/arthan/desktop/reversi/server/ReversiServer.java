@@ -15,13 +15,17 @@ public class ReversiServer {
     private ServerModel model = ServerModel.getInstance();
     private ServerSocket serverSocket;
 
-    public ReversiServer(int testServerPort) {
+    private ReversiServer() {
+    }
 
+    public static ReversiServer createServer(int serverPort) {
+        ReversiServer reversiServer = new ReversiServer();
         try {
-            initServer(testServerPort);
+            reversiServer.initServer(serverPort);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return reversiServer;
     }
 
     private void initServer(int serverPort) throws IOException {

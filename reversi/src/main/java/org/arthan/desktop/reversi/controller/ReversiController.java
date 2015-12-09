@@ -1,6 +1,5 @@
 package org.arthan.desktop.reversi.controller;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -21,8 +20,7 @@ import org.arthan.desktop.reversi.Config;
 import org.arthan.desktop.reversi.model.*;
 import org.arthan.desktop.reversi.server.ReversiClient;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.*;
 
 /**
  * Created by ashamsiev on 15.10.2015
@@ -59,6 +57,11 @@ public class ReversiController {
     @FXML
     Text remainingWhite;
     private static ReversiClient reversiClient;
+    private static final ScheduledExecutorService timerPool = Executors.newScheduledThreadPool(10, runnable -> {
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        return thread;
+    });
 
     public void initialize() {
         // top and bottom sizing
@@ -99,7 +102,7 @@ public class ReversiController {
                 .otherwise((DropShadow) null)
         );
 
-        checkUpdates(model);
+        scheduleUpdateThread();
     }
 
     private StackPane maskPane() {
@@ -111,25 +114,16 @@ public class ReversiController {
         return new StackPane(maskText);
     }
 
-    private static void checkUpdates(ReversiModel model) {
+    private void scheduleUpdateThread() {
         reversiClient = ReversiClient.getInstance();
-        Timer timer = new Timer(true);
-        timer.schedule(
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        Platform.runLater(() -> {
-                            if (model.turn.get() != Config.getPlayerColor()) {
-                                System.out.println("checking for updates..");
-                                GameInfo gameInfo = reversiClient.retriveInfo();
-                                model.applyGameInfo(gameInfo);
-                            }
-                        });
-                    }
-                },
-                0,
-                1000
-        );
+
+        ScheduledFuture<?> scheduledFuture = timerPool.scheduleAtFixedRate(() -> {
+            if (model.turn.get() != Config.getPlayerColor()) {
+                System.out.println("checking for updates..");
+                GameInfo gameInfo = reversiClient.retriveInfo();
+                model.applyGameInfo(gameInfo);
+            }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     private DropShadow createDropShadow() {
