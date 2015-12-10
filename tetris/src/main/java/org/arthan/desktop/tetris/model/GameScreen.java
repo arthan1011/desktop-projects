@@ -1,12 +1,12 @@
 package org.arthan.desktop.tetris.model;
 
+import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import org.apache.commons.lang.ArrayUtils;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.arthan.desktop.tetris.util.UIBuilder.createPixel;
 
@@ -18,7 +18,7 @@ public class GameScreen {
     public static final int GAME_SCREEN_WIDTH = 10;
     public static final int GAME_SCREEN_HEIGHT = 20;
     public final GridPane gameGrid;
-    private Pixel[] blocks = new Pixel[0];
+    private List<Pixel> blocks = Lists.newArrayList();
     private FigureOnScreen figure;
 
     public GameScreen(GridPane gameGrid) {
@@ -64,12 +64,15 @@ public class GameScreen {
         }
     }
 
-    public void setBlocks(Pixel[] blocksInBottom) {
-        blocks = Arrays.copyOf(blocksInBottom, blocksInBottom.length);
+    public void setBlocks(List<Pixel> blocksInBottom) {
+        blocks = Lists.newArrayList(blocksInBottom);
     }
 
-    public Pixel[] getPixelArray() {
-        return (Pixel[]) ArrayUtils.addAll(blocks, figure.getPixels());
+    public List<Pixel> getPixelArray() {
+        List<Pixel> resultList = Lists.newArrayList();
+        resultList.addAll(blocks);
+        resultList.addAll(figure.getPixels());
+        return resultList;
     }
 
     public void setFigure(FigureOnScreen figure) {
@@ -87,9 +90,9 @@ public class GameScreen {
     }
 
     public boolean figureReachedBlocks() {
-        Pixel[] pixelsUnderneath = figure.getPixelsUnderneath();
+        List<Pixel> pixelsUnderneath = figure.getPixelsUnderneath();
         for (Pixel pixel : pixelsUnderneath) {
-            if (ArrayUtils.contains(blocks, pixel)) {
+            if (blocks.contains(pixel)) {
                 return true;
             }
         }

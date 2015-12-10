@@ -1,5 +1,6 @@
 package org.arthan.desktop.tetris.controller;
 
+import com.google.common.collect.Lists;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -61,13 +62,12 @@ public class GameScreenController {
 
     public void test_setBlocksInBottom() {
         getGameScreen().setBlocks(
-                new Pixel[]{
+                Lists.newArrayList(
                         new Pixel(0, 19),
                         new Pixel(2, 19),
                         new Pixel(4, 19),
                         new Pixel(6, 19),
-                        new Pixel(8, 19),
-                }
-        );
+                        new Pixel(8, 19))
+                );
     }
 }
