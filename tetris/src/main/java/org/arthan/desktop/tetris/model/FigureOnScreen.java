@@ -30,6 +30,12 @@ public class FigureOnScreen {
             new Pixel(4, 18),
             new Pixel(5, 18)
     );
+    public static final List<Pixel> TEST_SQUARE_ABOVE_3_BOTTOM = Lists.newArrayList(
+            new Pixel(4, 15),
+            new Pixel(5, 15),
+            new Pixel(4, 16),
+            new Pixel(5, 16)
+    );
 
     private List<Pixel> pixels;
 

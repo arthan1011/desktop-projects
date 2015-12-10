@@ -5,6 +5,7 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
+import org.arthan.desktop.tetris.model.GAME_STATUS;
 import org.arthan.desktop.tetris.model.GameScreen;
 import org.arthan.desktop.tetris.model.Pixel;
 
@@ -30,17 +31,17 @@ public class GameScreenController {
         launch(square);
     }
 
-    private void launch(FigureOnScreen shape) {
-        getGameScreen().setFigure(shape);
+    private void launch(FigureOnScreen figure) {
+        getGameScreen().setFigure(figure);
         final long[] start = {System.nanoTime()};
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if ((now - start[0]) / ONE_SECOND >= 1) {
-                    getGameScreen().figureDown();
+                    GAME_STATUS status = getGameScreen().figureDown();
                     start[0] += ONE_SECOND;
 
-                    if (getGameScreen().figureReachedBottom() || getGameScreen().figureReachedBlocks()) {
+                    if (status == GAME_STATUS.STOPPED) {
                         stop();
                     }
                 }
@@ -68,6 +69,11 @@ public class GameScreenController {
                         new Pixel(4, 19),
                         new Pixel(6, 19),
                         new Pixel(8, 19))
-                );
+        );
+    }
+
+    public void test_launchSquare3PixelAboveBottom() {
+        FigureOnScreen square3PixelAboveBottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM);
+        launch(square3PixelAboveBottom);
     }
 }

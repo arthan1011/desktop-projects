@@ -40,6 +40,9 @@
                 <Hyperlink fx:id="test_set_blocks_in_bottom"
                            onAction="#test_setBlocksInBottom"
                            text="Set blocks in the bottom" />
+                <Hyperlink fx:id="test_launchSquare3PixelAboveBottom"
+                           onAction="#test_launchSquare3PixelAboveBottom"
+                           text="Launch square 3 pixels above bottom" />
             </children>
         </VBox>
     </left>

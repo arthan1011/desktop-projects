@@ -48,7 +48,7 @@ public class GameScreen {
         children.clear();
     }
 
-    public void updateGame() {
+    public GAME_STATUS updateGame() {
         removeChildren();
         fillWithPixels();
         for (Pixel pixel : figure.getPixels()) {
@@ -62,13 +62,21 @@ public class GameScreen {
             gameGrid.getChildren().remove(child);
             gameGrid.add(createPixel(), block.x, block.y);
         }
+
+        if (ifFigureReachedBlocks() || ifFigureReachedBottom()) {
+            blocks.addAll(figure.getPixels());
+            figure = null;
+            return GAME_STATUS.STOPPED;
+        }
+
+        return GAME_STATUS.FALLING;
     }
 
     public void setBlocks(List<Pixel> blocksInBottom) {
         blocks = Lists.newArrayList(blocksInBottom);
     }
 
-    public List<Pixel> getPixelArray() {
+    List<Pixel> getPixelArray() {
         List<Pixel> resultList = Lists.newArrayList();
         resultList.addAll(blocks);
         resultList.addAll(figure.getPixels());
@@ -80,16 +88,19 @@ public class GameScreen {
         updateGame();
     }
 
-    public void figureDown() {
+    public GAME_STATUS figureDown() {
+        if (figure == null) {
+            throw new IllegalStateException("Figure already fell");
+        }
         figure = figure.goDown();
-        updateGame();
+        return updateGame();
     }
 
-    public boolean figureReachedBottom() {
+    boolean ifFigureReachedBottom() {
         return figure.isInTheBottom();
     }
 
-    public boolean figureReachedBlocks() {
+    boolean ifFigureReachedBlocks() {
         List<Pixel> pixelsUnderneath = figure.getPixelsUnderneath();
         for (Pixel pixel : pixelsUnderneath) {
             if (blocks.contains(pixel)) {
@@ -97,5 +108,9 @@ public class GameScreen {
             }
         }
         return false;
+    }
+
+    public List<Pixel> getBlocks() {
+        return Lists.newArrayList(blocks);
     }
 }
