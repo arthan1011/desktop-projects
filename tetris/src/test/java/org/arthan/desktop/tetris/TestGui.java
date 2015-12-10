@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
  */
 public class TestGui extends GuiTest {
     public static final String TEST_LAUNCH_SQUARE_BUTTON = "#test_LaunchSquareButton";
+    public static final String TEST_SET_BLOCKS_IN_BOTTOM = "#test_set_blocks_in_bottom";
     protected static final String START_BUTTON_ID = "#startButton";
     protected static final String EXIT_BUTTON_ID = "#exitButton";
     protected static final String GAME_SCREEN_ID = "#gameGrid";

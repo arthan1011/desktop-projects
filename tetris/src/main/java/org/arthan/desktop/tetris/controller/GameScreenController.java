@@ -1,11 +1,11 @@
 package org.arthan.desktop.tetris.controller;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
 import org.arthan.desktop.tetris.model.GameScreen;
+import org.arthan.desktop.tetris.model.Pixel;
 
 /**
  * Created by Arthur Shamsiev on 05.12.15.
@@ -20,38 +20,31 @@ public class GameScreenController {
     private GameScreen gameScreen;
 
     public void initialize() {
-        getGameScreen().fillWithSquares();
+        getGameScreen().fillWithPixels();
     }
 
     @FXML
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
-
         launch(square);
     }
 
     private void launch(FigureOnScreen shape) {
-        updateGame(shape);
-        final FigureOnScreen[] figure = {shape};
+        getGameScreen().setFigure(shape);
         final long[] start = {System.nanoTime()};
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if ((now - start[0]) / ONE_SECOND >= 1) {
-                    figure[0] = figure[0].goDown();
-                    updateGame(figure[0]);
+                    getGameScreen().figureDown();
                     start[0] += ONE_SECOND;
 
-                    if (figure[0].isInTheBottom()) {
+                    if (getGameScreen().figureReachedBottom() || getGameScreen().figureReachedBlocks()) {
                         stop();
                     }
                 }
             }
         }.start();
-    }
-
-    private void updateGame(FigureOnScreen figure) {
-        getGameScreen().updateGame(figure);
     }
 
     public GameScreen getGameScreen() {
@@ -62,7 +55,19 @@ public class GameScreenController {
     }
 
     public void test_launchSquareNearBottom() {
-        FigureOnScreen square_near_bottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_NEAR_BOTTOM);
+        FigureOnScreen square_near_bottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
         launch(square_near_bottom);
+    }
+
+    public void test_setBlocksInBottom() {
+        getGameScreen().setBlocks(
+                new Pixel[]{
+                        new Pixel(0, 19),
+                        new Pixel(2, 19),
+                        new Pixel(4, 19),
+                        new Pixel(6, 19),
+                        new Pixel(8, 19),
+                }
+        );
     }
 }

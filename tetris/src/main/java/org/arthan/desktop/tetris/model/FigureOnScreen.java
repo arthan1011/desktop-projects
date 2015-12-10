@@ -1,6 +1,10 @@
 package org.arthan.desktop.tetris.model;
 
+import com.google.common.collect.Lists;
+
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by ashamsiev on 09.12.2015
@@ -13,11 +17,17 @@ public class FigureOnScreen {
             new Pixel(4, 1),
             new Pixel(5, 1)
     };
-    public static final Pixel[] TEST_SQUARE_NEAR_BOTTOM = new Pixel[]{
+    public static final Pixel[] TEST_SQUARE_ABOVE_2_BOTTOM = new Pixel[]{
             new Pixel(4, 16),
             new Pixel(5, 16),
             new Pixel(4, 17),
             new Pixel(5, 17)
+    };
+    public static final Pixel[] TEST_SQUARE_ABOVE_1_BOTTOM = new Pixel[]{
+            new Pixel(4, 17),
+            new Pixel(5, 17),
+            new Pixel(4, 18),
+            new Pixel(5, 18)
     };
 
     private Pixel[] pixels;
@@ -49,10 +59,33 @@ public class FigureOnScreen {
 
     int findLowestY() {
         int result = 0;
-        for (int i = 0; i < pixels.length; i++) {
-            Pixel pixel = pixels[i];
+        for (Pixel pixel : pixels) {
             result = Math.max(pixel.y, result);
         }
         return result;
+    }
+
+    Pixel[] getPixelsUnderneath() {
+        Pixel[] pixels = findLowestPixels();
+        for (int i = 0; i < pixels.length; i++) {
+            Pixel pixel = pixels[i];
+            pixels[i] = new Pixel(pixel.x, pixel.y + 1);
+        }
+        return Arrays.copyOf(pixels, pixels.length);
+    }
+
+    Pixel[] findLowestPixels() {
+        List<Pixel> resultList = Lists.newArrayList();
+        for (int i = 0; i < GameScreen.GAME_SCREEN_WIDTH; i++) {
+            resultList.add(null);
+        }
+
+        for (Pixel pixel : pixels) {
+            if (resultList.get(pixel.x) == null || resultList.get(pixel.x).y < pixel.y) {
+                resultList.set(pixel.x, pixel);
+            }
+        }
+        resultList.removeAll(Collections.singleton(null));
+        return resultList.toArray(new Pixel[resultList.size()]);
     }
 }
