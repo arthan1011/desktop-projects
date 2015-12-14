@@ -27,8 +27,9 @@ public class TetrisTest extends TestGui {
     private static final String SQUARE_IN_THE_BOTTOM = "/square_in_the_bottom.txt";
     private static final String SQUARE_2_PIXEL_ABOVE_BOTTOM_WITH_BLOCKS_IN_BOTTOM = "/square_2_pixel_above_bottom_with_blocks_in_bottom.txt";
     private static final String SQUARE_STOPPED_AT_BLOCKS_1_PIXEL_ABOVE_BOTTOM = "/square_stopped_at_blocks_1_pixel_above_bottom.txt";
-    public static final String SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT = "/square_in_the_bottom_and_second_square_above_it.txt";
-    public static final String SQUARE_ON_TOP_OF_ANOTHER_SQUARE_IN_THE_BOTTOM = "/square_on_top_of_another_square_in_the_bottom.txt";
+    private static final String SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT = "/square_in_the_bottom_and_second_square_above_it.txt";
+    private static final String SQUARE_ON_TOP_OF_ANOTHER_SQUARE_IN_THE_BOTTOM = "/square_on_top_of_another_square_in_the_bottom.txt";
+    private static final String SQUARE_ON_TOP_AND_FALLEN_SQUARE = "/square_on_top_and_fallen_square.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -37,7 +38,7 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Game screen on start wasn't blank",
                 readFile(BLANK_PATH),
-                getGameArray());
+                getGameData());
     }
 
     @Test
@@ -48,7 +49,7 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Square hasn't appeared at the top",
                 readFile(SQUARE_ON_TOP_PATH),
-                getGameArray());
+                getGameData());
     }
 
     @Test
@@ -60,13 +61,13 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Square wasn't falling at expected speed",
                 readFile(SQUARE_1_PIXEL_BELOW_TOP),
-                getGameArray());
+                getGameData());
 
         waitFor(1000);
         Assert.assertEquals(
                 "Square wasn't falling at expected speed",
                 readFile(SQUARE_2_PIXEL_BELOW_TOP),
-                getGameArray());
+                getGameData());
     }
 
     private GridPane findGameScreen() {
@@ -81,13 +82,13 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Square didn't appear near bottom",
                 readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM),
-                getGameArray());
+                getGameData());
 
         waitFor(3500);
 
         String gameArray = null;
         try {
-            gameArray = getGameArray();
+            gameArray = getGameData();
         } catch (ArrayIndexOutOfBoundsException e) {
             Assert.fail("Square didn't stop in the bottom");
         }
@@ -106,16 +107,16 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Initial state with figure near bottom and blocks in the bottom wasn't set",
                 readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM_WITH_BLOCKS_IN_BOTTOM),
-                getGameArray());
+                getGameData());
 
         waitFor(2500);
         Assert.assertEquals(
                 "Square didn't stop when it reached blocks",
                 readFile(SQUARE_STOPPED_AT_BLOCKS_1_PIXEL_ABOVE_BOTTOM),
-                getGameArray());
+                getGameData());
     }
 
-    private String getGameArray() {
+    private String getGameData() {
         GridPane screen = findGameScreen();
         int[][] gameArray = getArrayFromScreen(screen);
         return stringifyScreenArray(gameArray);
@@ -131,14 +132,33 @@ public class TetrisTest extends TestGui {
         Assert.assertEquals(
                 "Second square wasn't launched after first fell",
                 readFile(SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT),
-                getGameArray());
+                getGameData());
 
         waitFor(2500);
         Assert.assertEquals(
                 "Second square didn't fall on top of first one",
                 readFile(SQUARE_ON_TOP_OF_ANOTHER_SQUARE_IN_THE_BOTTOM),
-                getGameArray()
+                getGameData()
         );
+    }
+
+    @Test
+    public void shouldAutomaticallyLaunchNextFigureOnTop() throws Exception {
+        click(START_BUTTON_ID);
+        click("#testLaunchSquare2PixelAboveBottom__withFigureProvider");
+
+        Assert.assertEquals(
+                "Square should appear near bottom",
+                readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM),
+                getGameData());
+
+        waitFor(3500);
+        Assert.assertEquals(
+                "Square should appear on top after first one fell",
+                readFile(SQUARE_ON_TOP_AND_FALLEN_SQUARE),
+                getGameData()
+        );
+
     }
 
     private void click(String buttonID) {

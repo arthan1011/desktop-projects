@@ -2,6 +2,7 @@ package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
 import javafx.animation.AnimationTimer;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
@@ -34,6 +35,7 @@ public class GameScreenController {
     private void launch(FigureOnScreen figure) {
         getGameScreen().setFigure(figure);
         final long[] start = {System.nanoTime()};
+        // TODO: animationTimer should not be stopped and started for every new figure. Instead it should use figure provider
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -75,5 +77,9 @@ public class GameScreenController {
     public void test_launchSquare3PixelAboveBottom() {
         FigureOnScreen square3PixelAboveBottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM);
         launch(square3PixelAboveBottom);
+    }
+
+    public void testLaunchSquare2PixelAboveBottom__withFigureProvider() {
+
     }
 }

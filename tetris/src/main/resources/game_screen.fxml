@@ -43,6 +43,9 @@
                 <Hyperlink fx:id="test_launchSquare3PixelAboveBottom"
                            onAction="#test_launchSquare3PixelAboveBottom"
                            text="Launch square 3 pixels above bottom" />
+                <Hyperlink fx:id="testLaunchSquare2PixelAboveBottom__withFigureProvider"
+                           onAction="#testLaunchSquare2PixelAboveBottom__withFigureProvider"
+                           text="Launch square near bottom with provider" />
             </children>
         </VBox>
     </left>
