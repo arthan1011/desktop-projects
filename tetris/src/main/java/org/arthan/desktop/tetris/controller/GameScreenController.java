@@ -2,13 +2,15 @@ package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
-import org.arthan.desktop.tetris.model.GAME_STATUS;
 import org.arthan.desktop.tetris.model.GameScreen;
 import org.arthan.desktop.tetris.model.Pixel;
+import org.arthan.desktop.tetris.model.provider.FigureListProvider;
+import org.arthan.desktop.tetris.model.provider.FigureProvider;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Arthur Shamsiev on 05.12.15.
@@ -17,50 +19,42 @@ import org.arthan.desktop.tetris.model.Pixel;
  */
 public class GameScreenController {
 
-    public static final long ONE_SECOND = 1000000000;
+    private static final long ONE_SECOND = TimeUnit.SECONDS.toNanos(1);
     @FXML
     private GridPane gameGrid;
     private GameScreen gameScreen;
 
-    public void initialize() {
-        getGameScreen().fillWithPixels();
-    }
-
     @FXML
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
-        launch(square);
+        launch(new FigureListProvider(square));
     }
 
-    private void launch(FigureOnScreen figure) {
-        getGameScreen().setFigure(figure);
+    private void launch(FigureProvider figureProvider) {
+        getGameScreen().setProvider(figureProvider);
+        getGameScreen().nextStep();
         final long[] start = {System.nanoTime()};
-        // TODO: animationTimer should not be stopped and started for every new figure. Instead it should use figure provider
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if ((now - start[0]) / ONE_SECOND >= 1) {
-                    GAME_STATUS status = getGameScreen().figureDown();
+                    getGameScreen().nextStep();
                     start[0] += ONE_SECOND;
-
-                    if (status == GAME_STATUS.STOPPED) {
-                        stop();
-                    }
                 }
             }
         }.start();
     }
 
-    public GameScreen getGameScreen() {
+    private GameScreen getGameScreen() {
         if (gameScreen == null) {
-            gameScreen = new GameScreen(gameGrid);
+            gameScreen = new GameScreen(gameGrid, null);
         }
         return gameScreen;
     }
 
     public void test_launchSquareNearBottom() {
         FigureOnScreen square_near_bottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
-        launch(square_near_bottom);
+        launch(new FigureListProvider(square_near_bottom));
     }
 
     public void test_setBlocksInBottom() {
@@ -74,12 +68,17 @@ public class GameScreenController {
         );
     }
 
-    public void test_launchSquare3PixelAboveBottom() {
-        FigureOnScreen square3PixelAboveBottom = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM);
-        launch(square3PixelAboveBottom);
+    public void test_launch2Squares3PixelAboveBottom() {
+        launch(new FigureListProvider(
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM),
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM)
+        ));
     }
 
     public void testLaunchSquare2PixelAboveBottom__withFigureProvider() {
-
+        launch(new FigureListProvider(
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM),
+                new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP)
+        ));
     }
 }

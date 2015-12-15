@@ -4,28 +4,49 @@ import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.arthan.desktop.tetris.util.UIBuilder.createPixel;
 
 /**
  * Created by ashamsiev on 09.12.2015
+ * This class is state of the current game
  */
 public class GameScreen {
 
     public static final int GAME_SCREEN_WIDTH = 10;
     public static final int GAME_SCREEN_HEIGHT = 20;
-    public final GridPane gameGrid;
+    private final GridPane gameGrid;
     private List<Pixel> blocks = Lists.newArrayList();
     private FigureOnScreen figure;
+    private FigureProvider provider;
 
-    public GameScreen(GridPane gameGrid) {
+    public GameScreen(GridPane gameGrid, FigureProvider figureProvider) {
         this.gameGrid = gameGrid;
+        this.provider = figureProvider;
     }
 
-    public void fillWithPixels() {
+    private void updateGame() {
+        if (figure == null || figureArrived()) {
+            addFigureToBlocks();
+            Optional<FigureOnScreen> nextFigure = provider.next();
+            if (nextFigure.isPresent()) {
+                figure = nextFigure.get();
+            } else {
+                return;
+            }
+        } else {
+            figure = figure.goDown();
+        }
+
+        updateScreen();
+    }
+
+    private void fillWithPixels() {
         for (int i = 0; i < GAME_SCREEN_WIDTH; i++) {
             for (int j = 0; j < GAME_SCREEN_HEIGHT; j++) {
                 gameGrid.add(UIBuilder.createCell(), i, j);
@@ -33,7 +54,7 @@ public class GameScreen {
         }
     }
 
-    public Node getNodeAt(int x, int y) {
+    private Node getNodeAt(int x, int y) {
         ObservableList<Node> children = gameGrid.getChildren();
         for (Node node : children) {
             if (GridPane.getRowIndex(node) == y && GridPane.getColumnIndex(node) == x) {
@@ -43,64 +64,44 @@ public class GameScreen {
         return null;
     }
 
-    public void removeChildren() {
+    private void removeChildren() {
         ObservableList<Node> children = gameGrid.getChildren();
         children.clear();
     }
 
-    public GAME_STATUS updateGame() {
+    private void addFigureToBlocks() {
+        if (figure != null) {
+            blocks.addAll(figure.getPixels());
+        }
+    }
+
+    private boolean figureArrived() {
+        return figureReachedBlocks() || figureReachedBottom();
+    }
+
+    private void updateScreen() {
         removeChildren();
         fillWithPixels();
-        for (Pixel pixel : figure.getPixels()) {
-            Node child = getNodeAt(pixel.x, pixel.y);
-            gameGrid.getChildren().remove(child);
-            gameGrid.add(createPixel(), pixel.x, pixel.y);
-        }
 
-        for (Pixel block : blocks) {
-            Node child = getNodeAt(block.x, block.y);
-            gameGrid.getChildren().remove(child);
-            gameGrid.add(createPixel(), block.x, block.y);
-        }
-
-        if (ifFigureReachedBlocks() || ifFigureReachedBottom()) {
-            blocks.addAll(figure.getPixels());
-            figure = null;
-            return GAME_STATUS.STOPPED;
-        }
-
-        return GAME_STATUS.FALLING;
+        figure.getPixels().forEach(this::paintPixel);
+        blocks.forEach(this::paintPixel);
     }
 
-    public void setBlocks(List<Pixel> blocksInBottom) {
-        blocks = Lists.newArrayList(blocksInBottom);
+    private void paintPixel(Pixel pixel) {
+        Node child = getNodeAt(pixel.x, pixel.y);
+        gameGrid.getChildren().remove(child);
+        gameGrid.add(createPixel(), pixel.x, pixel.y);
     }
 
-    List<Pixel> getPixelArray() {
-        List<Pixel> resultList = Lists.newArrayList();
-        resultList.addAll(blocks);
-        resultList.addAll(figure.getPixels());
-        return resultList;
-    }
-
-    public void setFigure(FigureOnScreen figure) {
-        this.figure = figure;
+    public void nextStep() {
         updateGame();
     }
 
-    public GAME_STATUS figureDown() {
-        if (figure == null) {
-            throw new IllegalStateException("Figure already fell");
-        }
-        figure = figure.goDown();
-        return updateGame();
-    }
-
-    boolean ifFigureReachedBottom() {
+    private boolean figureReachedBottom() {
         return figure.isInTheBottom();
     }
 
-    boolean ifFigureReachedBlocks() {
+    boolean figureReachedBlocks() {
         List<Pixel> pixelsUnderneath = figure.getPixelsUnderneath();
         for (Pixel pixel : pixelsUnderneath) {
             if (blocks.contains(pixel)) {
@@ -110,7 +111,22 @@ public class GameScreen {
         return false;
     }
 
+    List<Pixel> getGameData() {
+        List<Pixel> resultList = Lists.newArrayList();
+        resultList.addAll(blocks);
+        resultList.addAll(figure.getPixels());
+        return resultList;
+    }
+
     public List<Pixel> getBlocks() {
         return Lists.newArrayList(blocks);
+    }
+
+    public void setBlocks(List<Pixel> blocksInBottom) {
+        blocks = Lists.newArrayList(blocksInBottom);
+    }
+
+    public void setProvider(FigureProvider provider) {
+        this.provider = provider;
     }
 }

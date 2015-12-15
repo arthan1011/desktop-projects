@@ -3,6 +3,8 @@ package org.arthan.desktop.tetris.model;
 import com.google.common.collect.Lists;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.TestUtils;
+import org.arthan.desktop.tetris.model.provider.FigureListProvider;
+import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,16 +31,18 @@ public class GameScreenTest {
 
     @Test
     public void shouldPreserveBlocksAfterFigurePositionUpdated() throws Exception {
-        GameScreen gameScreen = new GameScreen(new GridPane());
+        GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
-        gameScreen.setFigure(square);
+        gameScreen.setProvider(new FigureListProvider(square));
+        gameScreen.nextStep();
 
         List<Pixel> expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
         expectedArray.addAll(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
-        TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getPixelArray());
+        TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getGameData());
 
-        gameScreen.figureDown();
+        gameScreen.nextStep();
+        gameScreen.nextStep();
 
         expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
         expectedArray.addAll(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM);
@@ -47,23 +51,29 @@ public class GameScreenTest {
 
     @Test
     public void shouldFindOutIfFigureReachedBlocks() throws Exception {
-        GameScreen gameScreen = new GameScreen(new GridPane());
+        GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
-        gameScreen.setFigure(square);
+        gameScreen.setProvider(new FigureListProvider(square));
 
-        Assert.assertFalse("Figure did not reach blocks", gameScreen.ifFigureReachedBlocks());
+        gameScreen.nextStep();
 
-        GAME_STATUS status = gameScreen.figureDown();
+        Assert.assertFalse("Figure should not reach blocks", gameScreen.figureReachedBlocks());
 
-        Assert.assertEquals("Figure did not reach blocks", GAME_STATUS.STOPPED, status);
+        gameScreen.nextStep();
+
+        Assert.assertTrue("Figure should reach blocks", gameScreen.figureReachedBlocks());
     }
 
     @Test
     public void shouldBecomePartOfBlocksAfterFell() throws Exception {
-        GameScreen gameScreen = new GameScreen(new GridPane());
-        gameScreen.setFigure(new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM));
-        gameScreen.figureDown();
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM))
+        );
+        gameScreen.nextStep();
+        gameScreen.nextStep();
+        gameScreen.nextStep();
 
         TestUtils.assertListEquals(
                 "Figure didn't become part of blocks after reaching bottom",
@@ -78,30 +88,43 @@ public class GameScreenTest {
     }
 
     @Test
-    public void shouldReturnUpdateStatus() throws Exception {
-        GameScreen gameScreen = new GameScreen(new GridPane());
-        gameScreen.setFigure(new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM));
+    public void shouldAutomaticallyLaunchNewFigureOnTop() throws Exception {
+        FigureProvider figureProvider = new FigureListProvider(
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM),
+                new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP)
+        );
+        GameScreen gameScreen = new GameScreen(new GridPane(), figureProvider);
 
-        GAME_STATUS status = gameScreen.figureDown();
-        Assert.assertEquals(
-                "Game status should be FALLING",
-                GAME_STATUS.FALLING,
-                status);
+        gameScreen.nextStep();
 
-        status = gameScreen.figureDown();
+        TestUtils.assertListEquals(
+                "Should show first figure from figure provider",
+                Lists.newArrayList(
+                        new Pixel(4, 16),
+                        new Pixel(5, 16),
+                        new Pixel(4, 17),
+                        new Pixel(5, 17)
+                ),
+                gameScreen.getGameData()
+        );
 
-        Assert.assertEquals(
-                "Game status should be STOPPED",
-                GAME_STATUS.STOPPED,
-                status);
-    }
+        gameScreen.nextStep();
+        gameScreen.nextStep();
+        gameScreen.nextStep();
 
-    @Test(expected = IllegalStateException.class)
-    public void shouldThrowExceptionIfFigureDownAfterFell() throws Exception {
-        GameScreen gameScreen = new GameScreen(new GridPane());
-        gameScreen.setFigure(new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM));
-
-        gameScreen.figureDown();
-        gameScreen.figureDown();
+        TestUtils.assertListEquals(
+                "Second square provided by figure provider should appear on top",
+                Lists.newArrayList(
+                        new Pixel(4, 0),
+                        new Pixel(5, 0),
+                        new Pixel(4, 1),
+                        new Pixel(5, 1),
+                        new Pixel(4, 18),
+                        new Pixel(5, 18),
+                        new Pixel(4, 19),
+                        new Pixel(5, 19)
+                ),
+                gameScreen.getGameData()
+        );
     }
 }

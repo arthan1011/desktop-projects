@@ -125,10 +125,9 @@ public class TetrisTest extends TestGui {
     @Test
     public void shouldBecomeBlocksWhenFell() throws Exception {
         click(START_BUTTON_ID);
-        click(TEST_LAUNCH_SQUARE_3_PIXEL_ABOVE_BOTTOM);
+        click(TEST_LAUNCH_2_SQUARES_3_PIXEL_ABOVE_BOTTOM);
 
         waitFor(4500);
-        click(TEST_LAUNCH_SQUARE_3_PIXEL_ABOVE_BOTTOM);
         Assert.assertEquals(
                 "Second square wasn't launched after first fell",
                 readFile(SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT),
@@ -145,7 +144,7 @@ public class TetrisTest extends TestGui {
     @Test
     public void shouldAutomaticallyLaunchNextFigureOnTop() throws Exception {
         click(START_BUTTON_ID);
-        click("#testLaunchSquare2PixelAboveBottom__withFigureProvider");
+        click(TEST_LAUNCH_SQUARE2_PIXEL_ABOVE_BOTTOM_WITH_FIGURE_PROVIDER);
 
         Assert.assertEquals(
                 "Square should appear near bottom",

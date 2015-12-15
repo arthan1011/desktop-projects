@@ -40,8 +40,8 @@
                 <Hyperlink fx:id="test_set_blocks_in_bottom"
                            onAction="#test_setBlocksInBottom"
                            text="Set blocks in the bottom" />
-                <Hyperlink fx:id="test_launchSquare3PixelAboveBottom"
-                           onAction="#test_launchSquare3PixelAboveBottom"
+                <Hyperlink fx:id="test_launch2Squares3PixelAboveBottom"
+                           onAction="#test_launch2Squares3PixelAboveBottom"
                            text="Launch square 3 pixels above bottom" />
                 <Hyperlink fx:id="testLaunchSquare2PixelAboveBottom__withFigureProvider"
                            onAction="#testLaunchSquare2PixelAboveBottom__withFigureProvider"

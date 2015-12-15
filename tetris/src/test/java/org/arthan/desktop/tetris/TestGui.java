@@ -17,11 +17,12 @@ import java.net.URISyntaxException;
 public class TestGui extends GuiTest {
     public static final String TEST_LAUNCH_SQUARE_BUTTON = "#test_LaunchSquareButton";
     public static final String TEST_SET_BLOCKS_IN_BOTTOM = "#test_set_blocks_in_bottom";
-    public static final String TEST_LAUNCH_SQUARE_3_PIXEL_ABOVE_BOTTOM = "#test_launchSquare3PixelAboveBottom";
+    public static final String TEST_LAUNCH_2_SQUARES_3_PIXEL_ABOVE_BOTTOM = "#test_launch2Squares3PixelAboveBottom";
     protected static final String START_BUTTON_ID = "#startButton";
     protected static final String EXIT_BUTTON_ID = "#exitButton";
     protected static final String GAME_SCREEN_ID = "#gameGrid";
     protected static final String TEST_LAUNCH_SQUARE_BUTTON_NEAR_BOTTOM = "#test_LaunchSquareNearBottomButton";
+    protected static final String TEST_LAUNCH_SQUARE2_PIXEL_ABOVE_BOTTOM_WITH_FIGURE_PROVIDER = "#testLaunchSquare2PixelAboveBottom__withFigureProvider";
 
     protected String readFile(String path) {
         String expectedScreenArray;
