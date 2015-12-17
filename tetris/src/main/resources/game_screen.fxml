@@ -14,48 +14,71 @@
             xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.arthan.desktop.tetris.controller.GameScreenController">
-    <center>
-        <Pane>
-            <GridPane fx:id="gameGrid"
-                      hgap="2.0"
-                      prefHeight="420.0"
-                      prefWidth="220.0"
-                      vgap="2.0">
-            </GridPane>
-        </Pane>
+  <center>
+    <Pane>
+      <GridPane fx:id="gameGrid"
+                hgap="2.0"
+                prefHeight="420.0"
+                prefWidth="220.0"
+                vgap="2.0">
+      </GridPane>
+    </Pane>
 
-    </center>
-    <left>
-        <VBox prefHeight="200.0"
-              prefWidth="100.0"
-              BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Test"/>
-                <Hyperlink fx:id="test_LaunchSquareButton"
-                           onAction="#launchSquare"
-                           text="Launch square" />
-                <Hyperlink fx:id="test_LaunchSquareNearBottomButton"
-                           onAction="#test_launchSquareNearBottom"
-                           text="Launch square near bottom" />
-                <Hyperlink fx:id="test_set_blocks_in_bottom"
-                           onAction="#test_setBlocksInBottom"
-                           text="Set blocks in the bottom" />
-                <Hyperlink fx:id="test_launch2Squares3PixelAboveBottom"
-                           onAction="#test_launch2Squares3PixelAboveBottom"
-                           text="Launch square 3 pixels above bottom" />
-                <Hyperlink fx:id="testLaunchSquare2PixelAboveBottom__withFigureProvider"
-                           onAction="#testLaunchSquare2PixelAboveBottom__withFigureProvider"
-                           text="Launch square near bottom with provider" />
-            </children>
-        </VBox>
-    </left>
-    <top>
-        <Label text="Tetris"
-               BorderPane.alignment="CENTER">
-            <font>
-                <Font name="Arial Bold"
-                      size="27.0"/>
-            </font>
-        </Label>
-    </top>
+  </center>
+  <left>
+    <VBox prefHeight="200.0"
+          prefWidth="200.0"
+          BorderPane.alignment="CENTER">
+      <children>
+        <Label text="Test"/>
+        <Hyperlink fx:id="test_LaunchSquareButton"
+                   onAction="#launchSquare"
+                   text="Launch square"/>
+        <Hyperlink fx:id="test_LaunchSquareNearBottomButton"
+                   onAction="#test_launchSquareNearBottom"
+                   text="Launch square near bottom"/>
+        <Hyperlink fx:id="test_set_blocks_in_bottom"
+                   onAction="#test_setBlocksInBottom"
+                   text="Set blocks in the bottom"/>
+        <Hyperlink fx:id="test_launch2Squares3PixelAboveBottom"
+                   onAction="#test_launch2Squares3PixelAboveBottom"
+                   text="Launch square 3 pixels above bottom"/>
+        <Hyperlink fx:id="testLaunchSquare2PixelAboveBottom__withFigureProvider"
+                   onAction="#testLaunchSquare2PixelAboveBottom__withFigureProvider"
+                   text="Launch square near bottom with provider"/>
+
+        <Hyperlink fx:id="test_setSpeed_5"
+                   onAction="#test_setSpeed5"
+                   text="Set speed to 5" />
+        <Hyperlink fx:id="test_setSpeed_2"
+                   onAction="#test_setSpeed2"
+                   text="Set speed to 5" />
+
+      </children>
+    </VBox>
+  </left>
+  <top>
+    <Label text="Tetris"
+           BorderPane.alignment="CENTER">
+      <font>
+        <Font name="Arial Bold"
+              size="27.0"/>
+      </font>
+    </Label>
+  </top>
+  <right>
+    <VBox prefHeight="200.0"
+          prefWidth="100.0"
+          BorderPane.alignment="CENTER">
+      <children>
+        <Label text="Info" />
+        <HBox>
+          <children>
+            <Label text="Speed: " />
+            <Label fx:id="currentSpeedLabel" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </right>
 </BorderPane>

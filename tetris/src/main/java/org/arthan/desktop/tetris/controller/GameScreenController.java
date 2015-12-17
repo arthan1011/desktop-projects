@@ -2,7 +2,11 @@ package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
 import org.arthan.desktop.tetris.model.GameScreen;
@@ -21,9 +25,20 @@ import java.util.concurrent.TimeUnit;
 public class GameScreenController {
 
     private static final long ONE_SECOND = TimeUnit.SECONDS.toNanos(1);
+    public static final int FASTEST_STEP_MILLIS = 100;
+
+    @FXML
+    private Label currentSpeedLabel;
     @FXML
     private GridPane gameGrid;
+
     private GameScreen gameScreen;
+    private IntegerProperty speedProperty = new SimpleIntegerProperty(1);
+    private long[] start = new long[1];
+
+    public void initialize() {
+        currentSpeedLabel.textProperty().bind(speedProperty.asString());
+    }
 
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
@@ -33,16 +48,21 @@ public class GameScreenController {
     private void launch(FigureProvider figureProvider) {
         getGameScreen().setProvider(figureProvider);
         getGameScreen().nextStep();
-        final long[] start = {System.nanoTime()};
+        refreshStartTime();
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if ((now - start[0]) / ONE_SECOND >= 1) {
+                long interval = ONE_SECOND / speedProperty.get();
+                if ((now - start[0]) / interval >= 1) {
                     getGameScreen().nextStep();
-                    start[0] += ONE_SECOND;
+                    start[0] += interval;
                 }
             }
         }.start();
+    }
+
+    private void refreshStartTime() {
+        start[0] = System.nanoTime();
     }
 
     private GameScreen getGameScreen() {
@@ -80,5 +100,15 @@ public class GameScreenController {
                 new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM),
                 new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP)
         ));
+    }
+
+    public void test_setSpeed5() {
+        speedProperty.set(5);
+        refreshStartTime();
+    }
+
+    public void test_setSpeed2() {
+        speedProperty.set(2);
+        refreshStartTime();
     }
 }
