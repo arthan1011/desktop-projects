@@ -9,6 +9,7 @@ import org.arthan.desktop.tetris.model.GameScreen;
 import org.arthan.desktop.tetris.model.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureListProvider;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
+import org.arthan.desktop.tetris.model.provider.InfiniteFigureProvider;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +28,7 @@ public class GameScreenController {
     @FXML
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
-        launch(new FigureListProvider(square));
+        launch(new InfiniteFigureProvider(square));
     }
 
     private void launch(FigureProvider figureProvider) {
