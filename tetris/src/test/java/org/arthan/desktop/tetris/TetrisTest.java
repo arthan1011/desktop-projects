@@ -70,10 +70,6 @@ public class TetrisTest extends TestGui {
                 getGameData());
     }
 
-    private GridPane findGameScreen() {
-        return find(GAME_SCREEN_ID);
-    }
-
     @Test
     public void shouldStopInTheBottom() throws Exception {
         click(START_BUTTON_ID);
@@ -116,12 +112,6 @@ public class TetrisTest extends TestGui {
                 getGameData());
     }
 
-    private String getGameData() {
-        GridPane screen = findGameScreen();
-        int[][] gameArray = getArrayFromScreen(screen);
-        return stringifyScreenArray(gameArray);
-    }
-
     @Test
     public void shouldBecomeBlocksWhenFell() throws Exception {
         click(START_BUTTON_ID);
@@ -158,6 +148,16 @@ public class TetrisTest extends TestGui {
                 getGameData()
         );
 
+    }
+
+    private GridPane findGameScreen() {
+        return find(GAME_SCREEN_ID);
+    }
+
+    private String getGameData() {
+        GridPane screen = findGameScreen();
+        int[][] gameArray = getArrayFromScreen(screen);
+        return stringifyScreenArray(gameArray);
     }
 
     private void click(String buttonID) {

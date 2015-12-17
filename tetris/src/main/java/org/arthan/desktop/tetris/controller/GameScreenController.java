@@ -25,7 +25,6 @@ public class GameScreenController {
     private GridPane gameGrid;
     private GameScreen gameScreen;
 
-    @FXML
     public void launchSquare() {
         FigureOnScreen square = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
         launch(new InfiniteFigureProvider(square));
