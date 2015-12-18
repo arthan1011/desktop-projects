@@ -60,15 +60,12 @@ public class FigureOnScreen {
     }
 
     public boolean isInTheBottom() {
-        return findLowestY() == GameScreen.GAME_SCREEN_HEIGHT - 1;
-    }
+        int lowestY = pixels
+                .stream()
+                .mapToInt(p -> p.y)
+                .max().getAsInt();
 
-    int findLowestY() {
-        int result = 0;
-        for (Pixel pixel : pixels) {
-            result = Math.max(pixel.y, result);
-        }
-        return result;
+        return lowestY == GameScreen.GAME_SCREEN_HEIGHT - 1;
     }
 
     List<Pixel> getPixelsUnderneath() {
@@ -88,5 +85,48 @@ public class FigureOnScreen {
                 });
 
         return Lists.newArrayList(tempMap.values());
+    }
+
+    public FigureOnScreen goRight() {
+        if (!byRightBorder()) {
+            List<Pixel> afterRightPixels = pixels
+                    .stream()
+                    .map(pixel -> new Pixel(pixel.x + 1, pixel.y))
+                    .collect(Collectors.toList());
+
+            return new FigureOnScreen(afterRightPixels);
+        } else {
+            return this;
+        }
+    }
+
+    private boolean byRightBorder() {
+        int rightestX = pixels
+                .stream()
+                .mapToInt(p -> p.x)
+                .max().getAsInt();
+
+        return rightestX == GameScreen.GAME_SCREEN_WIDTH - 1;
+    }
+
+    public FigureOnScreen goLeft() {
+        if (!byLeftBorder()) {
+            List<Pixel> afterLeftPixels = pixels
+                    .stream()
+                    .map(pixel -> new Pixel(pixel.x - 1, pixel.y))
+                    .collect(Collectors.toList());
+            return new FigureOnScreen(afterLeftPixels);
+        } else {
+            return this;
+        }
+    }
+
+    private boolean byLeftBorder() {
+        int leftestX = pixels
+                .stream()
+                .mapToInt(p -> p.x)
+                .min().getAsInt();
+
+        return leftestX == 0;
     }
 }

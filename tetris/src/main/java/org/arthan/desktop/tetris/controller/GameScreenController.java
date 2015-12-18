@@ -3,13 +3,16 @@ package org.arthan.desktop.tetris.controller;
 import com.google.common.collect.Lists;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.FigureOnScreen;
 import org.arthan.desktop.tetris.model.GameScreen;
+import org.arthan.desktop.tetris.model.MOVE_DIRECTION;
 import org.arthan.desktop.tetris.model.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureListProvider;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
@@ -34,10 +37,12 @@ public class GameScreenController {
 
     private GameScreen gameScreen;
     private IntegerProperty speedProperty = new SimpleIntegerProperty(1);
+    private ObjectProperty<MOVE_DIRECTION> moveProperty = new SimpleObjectProperty<>();
     private long[] start = new long[1];
 
     public void initialize() {
         currentSpeedLabel.textProperty().bind(speedProperty.asString());
+        moveProperty.set(MOVE_DIRECTION.NONE);
     }
 
     public void launchSquare() {
@@ -52,13 +57,30 @@ public class GameScreenController {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                long interval = ONE_SECOND / speedProperty.get();
-                if ((now - start[0]) / interval >= 1) {
-                    getGameScreen().nextStep();
-                    start[0] += interval;
-                }
+                performMoveCommand();
+                performNextStep(now);
             }
         }.start();
+    }
+
+    private void performNextStep(long now) {
+        long interval = ONE_SECOND / speedProperty.get();
+        boolean isTimeForNextStep = (now - start[0]) / interval >= 1;
+        if (isTimeForNextStep) {
+            getGameScreen().nextStep();
+            start[0] += interval;
+        }
+    }
+
+    private void performMoveCommand() {
+        switch (moveProperty.get()) {
+            case RIGHT:
+                getGameScreen().goRight();
+                break;
+            case LEFT:
+                getGameScreen().goLeft();
+        }
+        moveProperty.setValue(MOVE_DIRECTION.NONE);
     }
 
     private void refreshStartTime() {
@@ -110,5 +132,21 @@ public class GameScreenController {
     public void test_setSpeed2() {
         speedProperty.set(2);
         refreshStartTime();
+    }
+
+    public void test_launch_three_squares_3_pixel_above_bottom() {
+        launch(new FigureListProvider(
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM),
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM),
+                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_3_BOTTOM)
+        ));
+    }
+
+    public void goRight() {
+        moveProperty.setValue(MOVE_DIRECTION.RIGHT);
+    }
+
+    public void goLeft() {
+        moveProperty.setValue(MOVE_DIRECTION.LEFT);
     }
 }

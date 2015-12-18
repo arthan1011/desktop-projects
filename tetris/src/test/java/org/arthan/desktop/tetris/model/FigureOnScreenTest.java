@@ -41,13 +41,6 @@ public class FigureOnScreenTest {
     }
 
     @Test
-    public void shouldFindLowestPixel_Y_Value() throws Exception {
-        FigureOnScreen figureOnScreen = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
-        int expectedLowestY = figureOnScreen.findLowestY();
-        assertEquals("Lowest Y was not found", expectedLowestY, 17);
-    }
-
-    @Test
     public void shouldCalculatePixelsUnderFigure() throws Exception {
         FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
 
@@ -70,4 +63,103 @@ public class FigureOnScreenTest {
         TestUtils.assertListEquals("Lowest pixels in figure wasn't calculated properly", expectedPixelsUnderFigure, actualPixelsUnderFigure);
     }
 
+    @Test
+    public void shouldGoRight() throws Exception {
+        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        figure = figure.goRight();
+
+        List<Pixel> expectedPixelsAfterGoRight = Lists.newArrayList(
+                new Pixel(5, 16),
+                new Pixel(6, 16),
+                new Pixel(5, 17),
+                new Pixel(6, 17)
+        );
+
+        TestUtils.assertListEquals(
+                "Figure didn't move to the right",
+                expectedPixelsAfterGoRight,
+                figure.getPixels()
+        );
+    }
+
+    @Test
+    public void shouldNotGoRightBeyondScreen() throws Exception {
+        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+
+        figure = figure.goRight();
+        figure = figure.goRight();
+        figure = figure.goRight();
+        figure = figure.goRight();
+
+        List<Pixel> expectedPixelsByRightBorder = Lists.newArrayList(
+                new Pixel(8, 16),
+                new Pixel(9, 16),
+                new Pixel(8, 17),
+                new Pixel(9, 17)
+        );
+
+        TestUtils.assertListEquals(
+                "Figure should be by right border",
+                expectedPixelsByRightBorder,
+                figure.getPixels()
+        );
+
+        figure = figure.goRight();
+
+        TestUtils.assertListEquals(
+                "Figure should still be by right border",
+                expectedPixelsByRightBorder,
+                figure.getPixels()
+        );
+    }
+
+    @Test
+    public void shouldGoLeft() throws Exception {
+        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        figure = figure.goLeft();
+
+        List<Pixel> expectedPixelsAfterGoLeft = Lists.newArrayList(
+                new Pixel(3, 16),
+                new Pixel(4, 16),
+                new Pixel(3, 17),
+                new Pixel(4, 17)
+        );
+
+        TestUtils.assertListEquals(
+                "Figure should go left",
+                expectedPixelsAfterGoLeft,
+                figure.getPixels()
+        );
+    }
+
+    @Test
+    public void shouldNotGoLeftBeyondScreen() throws Exception {
+        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+
+        figure = figure.goLeft();
+        figure = figure.goLeft();
+        figure = figure.goLeft();
+        figure = figure.goLeft();
+
+        List<Pixel> expectedPixelsByLeftBorder = Lists.newArrayList(
+                new Pixel(0, 16),
+                new Pixel(1, 16),
+                new Pixel(0, 17),
+                new Pixel(1, 17)
+        );
+
+        TestUtils.assertListEquals(
+                "Figure should be by left border",
+                expectedPixelsByLeftBorder,
+                figure.getPixels()
+        );
+
+        figure = figure.goLeft();
+
+        TestUtils.assertListEquals(
+                "Figure should still be by left border",
+                expectedPixelsByLeftBorder,
+                figure.getPixels()
+        );
+    }
 }

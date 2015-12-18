@@ -45,7 +45,10 @@
                    text="Launch square 3 pixels above bottom"/>
         <Hyperlink fx:id="testLaunchSquare2PixelAboveBottom__withFigureProvider"
                    onAction="#testLaunchSquare2PixelAboveBottom__withFigureProvider"
-                   text="Launch square near bottom with provider"/>
+                   text="Launch square near bottom with provider" />
+        <Hyperlink fx:id="test_launch_three_squares_3_pixel_above_bottom"
+                   onAction="#test_launch_three_squares_3_pixel_above_bottom"
+                   text="Launch three squares 3 pixels above bottom" />
 
         <Hyperlink fx:id="test_setSpeed_5"
                    onAction="#test_setSpeed5"
@@ -53,6 +56,13 @@
         <Hyperlink fx:id="test_setSpeed_2"
                    onAction="#test_setSpeed2"
                    text="Set speed to 5" />
+
+        <Hyperlink fx:id="goRight"
+                   onAction="#goRight"
+                   text="Go right" />
+        <Hyperlink fx:id="goLeft"
+                   onAction="#goLeft"
+                   text="Go left" />
 
       </children>
     </VBox>

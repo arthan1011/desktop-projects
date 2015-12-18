@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import static org.arthan.desktop.tetris.model.GameScreen.GAME_SCREEN_HEIGHT;
 import static org.arthan.desktop.tetris.model.GameScreen.GAME_SCREEN_WIDTH;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Arthur Shamsiev on 28.11.15.
@@ -35,12 +36,17 @@ public class TetrisTest extends TestGui {
     private static final int INTERVAL_LT_FASTEST_STEP = GameScreenController.FASTEST_STEP_MILLIS / 2;
     private static final String SQUARE_5_PIXEL_BELOW_TOP = "/square_5_pixel_below_top.txt";
     private static final String SQUARE_7_PIXEL_BELOW_TOP = "/square_7_pixel_below_top.txt";
+    public static final String SQUARE_3_PIXEL_ABOVE_BOTTOM_1_PIXEL_RIGHT = "/square_3_pixel_above_bottom_1_pixel_right.txt";
+    public static final String SQUARE_IN_THE_BOTTOM_AND_1_PIXEL_RIGHT = "/square_in_the_bottom_and_1_pixel_right.txt";
+    public static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_3_PIXEL_ABOVE_BOTTOM = "/square1_in_the_bottom_and_square2_3_pixel_above_bottom.txt";
+    private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_2_PIXEL_ABOVE_BOTTOM_AND_2_PIXEL_LEFT = "/square1_in_the_bottom_and_square2_2_pixel_above_bottom_and_2_pixel_left.txt";
+    private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM = "/square1_in_the_bottom_and_square2_in_the_bottom_and_square3_stopped_on_them.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
         click(START_BUTTON_ID);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Game screen on start wasn't blank",
                 readFile(BLANK_PATH),
                 getGameData());
@@ -51,7 +57,7 @@ public class TetrisTest extends TestGui {
         click(START_BUTTON_ID);
         click(TEST_LAUNCH_SQUARE_BUTTON);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Square hasn't appeared at the top",
                 readFile(SQUARE_ON_TOP_PATH),
                 getGameData());
@@ -63,13 +69,13 @@ public class TetrisTest extends TestGui {
         click(TEST_LAUNCH_SQUARE_BUTTON);
 
         waitFor(stepsBeyond(1));
-        Assert.assertEquals(
+        assertEquals(
                 "Square wasn't falling at expected speed",
                 readFile(SQUARE_1_PIXEL_BELOW_TOP),
                 getGameData());
 
         waitFor(steps(1));
-        Assert.assertEquals(
+        assertEquals(
                 "Square wasn't falling at expected speed",
                 readFile(SQUARE_2_PIXEL_BELOW_TOP),
                 getGameData());
@@ -80,7 +86,7 @@ public class TetrisTest extends TestGui {
         click(START_BUTTON_ID);
         click(TEST_LAUNCH_SQUARE_BUTTON_NEAR_BOTTOM);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Square didn't appear near bottom",
                 readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM),
                 getGameData());
@@ -93,7 +99,7 @@ public class TetrisTest extends TestGui {
         } catch (ArrayIndexOutOfBoundsException e) {
             Assert.fail("Square didn't stop in the bottom");
         }
-        Assert.assertEquals(
+        assertEquals(
                 "Square didn't stop in the bottom",
                 readFile(SQUARE_IN_THE_BOTTOM),
                 gameArray);
@@ -105,13 +111,13 @@ public class TetrisTest extends TestGui {
         click(TEST_SET_BLOCKS_IN_BOTTOM);
         click(TEST_LAUNCH_SQUARE_BUTTON_NEAR_BOTTOM);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Initial state with figure near bottom and blocks in the bottom wasn't set",
                 readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM_WITH_BLOCKS_IN_BOTTOM),
                 getGameData());
 
         waitFor(stepsBeyond(2));
-        Assert.assertEquals(
+        assertEquals(
                 "Square didn't stop when it reached blocks",
                 readFile(SQUARE_STOPPED_AT_BLOCKS_1_PIXEL_ABOVE_BOTTOM),
                 getGameData());
@@ -123,13 +129,13 @@ public class TetrisTest extends TestGui {
         click(TEST_LAUNCH_2_SQUARES_3_PIXEL_ABOVE_BOTTOM);
 
         waitFor(stepsBeyond(4));
-        Assert.assertEquals(
+        assertEquals(
                 "Second square wasn't launched after first fell",
                 readFile(SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT),
                 getGameData());
 
         waitFor(steps(2));
-        Assert.assertEquals(
+        assertEquals(
                 "Second square didn't fall on top of first one",
                 readFile(SQUARE_ON_TOP_OF_ANOTHER_SQUARE_IN_THE_BOTTOM),
                 getGameData()
@@ -141,14 +147,14 @@ public class TetrisTest extends TestGui {
         click(START_BUTTON_ID);
         click(TEST_LAUNCH_SQUARE2_PIXEL_ABOVE_BOTTOM_WITH_FIGURE_PROVIDER);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Square should appear near bottom",
                 readFile(SQUARE_2_PIXEL_ABOVE_BOTTOM),
                 getGameData());
 
         waitFor(stepsBeyond(3));
 
-        Assert.assertEquals(
+        assertEquals(
                 "Square should appear on top after first one fell",
                 readFile(SQUARE_ON_TOP_AND_FALLEN_SQUARE),
                 getGameData()
@@ -162,7 +168,7 @@ public class TetrisTest extends TestGui {
         click(TEST_LAUNCH_SQUARE_BUTTON);
         waitFor(steps(2) + INTERVAL_LT_FASTEST_STEP);
 
-        Assert.assertEquals(
+        assertEquals(
                 "Should appear 2 pixels below top",
                 readFile(SQUARE_2_PIXEL_BELOW_TOP),
                 getGameData()
@@ -171,7 +177,7 @@ public class TetrisTest extends TestGui {
         click(TEST_SET_SPEED_5);
         waitFor(steps(3));
 
-        Assert.assertEquals(
+        assertEquals(
                 "Should appear 5 pixels below top",
                 readFile(SQUARE_5_PIXEL_BELOW_TOP),
                 getGameData()
@@ -179,9 +185,58 @@ public class TetrisTest extends TestGui {
 
         click(TEST_SET_SPEED_2);
         waitFor(steps(2));
-        Assert.assertEquals(
+        assertEquals(
                 "Should appear 7 pixels below top",
                 readFile(SQUARE_7_PIXEL_BELOW_TOP),
+                getGameData()
+        );
+    }
+
+    @Test
+    public void shouldGoRightAndLeft() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_LAUNCH_THREE_SQUARES_3_PIXEL_ABOVE_BOTTOM);
+        click(GO_RIGHT);
+        waitFor(stepsBeyond(0));
+
+        assertEquals(
+                "Figure should be 3 pixels above bottom and 1 pixel right",
+                readFile(SQUARE_3_PIXEL_ABOVE_BOTTOM_1_PIXEL_RIGHT),
+                getGameData()
+        );
+
+        waitFor(steps(3));
+
+        assertEquals(
+                "Figure should be in the bottom and 1 pixel right",
+                readFile(SQUARE_IN_THE_BOTTOM_AND_1_PIXEL_RIGHT),
+                getGameData()
+        );
+
+        waitFor(steps(1));
+
+        assertEquals(
+                "First figure should be in the bottom and the second figure should be 3 pixels above bottom",
+                readFile(SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_3_PIXEL_ABOVE_BOTTOM),
+                getGameData()
+        );
+
+        click(GO_LEFT);
+        click(GO_LEFT);
+        waitFor(steps(1));
+
+        assertEquals(
+                "First figure should be in the bottom and the second figure should be 2 pixels above bottom and 2 pixels left",
+                readFile(SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_2_PIXEL_ABOVE_BOTTOM_AND_2_PIXEL_LEFT),
+                getGameData()
+        );
+
+        waitFor(steps(5));
+
+        assertEquals(
+                "First figure should be in the bottom and the second figure should be in the bottom and third \n" +
+                "square stopped at blocks",
+                readFile(SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM),
                 getGameData()
         );
     }

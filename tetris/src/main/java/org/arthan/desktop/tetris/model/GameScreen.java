@@ -30,22 +30,6 @@ public class GameScreen {
         this.provider = figureProvider;
     }
 
-    private void updateGame() {
-        if (figure == null || figureArrived()) {
-            addFigureToBlocks();
-            Optional<FigureOnScreen> nextFigure = provider.next();
-            if (nextFigure.isPresent()) {
-                figure = nextFigure.get();
-            } else {
-                return;
-            }
-        } else {
-            figure = figure.goDown();
-        }
-
-        updateScreen();
-    }
-
     private void fillWithPixels() {
         for (int i = 0; i < GAME_SCREEN_WIDTH; i++) {
             for (int j = 0; j < GAME_SCREEN_HEIGHT; j++) {
@@ -94,7 +78,19 @@ public class GameScreen {
     }
 
     public void nextStep() {
-        updateGame();
+        if (figure == null || figureArrived()) {
+            addFigureToBlocks();
+            Optional<FigureOnScreen> nextFigure = provider.next();
+            if (nextFigure.isPresent()) {
+                figure = nextFigure.get();
+            } else {
+                return;
+            }
+        } else {
+            figure = figure.goDown();
+        }
+
+        updateScreen();
     }
 
     private boolean figureReachedBottom() {
@@ -128,5 +124,15 @@ public class GameScreen {
 
     public void setProvider(FigureProvider provider) {
         this.provider = provider;
+    }
+
+    public void goRight() {
+        figure = figure.goRight();
+        updateScreen();
+    }
+
+    public void goLeft() {
+        figure = figure.goLeft();
+        updateScreen();
     }
 }
