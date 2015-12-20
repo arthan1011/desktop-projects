@@ -5,6 +5,7 @@ import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.TestUtils;
 import org.arthan.desktop.tetris.model.provider.FigureListProvider;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
+import org.arthan.desktop.tetris.model.provider.InfiniteFigureProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -126,5 +127,28 @@ public class GameScreenTest {
                 ),
                 gameScreen.getGameData()
         );
+    }
+
+    @Test
+    public void shouldGoToBottom() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new InfiniteFigureProvider(new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP))
+        );
+
+        gameScreen.nextStep();
+        gameScreen.goBottom();
+
+        TestUtils.assertListEquals(
+                "Square should be in the bottom",
+                Lists.newArrayList(
+                        new Pixel(4, 18),
+                        new Pixel(5, 18),
+                        new Pixel(4, 19),
+                        new Pixel(5, 19)
+                ),
+                gameScreen.getGameData()
+        );
+
     }
 }

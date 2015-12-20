@@ -79,6 +79,10 @@ public class GameScreenController {
                 break;
             case LEFT:
                 getGameScreen().goLeft();
+                break;
+            case BOTTOM:
+                getGameScreen().goBottom();
+                break;
         }
         moveProperty.setValue(MOVE_DIRECTION.NONE);
     }
@@ -148,5 +152,13 @@ public class GameScreenController {
 
     public void goLeft() {
         moveProperty.setValue(MOVE_DIRECTION.LEFT);
+    }
+
+    public void test_launch_two_squares_on_top() {
+        launchSquare();
+    }
+
+    public void goButtom() {
+        moveProperty.setValue(MOVE_DIRECTION.BOTTOM);
     }
 }

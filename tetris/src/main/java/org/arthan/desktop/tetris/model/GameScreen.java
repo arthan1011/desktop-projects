@@ -59,8 +59,8 @@ public class GameScreen {
         }
     }
 
-    private boolean figureArrived() {
-        return figureReachedBlocks() || figureReachedBottom();
+    private boolean figureArrived(FigureOnScreen figure) {
+        return figureReachedBlocks(figure) || figure.isInTheBottom();
     }
 
     private void updateScreen() {
@@ -78,7 +78,7 @@ public class GameScreen {
     }
 
     public void nextStep() {
-        if (figure == null || figureArrived()) {
+        if (figure == null || figureArrived(figure)) {
             addFigureToBlocks();
             Optional<FigureOnScreen> nextFigure = provider.next();
             if (nextFigure.isPresent()) {
@@ -93,11 +93,7 @@ public class GameScreen {
         updateScreen();
     }
 
-    private boolean figureReachedBottom() {
-        return figure.isInTheBottom();
-    }
-
-    boolean figureReachedBlocks() {
+    private boolean figureReachedBlocks(FigureOnScreen figure) {
         List<Pixel> pixelsUnderneath = figure.getPixelsUnderneath();
         for (Pixel pixel : pixelsUnderneath) {
             if (blocks.contains(pixel)) {
@@ -105,6 +101,10 @@ public class GameScreen {
             }
         }
         return false;
+    }
+
+    boolean figureReachedBlocks() {
+        return figureReachedBlocks(this.figure);
     }
 
     List<Pixel> getGameData() {
@@ -134,5 +134,20 @@ public class GameScreen {
     public void goLeft() {
         figure = figure.goLeft();
         updateScreen();
+    }
+
+    public void goBottom() {
+        figure = getFallenFigure();
+        updateScreen();
+    }
+
+    private FigureOnScreen getFallenFigure() {
+        FigureOnScreen fallenFigure = figure;
+
+        while (!figureArrived(fallenFigure)) {
+            fallenFigure = fallenFigure.goDown();
+        }
+
+        return fallenFigure;
     }
 }

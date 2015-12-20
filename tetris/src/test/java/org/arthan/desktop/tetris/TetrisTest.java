@@ -41,6 +41,9 @@ public class TetrisTest extends TestGui {
     public static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_3_PIXEL_ABOVE_BOTTOM = "/square1_in_the_bottom_and_square2_3_pixel_above_bottom.txt";
     private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_2_PIXEL_ABOVE_BOTTOM_AND_2_PIXEL_LEFT = "/square1_in_the_bottom_and_square2_2_pixel_above_bottom_and_2_pixel_left.txt";
     private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM = "/square1_in_the_bottom_and_square2_in_the_bottom_and_square3_stopped_on_them.txt";
+    private static final String SQUARE_AT_THE_TOP_LEFT_CORNER = "/square_at_the_top_left_corner.txt";
+    private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER = "/square_at_the_bottom_left_corner.txt";
+    private static final String SUQARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT = "/suqare_at_the_bottom_left_corner_and_another_square_on_it.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -237,6 +240,37 @@ public class TetrisTest extends TestGui {
                 "First figure should be in the bottom and the second figure should be in the bottom and third \n" +
                 "square stopped at blocks",
                 readFile(SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM),
+                getGameData()
+        );
+    }
+
+    @Test
+    public void shouldInstantlyDropFigure() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_LAUNCH_TWO_SQUARES_ON_TOP);
+        waitFor(stepsBeyond(0));
+
+        click(GO_LEFT);
+        click(GO_LEFT);
+        click(GO_LEFT);
+        click(GO_LEFT);
+        click(GO_BOTTOM);
+
+        assertEquals(
+                "Square should be at the bottom left corner",
+                readFile(SQUARE_AT_THE_BOTTOM_LEFT_CORNER),
+                getGameData()
+        );
+
+        waitFor(steps(1));
+        click(GO_LEFT);
+        click(GO_LEFT);
+        click(GO_LEFT);
+        click(GO_BOTTOM);
+
+        assertEquals(
+                "Second square should be on the first square near bottom left corner",
+                readFile(SUQARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT),
                 getGameData()
         );
     }
