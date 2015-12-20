@@ -68,7 +68,7 @@
                    text="Go left" />
         <Hyperlink fx:id="goBottom"
                    onAction="#goButtom"
-                   text="go bottom" />
+                   text="Go bottom" />
 
       </children>
     </VBox>

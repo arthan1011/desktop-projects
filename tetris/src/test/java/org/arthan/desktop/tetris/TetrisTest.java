@@ -43,7 +43,7 @@ public class TetrisTest extends TestGui {
     private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM = "/square1_in_the_bottom_and_square2_in_the_bottom_and_square3_stopped_on_them.txt";
     private static final String SQUARE_AT_THE_TOP_LEFT_CORNER = "/square_at_the_top_left_corner.txt";
     private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER = "/square_at_the_bottom_left_corner.txt";
-    private static final String SUQARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT = "/suqare_at_the_bottom_left_corner_and_another_square_on_it.txt";
+    private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT = "/suqare_at_the_bottom_left_corner_and_another_square_on_it.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -270,7 +270,7 @@ public class TetrisTest extends TestGui {
 
         assertEquals(
                 "Second square should be on the first square near bottom left corner",
-                readFile(SUQARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT),
+                readFile(SQUARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT),
                 getGameData()
         );
     }
