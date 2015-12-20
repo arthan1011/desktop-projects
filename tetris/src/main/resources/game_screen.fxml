@@ -67,7 +67,7 @@
                    onAction="#goLeft"
                    text="Go left" />
         <Hyperlink fx:id="goBottom"
-                   onAction="#goButtom"
+                   onAction="#goBottom"
                    text="Go bottom" />
 
       </children>
