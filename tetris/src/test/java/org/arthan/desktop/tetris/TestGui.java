@@ -31,6 +31,8 @@ public class TestGui extends GuiTest {
     protected static final String GO_LEFT = "#goLeft";
     protected static final String TEST_LAUNCH_TWO_SQUARES_ON_TOP = "#test_launch_two_squares_on_top";
     static final String GO_BOTTOM = "#goBottom";
+    protected static final String TEST_LAUNCH_STICK = "#test_launchStick";
+    protected static final String DO_ROTATE = "#doRotate";
 
     protected String readFile(String path) {
         String expectedScreenArray;

@@ -1,7 +1,7 @@
 package org.arthan.desktop.tetris.model.provider;
 
 import com.google.common.collect.Lists;
-import org.arthan.desktop.tetris.model.FigureOnScreen;
+import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
 
 import java.util.ArrayList;
 import java.util.ListIterator;

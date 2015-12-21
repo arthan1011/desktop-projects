@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
+import org.arthan.desktop.tetris.model.figure.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
@@ -149,5 +151,10 @@ public class GameScreen {
         }
 
         return fallenFigure;
+    }
+
+    public void doRotate() {
+        figure = figure.rotate();
+        updateScreen();
     }
 }

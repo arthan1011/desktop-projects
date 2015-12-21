@@ -3,6 +3,9 @@ package org.arthan.desktop.tetris.model;
 import com.google.common.collect.Lists;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.TestUtils;
+import org.arthan.desktop.tetris.model.figure.Figure;
+import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
+import org.arthan.desktop.tetris.model.figure.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureListProvider;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.arthan.desktop.tetris.model.provider.InfiniteFigureProvider;
@@ -34,19 +37,19 @@ public class GameScreenTest {
     public void shouldPreserveBlocksAfterFigurePositionUpdated() throws Exception {
         GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
-        FigureOnScreen square = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen square = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
         gameScreen.setProvider(new FigureListProvider(square));
         gameScreen.nextStep();
 
         List<Pixel> expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
-        expectedArray.addAll(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        expectedArray.addAll(Figure.TEST_SQUARE_ABOVE_2_BOTTOM.getPixels());
         TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getGameData());
 
         gameScreen.nextStep();
         gameScreen.nextStep();
 
         expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
-        expectedArray.addAll(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM);
+        expectedArray.addAll(Figure.TEST_SQUARE_ABOVE_1_BOTTOM.getPixels());
         TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getBlocks());
     }
 
@@ -54,7 +57,7 @@ public class GameScreenTest {
     public void shouldFindOutIfFigureReachedBlocks() throws Exception {
         GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
-        FigureOnScreen square = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen square = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
         gameScreen.setProvider(new FigureListProvider(square));
 
         gameScreen.nextStep();
@@ -70,7 +73,7 @@ public class GameScreenTest {
     public void shouldBecomePartOfBlocksAfterFell() throws Exception {
         GameScreen gameScreen = new GameScreen(
                 new GridPane(),
-                new FigureListProvider(new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_1_BOTTOM))
+                new FigureListProvider(Figure.TEST_SQUARE_ABOVE_1_BOTTOM)
         );
         gameScreen.nextStep();
         gameScreen.nextStep();
@@ -91,8 +94,8 @@ public class GameScreenTest {
     @Test
     public void shouldAutomaticallyLaunchNewFigureOnTop() throws Exception {
         FigureProvider figureProvider = new FigureListProvider(
-                new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM),
-                new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP)
+                Figure.TEST_SQUARE_ABOVE_2_BOTTOM,
+                Figure.SQUARE_ON_TOP
         );
         GameScreen gameScreen = new GameScreen(new GridPane(), figureProvider);
 
@@ -133,7 +136,7 @@ public class GameScreenTest {
     public void shouldGoToBottom() throws Exception {
         GameScreen gameScreen = new GameScreen(
                 new GridPane(),
-                new InfiniteFigureProvider(new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP))
+                new InfiniteFigureProvider(Figure.SQUARE_ON_TOP)
         );
 
         gameScreen.nextStep();
@@ -150,5 +153,27 @@ public class GameScreenTest {
                 gameScreen.getGameData()
         );
 
+    }
+
+    @Test
+    public void shouldRotateStick() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(Figure.STICK_ON_TOP)
+        );
+        gameScreen.nextStep();
+        gameScreen.nextStep();
+        gameScreen.doRotate();
+
+        TestUtils.assertListEquals(
+                "Stick should rotate",
+                Lists.newArrayList(
+                        new Pixel(3, 2),
+                        new Pixel(4, 2),
+                        new Pixel(5, 2),
+                        new Pixel(6, 2)
+                ),
+                gameScreen.getGameData()
+        );
     }
 }

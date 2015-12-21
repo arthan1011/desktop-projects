@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class TetrisTest extends TestGui {
 
+    private static final int INTERVAL_LT_FASTEST_STEP = GameScreenController.FASTEST_STEP_MILLIS / 2;
     private static final String SQUARE_ON_TOP_PATH = "/square_on_top.txt";
     private static final String BLANK_PATH = "/blank.txt";
     private static final String SQUARE_1_PIXEL_BELOW_TOP = "/square_1_pixel_below_top.txt";
@@ -33,17 +34,18 @@ public class TetrisTest extends TestGui {
     private static final String SQUARE_IN_THE_BOTTOM_AND_SECOND_SQUARE_ABOVE_IT = "/square_in_the_bottom_and_second_square_above_it.txt";
     private static final String SQUARE_ON_TOP_OF_ANOTHER_SQUARE_IN_THE_BOTTOM = "/square_on_top_of_another_square_in_the_bottom.txt";
     private static final String SQUARE_ON_TOP_AND_FALLEN_SQUARE = "/square_on_top_and_fallen_square.txt";
-    private static final int INTERVAL_LT_FASTEST_STEP = GameScreenController.FASTEST_STEP_MILLIS / 2;
     private static final String SQUARE_5_PIXEL_BELOW_TOP = "/square_5_pixel_below_top.txt";
     private static final String SQUARE_7_PIXEL_BELOW_TOP = "/square_7_pixel_below_top.txt";
-    public static final String SQUARE_3_PIXEL_ABOVE_BOTTOM_1_PIXEL_RIGHT = "/square_3_pixel_above_bottom_1_pixel_right.txt";
-    public static final String SQUARE_IN_THE_BOTTOM_AND_1_PIXEL_RIGHT = "/square_in_the_bottom_and_1_pixel_right.txt";
-    public static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_3_PIXEL_ABOVE_BOTTOM = "/square1_in_the_bottom_and_square2_3_pixel_above_bottom.txt";
+    private static final String SQUARE_3_PIXEL_ABOVE_BOTTOM_1_PIXEL_RIGHT = "/square_3_pixel_above_bottom_1_pixel_right.txt";
+    private static final String SQUARE_IN_THE_BOTTOM_AND_1_PIXEL_RIGHT = "/square_in_the_bottom_and_1_pixel_right.txt";
+    private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_3_PIXEL_ABOVE_BOTTOM = "/square1_in_the_bottom_and_square2_3_pixel_above_bottom.txt";
     private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_2_PIXEL_ABOVE_BOTTOM_AND_2_PIXEL_LEFT = "/square1_in_the_bottom_and_square2_2_pixel_above_bottom_and_2_pixel_left.txt";
     private static final String SQUARE1_IN_THE_BOTTOM_AND_SQUARE2_IN_THE_BOTTOM_AND_SQUARE3_STOPPED_ON_THEM = "/square1_in_the_bottom_and_square2_in_the_bottom_and_square3_stopped_on_them.txt";
     private static final String SQUARE_AT_THE_TOP_LEFT_CORNER = "/square_at_the_top_left_corner.txt";
     private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER = "/square_at_the_bottom_left_corner.txt";
     private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT = "/suqare_at_the_bottom_left_corner_and_another_square_on_it.txt";
+    private static final String STICK_ON_TOP = "/stick_on_top.txt";
+    private static final String STICK_ROTATED_1_PIXEL_BELOW_TOP = "/stick_rotated_1_pixel_below_top.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -248,16 +250,16 @@ public class TetrisTest extends TestGui {
     public void shouldInstantlyDropFigure() throws Exception {
         click(START_BUTTON_ID);
         click(TEST_LAUNCH_TWO_SQUARES_ON_TOP);
-        waitFor(stepsBeyond(0));
 
         click(GO_LEFT);
         click(GO_LEFT);
         click(GO_LEFT);
         click(GO_LEFT);
         click(GO_BOTTOM);
+        waitFor(stepsBeyond(0));
 
         assertEquals(
-                "Square should be at the bottom left corner",
+                "Square should be at the bottom left corner\n" + getGameData(),
                 readFile(SQUARE_AT_THE_BOTTOM_LEFT_CORNER),
                 getGameData()
         );
@@ -271,6 +273,28 @@ public class TetrisTest extends TestGui {
         assertEquals(
                 "Second square should be on the first square near bottom left corner",
                 readFile(SQUARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT),
+                getGameData()
+        );
+    }
+
+    @Test
+    public void shouldRotateStickFigure() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_LAUNCH_STICK);
+        waitFor(stepsBeyond(0));
+
+        assertEquals(
+                "A stick figure should appear on top",
+                readFile(STICK_ON_TOP),
+                getGameData()
+        );
+
+        waitFor(steps(1));
+        click(DO_ROTATE);
+
+        assertEquals(
+                "The stick figure should be rotated",
+                readFile(STICK_ROTATED_1_PIXEL_BELOW_TOP),
                 getGameData()
         );
     }

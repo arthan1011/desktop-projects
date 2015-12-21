@@ -52,7 +52,11 @@
         <Hyperlink fx:id="test_launch_two_squares_on_top"
                    onAction="#test_launch_two_squares_on_top"
                    text="Launch two squares on top" />
+        <Hyperlink fx:id="test_launchStick"
+                   onAction="#test_launchStick"
+                   text="Launch stick on top" />
 
+        <Separator />
         <Hyperlink fx:id="test_setSpeed_5"
                    onAction="#test_setSpeed5"
                    text="Set speed to 5" />
@@ -60,6 +64,7 @@
                    onAction="#test_setSpeed2"
                    text="Set speed to 5" />
 
+        <Separator />
         <Hyperlink fx:id="goRight"
                    onAction="#goRight"
                    text="Go right" />
@@ -69,6 +74,9 @@
         <Hyperlink fx:id="goBottom"
                    onAction="#goBottom"
                    text="Go bottom" />
+        <Hyperlink fx:id="doRotate"
+                   onAction="#doRotate"
+                   text="Do rotate" />
 
       </children>
     </VBox>

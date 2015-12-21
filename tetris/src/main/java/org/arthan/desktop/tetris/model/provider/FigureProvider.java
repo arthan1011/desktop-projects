@@ -1,6 +1,6 @@
 package org.arthan.desktop.tetris.model.provider;
 
-import org.arthan.desktop.tetris.model.FigureOnScreen;
+import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
 
 import java.util.Optional;
 

@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.GameScreen;
-import org.arthan.desktop.tetris.model.MOVE_DIRECTION;
+import org.arthan.desktop.tetris.model.MOVE;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
 
 import java.util.concurrent.TimeUnit;
@@ -22,28 +22,28 @@ public class Game {
     private GameScreen innerGameScreen;
 
     private IntegerProperty speedProperty = new SimpleIntegerProperty(1);
-    private ObjectProperty<MOVE_DIRECTION> gameMoveProperty = new SimpleObjectProperty<>();
+    private ObjectProperty<MOVE> gameMoveProperty = new SimpleObjectProperty<>();
     long[] start = new long[1];
 
     public Game(GridPane gameGrid) {
         innerGameScreen = new GameScreen(gameGrid, null);
 
-        getGameMoveProperty().set(MOVE_DIRECTION.NONE);
+        getGameMoveProperty().set(MOVE.NONE);
     }
 
     GameScreen getGameScreen() {
         return innerGameScreen;
     }
 
-    void launch(FigureProvider figureProvider, GameScreenController gameScreenController) {
+    void launch(FigureProvider figureProvider) {
         getGameScreen().setProvider(figureProvider);
         getGameScreen().nextStep();
-        gameScreenController.game.refreshStartTime();
+        refreshStartTime();
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                gameScreenController.game.performMoveCommand();
-                gameScreenController.game.performNextStep(now);
+                performMoveCommand();
+                performNextStep(now);
             }
         }.start();
     }
@@ -56,11 +56,14 @@ public class Game {
             case LEFT:
                 getGameScreen().goLeft();
                 break;
+            case ROTATE:
+                getGameScreen().doRotate();
+                break;
             case BOTTOM:
                 getGameScreen().goBottom();
                 break;
         }
-        getGameMoveProperty().setValue(MOVE_DIRECTION.NONE);
+        getGameMoveProperty().setValue(MOVE.NONE);
     }
 
     void performNextStep(long now) {
@@ -89,11 +92,11 @@ public class Game {
         this.speedProperty = speedProperty;
     }
 
-    public ObjectProperty<MOVE_DIRECTION> getGameMoveProperty() {
+    public ObjectProperty<MOVE> getGameMoveProperty() {
         return gameMoveProperty;
     }
 
-    public void setGameMoveProperty(ObjectProperty<MOVE_DIRECTION> gameMoveProperty) {
+    public void setGameMoveProperty(ObjectProperty<MOVE> gameMoveProperty) {
         this.gameMoveProperty = gameMoveProperty;
     }
 }

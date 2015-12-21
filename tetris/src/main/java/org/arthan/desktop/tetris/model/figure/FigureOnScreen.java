@@ -1,7 +1,8 @@
-package org.arthan.desktop.tetris.model;
+package org.arthan.desktop.tetris.model.figure;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.arthan.desktop.tetris.model.GameScreen;
 
 import java.util.List;
 import java.util.Map;
@@ -10,57 +11,35 @@ import java.util.stream.Collectors;
 /**
  * Created by ashamsiev on 09.12.2015
  */
-public class FigureOnScreen {
+public abstract class FigureOnScreen {
 
-    public static final List<Pixel> SQUARE_ON_TOP = Lists.newArrayList(
-            new Pixel(4, 0),
-            new Pixel(5, 0),
-            new Pixel(4, 1),
-            new Pixel(5, 1)
-    );
-    public static final List<Pixel> TEST_SQUARE_ABOVE_2_BOTTOM = Lists.newArrayList(
-            new Pixel(4, 16),
-            new Pixel(5, 16),
-            new Pixel(4, 17),
-            new Pixel(5, 17)
-    );
-    public static final List<Pixel> TEST_SQUARE_ABOVE_1_BOTTOM = Lists.newArrayList(
-            new Pixel(4, 17),
-            new Pixel(5, 17),
-            new Pixel(4, 18),
-            new Pixel(5, 18)
-    );
-    public static final List<Pixel> TEST_SQUARE_ABOVE_3_BOTTOM = Lists.newArrayList(
-            new Pixel(4, 15),
-            new Pixel(5, 15),
-            new Pixel(4, 16),
-            new Pixel(5, 16)
-    );
-
-    private List<Pixel> pixels;
-
-    public FigureOnScreen(List<Pixel> pixels) {
-        this.pixels = Lists.newArrayList(pixels);
-    }
+    private List<Pixel> currentPositionPixels;
 
     public List<Pixel> getPixels() {
-        return Lists.newArrayList(pixels);
+        return Lists.newArrayList(currentPositionPixels);
+    }
+
+    public void setCurrentPositionPixels(List<Pixel> currentPositionPixels) {
+        this.currentPositionPixels = Lists.newArrayList(currentPositionPixels);
     }
 
     public FigureOnScreen goDown() {
-        FigureOnScreen downFigure = new FigureOnScreen(pixels);
-        List<Pixel> pixels = downFigure.pixels;
+        List<Pixel> downPixels = Lists.newArrayList(currentPositionPixels);
 
-        for (int i = 0; i < pixels.size(); i++) {
-            Pixel oldPixel = pixels.get(i);
-            pixels.set(i, new Pixel(oldPixel.x, oldPixel.y + 1));
+        for (int i = 0; i < downPixels.size(); i++) {
+            Pixel oldPixel = downPixels.get(i);
+            downPixels.set(i, new Pixel(oldPixel.x, oldPixel.y + 1));
         }
 
+        FigureOnScreen downFigure = createEmpty();
+        downFigure.setCurrentPositionPixels(downPixels);
         return downFigure;
     }
 
+    protected abstract FigureOnScreen createEmpty();
+
     public boolean isInTheBottom() {
-        int lowestY = pixels
+        int lowestY = currentPositionPixels
                 .stream()
                 .mapToInt(p -> p.y)
                 .max().getAsInt();
@@ -68,16 +47,16 @@ public class FigureOnScreen {
         return lowestY == GameScreen.GAME_SCREEN_HEIGHT - 1;
     }
 
-    List<Pixel> getPixelsUnderneath() {
+    public List<Pixel> getPixelsUnderneath() {
         List<Pixel> pixels = findLowestPixels();
         return pixels.stream()
                 .map(p -> new Pixel(p.x, p.y + 1))
                 .collect(Collectors.toList());
     }
 
-    List<Pixel> findLowestPixels() {
+    public List<Pixel> findLowestPixels() {
         Map<Integer, Pixel> tempMap = Maps.newHashMap();
-        pixels.stream()
+        currentPositionPixels.stream()
                 .forEach(p -> {
                     if (tempMap.get(p.x) == null || tempMap.get(p.x).y < p.y) {
                         tempMap.put(p.x, p);
@@ -89,19 +68,21 @@ public class FigureOnScreen {
 
     public FigureOnScreen goRight() {
         if (!byRightBorder()) {
-            List<Pixel> afterRightPixels = pixels
+            List<Pixel> rightPixels = currentPositionPixels
                     .stream()
                     .map(pixel -> new Pixel(pixel.x + 1, pixel.y))
                     .collect(Collectors.toList());
 
-            return new FigureOnScreen(afterRightPixels);
+            FigureOnScreen rightFigure = createEmpty();
+            rightFigure.setCurrentPositionPixels(rightPixels);
+            return rightFigure;
         } else {
             return this;
         }
     }
 
     private boolean byRightBorder() {
-        int rightestX = pixels
+        int rightestX = currentPositionPixels
                 .stream()
                 .mapToInt(p -> p.x)
                 .max().getAsInt();
@@ -111,22 +92,39 @@ public class FigureOnScreen {
 
     public FigureOnScreen goLeft() {
         if (!byLeftBorder()) {
-            List<Pixel> afterLeftPixels = pixels
+            List<Pixel> leftPixels = currentPositionPixels
                     .stream()
                     .map(pixel -> new Pixel(pixel.x - 1, pixel.y))
                     .collect(Collectors.toList());
-            return new FigureOnScreen(afterLeftPixels);
+
+            FigureOnScreen leftFigure = createEmpty();
+            leftFigure.setCurrentPositionPixels(leftPixels);
+            return leftFigure;
         } else {
             return this;
         }
     }
 
     private boolean byLeftBorder() {
-        int leftestX = pixels
+        int leftestX = currentPositionPixels
                 .stream()
                 .mapToInt(p -> p.x)
                 .min().getAsInt();
 
         return leftestX == 0;
+    }
+
+    public abstract FigureOnScreen rotate();
+
+
+    public static FigureOnScreen build(FigureOnScreen figure) {
+
+        return null;
+    }
+
+    public FigureOnScreen make(FigureOnScreen figure) {
+        FigureOnScreen newFigure = createEmpty();
+        newFigure.setCurrentPositionPixels(figure.getPixels());
+        return newFigure;
     }
 }

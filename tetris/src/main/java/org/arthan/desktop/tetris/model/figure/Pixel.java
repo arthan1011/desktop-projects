@@ -1,4 +1,4 @@
-package org.arthan.desktop.tetris.model;
+package org.arthan.desktop.tetris.model.figure;
 
 /**
  * Created by ashamsiev on 09.12.2015

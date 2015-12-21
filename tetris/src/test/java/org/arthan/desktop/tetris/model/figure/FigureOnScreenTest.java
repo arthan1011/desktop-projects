@@ -1,4 +1,4 @@
-package org.arthan.desktop.tetris.model;
+package org.arthan.desktop.tetris.model.figure;
 
 import com.google.common.collect.Lists;
 import org.arthan.desktop.tetris.TestUtils;
@@ -15,7 +15,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldChangePositionOnGoDown() throws Exception {
-        FigureOnScreen figureOnScreen = new FigureOnScreen(FigureOnScreen.SQUARE_ON_TOP);
+        FigureOnScreen figureOnScreen = Figure.SQUARE_ON_TOP;
 
         figureOnScreen = figureOnScreen.goDown();
 
@@ -31,18 +31,18 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldSayIfInTheBottom() throws Exception {
-        FigureOnScreen figureONScreen = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figureOnScreen = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
 
-        figureONScreen = figureONScreen.goDown();
-        assertFalse("Figure should not be in the bottom", figureONScreen.isInTheBottom());
+        figureOnScreen = figureOnScreen.goDown();
+        assertFalse("Figure should not be in the bottom", figureOnScreen.isInTheBottom());
 
-        figureONScreen = figureONScreen.goDown();
-        assertTrue("Figure should be in the bottom", figureONScreen.isInTheBottom());
+        figureOnScreen = figureOnScreen.goDown();
+        assertTrue("Figure should be in the bottom", figureOnScreen.isInTheBottom());
     }
 
     @Test
     public void shouldCalculatePixelsUnderFigure() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
 
         List<Pixel> expectedPixelsUnderFigure = Lists.newArrayList(new Pixel(4, 18), new Pixel(5, 18));
         List<Pixel> actualPixelsUnderFigure = figure.getPixelsUnderneath();
@@ -55,7 +55,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldCalculateLowestPixelsInFigure() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
 
         List<Pixel> expectedPixelsUnderFigure = Lists.newArrayList(new Pixel(4, 17), new Pixel(5, 17));
         List<Pixel> actualPixelsUnderFigure = figure.findLowestPixels();
@@ -65,7 +65,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldGoRight() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
         figure = figure.goRight();
 
         List<Pixel> expectedPixelsAfterGoRight = Lists.newArrayList(
@@ -84,7 +84,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldNotGoRightBeyondScreen() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
 
         figure = figure.goRight();
         figure = figure.goRight();
@@ -115,7 +115,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldGoLeft() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
         figure = figure.goLeft();
 
         List<Pixel> expectedPixelsAfterGoLeft = Lists.newArrayList(
@@ -134,7 +134,7 @@ public class FigureOnScreenTest {
 
     @Test
     public void shouldNotGoLeftBeyondScreen() throws Exception {
-        FigureOnScreen figure = new FigureOnScreen(FigureOnScreen.TEST_SQUARE_ABOVE_2_BOTTOM);
+        FigureOnScreen figure = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
 
         figure = figure.goLeft();
         figure = figure.goLeft();
@@ -159,6 +159,23 @@ public class FigureOnScreenTest {
         TestUtils.assertListEquals(
                 "Figure should still be by left border",
                 expectedPixelsByLeftBorder,
+                figure.getPixels()
+        );
+    }
+
+    @Test
+    public void shouldRotateStickFigure() throws Exception {
+        FigureOnScreen figure = Figure.STICK_ON_TOP;
+        figure = figure.rotate();
+
+        TestUtils.assertListEquals(
+                "Stick should rotate",
+                Lists.newArrayList(
+                        new Pixel(3, 1),
+                        new Pixel(4, 1),
+                        new Pixel(5, 1),
+                        new Pixel(6, 1)
+                ),
                 figure.getPixels()
         );
     }
