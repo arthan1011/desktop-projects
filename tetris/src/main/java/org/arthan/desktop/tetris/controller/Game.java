@@ -61,6 +61,7 @@ public class Game {
                 break;
             case BOTTOM:
                 getGameScreen().goBottom();
+                refreshStartTime();
                 break;
         }
         getGameMoveProperty().setValue(MOVE.NONE);
