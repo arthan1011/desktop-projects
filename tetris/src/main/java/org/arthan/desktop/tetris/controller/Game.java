@@ -23,7 +23,7 @@ public class Game {
 
     private IntegerProperty speedProperty = new SimpleIntegerProperty(1);
     private ObjectProperty<MOVE> gameMoveProperty = new SimpleObjectProperty<>();
-    long[] start = new long[1];
+    long startTime;
 
     public Game(GridPane gameGrid) {
         innerGameScreen = new GameScreen(gameGrid, null);
@@ -69,15 +69,15 @@ public class Game {
 
     void performNextStep(long now) {
         long interval = ONE_SECOND / getSpeedProperty().get();
-        boolean isTimeForNextStep = (now - start[0]) / interval >= 1;
+        boolean isTimeForNextStep = (now - startTime) / interval >= 1;
         if (isTimeForNextStep) {
             getGameScreen().nextStep();
-            start[0] += interval;
+            startTime += interval;
         }
     }
 
     void refreshStartTime() {
-        start[0] = System.nanoTime();
+        startTime = System.nanoTime();
     }
 
     void changeSpeed(int newSpeed) {

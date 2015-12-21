@@ -1,12 +1,9 @@
 package org.arthan.desktop.tetris.util;
 
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.arthan.desktop.tetris.model.GameScreen;
 
 /**
  * Created by Arthur Shamsiev on 27.11.15.
@@ -14,6 +11,10 @@ import org.arthan.desktop.tetris.model.GameScreen;
  * Project - desktop
  */
 public class UIBuilder {
+
+    public static final Color BLOCK_COLOR = Color.RED;
+    public static final Color CELL_COLOR = Color.LIGHTGREY;
+    public static final Color GHOST_COLOR = Color.LIGHTYELLOW;
 
     public static Parent createGameScreen() {
         return UILoader.loadGameScreen();
@@ -30,15 +31,21 @@ public class UIBuilder {
         return root;
     }
 
-    public static Rectangle createPixel() {
-        Rectangle rect = new Rectangle(20, 20);
-        rect.setFill(Color.RED);
-        return rect;
+    public static Rectangle createBlock() {
+        return makePixel(BLOCK_COLOR);
     }
 
     public static Rectangle createCell() {
+        return makePixel(CELL_COLOR);
+    }
+
+    public static Rectangle createGhost() {
+        return makePixel(GHOST_COLOR);
+    }
+
+    private static Rectangle makePixel(Color ghostColor) {
         Rectangle rectangle = new Rectangle(20, 20);
-        rectangle.setFill(Color.LIGHTGREY);
+        rectangle.setFill(ghostColor);
         return rectangle;
     }
 }

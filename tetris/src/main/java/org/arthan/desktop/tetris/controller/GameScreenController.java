@@ -1,6 +1,7 @@
 package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -111,5 +112,9 @@ public class GameScreenController {
 
     public void doRotate() {
         setGameMove(MOVE.ROTATE);
+    }
+
+    public void test_launch_L_figure() {
+
     }
 }

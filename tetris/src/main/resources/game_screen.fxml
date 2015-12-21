@@ -55,6 +55,9 @@
         <Hyperlink fx:id="test_launchStick"
                    onAction="#test_launchStick"
                    text="Launch stick on top" />
+        <Hyperlink fx:id="test_launch_L_figure"
+                   onAction="#test_launch_L_figure"
+                   text="Launch L-figure" />
 
         <Separator />
         <Hyperlink fx:id="test_setSpeed_5"

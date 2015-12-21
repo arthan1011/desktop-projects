@@ -12,7 +12,7 @@ import org.arthan.desktop.tetris.util.UIBuilder;
 import java.util.List;
 import java.util.Optional;
 
-import static org.arthan.desktop.tetris.util.UIBuilder.createPixel;
+import static org.arthan.desktop.tetris.util.UIBuilder.createBlock;
 
 /**
  * Created by ashamsiev on 09.12.2015
@@ -76,7 +76,7 @@ public class GameScreen {
     private void paintPixel(Pixel pixel) {
         Node child = getNodeAt(pixel.x, pixel.y);
         gameGrid.getChildren().remove(child);
-        gameGrid.add(createPixel(), pixel.x, pixel.y);
+        gameGrid.add(createBlock(), pixel.x, pixel.y);
     }
 
     public void nextStep() {

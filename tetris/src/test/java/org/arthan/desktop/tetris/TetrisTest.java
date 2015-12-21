@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.arthan.desktop.tetris.controller.GameScreenController;
+import org.arthan.desktop.tetris.util.UIBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,6 +47,14 @@ public class TetrisTest extends TestGui {
     private static final String SQUARE_AT_THE_BOTTOM_LEFT_CORNER_AND_ANOTHER_SQUARE_ON_IT = "/suqare_at_the_bottom_left_corner_and_another_square_on_it.txt";
     private static final String STICK_ON_TOP = "/stick_on_top.txt";
     private static final String STICK_ROTATED_1_PIXEL_BELOW_TOP = "/stick_rotated_1_pixel_below_top.txt";
+    private static final String L_FIGURE_ON_TOP = "/L-figure_on_top.txt";
+    private static final String L_FIGURE_IN_THE_BOTTOM = "/L-figure_in_the_bottom.txt";
+    private static final String L_FIGURE_ROTATED_ONCE = "/L-figure_rotated_once_1pxbt.txt";
+    private static final String L_FIGURE_ROTATED_ONCE_IN_THE_BOTTOM = "/L-figure_rotated_once_in_the_bottom.txt";
+    private static final String L_FIGURE_ROTATED_THREE_TIMES_MOVED_LEFT_2PXBT = "/L-figure_rotated_three_times_moved_left_2pxbt.txt";
+    private static final String L_FIGURE_ROTATED_THREE_TIMES_AND_MOVED_LEFT_IN_THE_BOTTOM = "/L-figure_rotated_three_times_and_moved_left_in_the_bottom.txt";
+    private static final String L_FIGURE_ON_RIGHT_3PXBT = "/L-figure_on_right_3pxbt.txt";
+    private static final String L_FIGURE_MOVED_RIGHT_IN_THE_BOTTOM = "/L-figure_moved_right_in_the_bottom.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -299,6 +308,70 @@ public class TetrisTest extends TestGui {
         );
     }
 
+    @Test
+    public void ShouldRotateAndMoveLFigureWithGhost() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_LAUNCH_L_FIGURE);
+        waitFor(stepsBeyond(0));
+
+        assertEquals(
+                "L-Figure should appear on top",
+                readFile(L_FIGURE_ON_TOP),
+                getGameData()
+        );
+        assertEquals(
+                "L-Figure ghost should appear in the bottom",
+                readFile(L_FIGURE_IN_THE_BOTTOM),
+                getGameGhost()
+        );
+
+        click(DO_ROTATE);
+        waitFor(steps(1));
+
+        assertEquals(
+                "L-figure should rotate",
+                readFile(L_FIGURE_ROTATED_ONCE),
+                getGameData()
+        );
+        assertEquals(
+                "L-figure ghost should change after one rotate",
+                readFile(L_FIGURE_ROTATED_ONCE_IN_THE_BOTTOM),
+                getGameGhost()
+        );
+
+        click(GO_LEFT);
+        click(DO_ROTATE);
+        click(DO_ROTATE);
+        waitFor(steps(1));
+
+        assertEquals(
+                "L-figure should be moved left and rotated three times",
+                readFile(L_FIGURE_ROTATED_THREE_TIMES_MOVED_LEFT_2PXBT),
+                getGameData()
+        );
+        assertEquals(
+                "L-figure ghost should change after left move",
+                readFile(L_FIGURE_ROTATED_THREE_TIMES_AND_MOVED_LEFT_IN_THE_BOTTOM),
+                getGameGhost()
+        );
+
+        click(GO_RIGHT);
+        click(GO_RIGHT);
+        click(DO_ROTATE);
+        waitFor(steps(1));
+
+        assertEquals(
+                "L-figure should be moved left and rotated full circle",
+                readFile(L_FIGURE_ON_RIGHT_3PXBT),
+                getGameData()
+        );
+        assertEquals(
+                "L-figure ghost should be moved right",
+                readFile(L_FIGURE_MOVED_RIGHT_IN_THE_BOTTOM),
+                getGameGhost()
+        );
+    }
+
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;
     }
@@ -311,10 +384,35 @@ public class TetrisTest extends TestGui {
         return find(GAME_SCREEN_ID);
     }
 
+    private String getGameGhost() {
+        int[][] ghostArray = getGhostArrayFromScreen();
+        return stringifyScreenArray(ghostArray);
+    }
+
     private String getGameData() {
-        GridPane screen = findGameScreen();
-        int[][] gameArray = getArrayFromScreen(screen);
+        int[][] gameArray = getBlockArrayFromScreen();
         return stringifyScreenArray(gameArray);
+    }
+
+    private int[][] getGhostArrayFromScreen() {
+        return getArrayFromScreen(UIBuilder.GHOST_COLOR);
+    }
+
+    private int[][] getBlockArrayFromScreen() {
+        return getArrayFromScreen(UIBuilder.BLOCK_COLOR);
+    }
+
+    private int[][] getArrayFromScreen(Color pixelColor) {
+        int screenArray[][] = new int[GAME_SCREEN_HEIGHT][GAME_SCREEN_WIDTH];
+
+        ObservableList<Node> children = findGameScreen().getChildren();
+        for (Node aChildren : children) {
+            Rectangle cell = (Rectangle) aChildren;
+            if (cell.getFill().equals(pixelColor)) {
+                screenArray[GridPane.getRowIndex(cell)][GridPane.getColumnIndex(cell)] = 1;
+            }
+        }
+        return screenArray;
     }
 
     private void click(String buttonID) {
@@ -327,19 +425,6 @@ public class TetrisTest extends TestGui {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private int[][] getArrayFromScreen(GridPane screen) {
-        int screenArray[][] = new int[GAME_SCREEN_HEIGHT][GAME_SCREEN_WIDTH];
-
-        ObservableList<Node> children = screen.getChildren();
-        for (Node aChildren : children) {
-            Rectangle cell = (Rectangle) aChildren;
-            if (!cell.getFill().equals(Color.LIGHTGREY)) {
-                screenArray[GridPane.getRowIndex(cell)][GridPane.getColumnIndex(cell)] = 1;
-            }
-        }
-        return screenArray;
     }
 
     private String stringifyScreenArray(int[][] screenArray) {

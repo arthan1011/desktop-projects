@@ -19,7 +19,7 @@ public abstract class FigureOnScreen {
         return Lists.newArrayList(currentPositionPixels);
     }
 
-    public void setCurrentPositionPixels(List<Pixel> currentPositionPixels) {
+    protected void setCurrentPositionPixels(List<Pixel> currentPositionPixels) {
         this.currentPositionPixels = Lists.newArrayList(currentPositionPixels);
     }
 
@@ -81,15 +81,6 @@ public abstract class FigureOnScreen {
         }
     }
 
-    private boolean byRightBorder() {
-        int rightestX = currentPositionPixels
-                .stream()
-                .mapToInt(p -> p.x)
-                .max().getAsInt();
-
-        return rightestX == GameScreen.GAME_SCREEN_WIDTH - 1;
-    }
-
     public FigureOnScreen goLeft() {
         if (!byLeftBorder()) {
             List<Pixel> leftPixels = currentPositionPixels
@@ -103,6 +94,15 @@ public abstract class FigureOnScreen {
         } else {
             return this;
         }
+    }
+
+    private boolean byRightBorder() {
+        int rightestX = currentPositionPixels
+                .stream()
+                .mapToInt(p -> p.x)
+                .max().getAsInt();
+
+        return rightestX == GameScreen.GAME_SCREEN_WIDTH - 1;
     }
 
     private boolean byLeftBorder() {
