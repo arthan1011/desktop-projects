@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Rectangle;
 import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
 import org.arthan.desktop.tetris.model.figure.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.arthan.desktop.tetris.util.UIBuilder.createBlock;
+import static org.arthan.desktop.tetris.util.UIBuilder.createGhostBlock;
 
 /**
  * Created by ashamsiev on 09.12.2015
@@ -69,14 +71,23 @@ public class GameScreen {
         removeChildren();
         fillWithPixels();
 
-        figure.getPixels().forEach(this::paintPixel);
-        blocks.forEach(this::paintPixel);
+        getGhost().getPixels().forEach((p) -> paintPixel(p, createGhostBlock()));
+        figure.getPixels().forEach((p) -> paintPixel(p, createBlock()));
+        blocks.forEach((p) -> paintPixel(p, createBlock()));
     }
 
-    private void paintPixel(Pixel pixel) {
+    private FigureOnScreen getGhost() {
+        FigureOnScreen ghost = figure;
+        while (!figureArrived(ghost)) {
+            ghost = ghost.goDown();
+        }
+        return ghost;
+    }
+
+    private void paintPixel(Pixel pixel, Rectangle newPixel) {
         Node child = getNodeAt(pixel.x, pixel.y);
         gameGrid.getChildren().remove(child);
-        gameGrid.add(createBlock(), pixel.x, pixel.y);
+        gameGrid.add(newPixel, pixel.x, pixel.y);
     }
 
     public void nextStep() {

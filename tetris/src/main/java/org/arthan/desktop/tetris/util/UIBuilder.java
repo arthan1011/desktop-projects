@@ -39,7 +39,7 @@ public class UIBuilder {
         return makePixel(CELL_COLOR);
     }
 
-    public static Rectangle createGhost() {
+    public static Rectangle createGhostBlock() {
         return makePixel(GHOST_COLOR);
     }
 

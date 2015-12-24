@@ -27,12 +27,24 @@ public class Square extends FigureOnScreen {
     }
 
     @Override
-    protected FigureOnScreen createEmpty() {
-        return new Square();
+    protected FigureOnScreen createEmpty(int shapeIndex) {
+        Square square = new Square();
+        square.setShapeIndex(shapeIndex);
+        return square;
     }
 
     @Override
     public FigureOnScreen rotate() {
         return this;
+    }
+
+    @Override
+    public List<List<Pixel>> getFigureShapes() {
+        return null;
+    }
+
+    @Override
+    public List<int[]> getPivotVectors() {
+        return null;
     }
 }

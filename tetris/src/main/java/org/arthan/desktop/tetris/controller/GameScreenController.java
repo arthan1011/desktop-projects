@@ -1,7 +1,6 @@
 package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -115,6 +114,8 @@ public class GameScreenController {
     }
 
     public void test_launch_L_figure() {
-
+        game.launch(new FigureListProvider(
+                Figure.L_FIGURE_ON_TOP
+        ));
     }
 }

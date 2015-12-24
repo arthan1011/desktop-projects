@@ -2,8 +2,6 @@ package org.arthan.desktop.tetris.model.figure;
 
 import com.google.common.collect.Lists;
 
-import java.util.List;
-
 /**
  * Created by Артур on 21.12.2015.
  * Next to Ufa.
@@ -40,8 +38,10 @@ public class Figure {
             new Pixel(5, 3)
     ));
 
-
-
-
-
+    public static final FigureOnScreen L_FIGURE_ON_TOP = LShape.build(Lists.newArrayList(
+            new Pixel(4, 0),
+            new Pixel(4, 1),
+            new Pixel(4, 2),
+            new Pixel(5, 2)
+    ));
 }

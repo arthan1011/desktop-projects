@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  */
 public abstract class FigureOnScreen {
 
+    protected int shapeIndex = 0;
     private List<Pixel> currentPositionPixels;
 
     public List<Pixel> getPixels() {
@@ -31,12 +32,16 @@ public abstract class FigureOnScreen {
             downPixels.set(i, new Pixel(oldPixel.x, oldPixel.y + 1));
         }
 
-        FigureOnScreen downFigure = createEmpty();
+        FigureOnScreen downFigure = createEmpty(getShapeIndex());
         downFigure.setCurrentPositionPixels(downPixels);
         return downFigure;
     }
 
-    protected abstract FigureOnScreen createEmpty();
+    public abstract List<List<Pixel>> getFigureShapes();
+
+    public abstract List<int[]> getPivotVectors();
+
+    protected abstract FigureOnScreen createEmpty(int shapeIndex);
 
     public boolean isInTheBottom() {
         int lowestY = currentPositionPixels
@@ -73,7 +78,7 @@ public abstract class FigureOnScreen {
                     .map(pixel -> new Pixel(pixel.x + 1, pixel.y))
                     .collect(Collectors.toList());
 
-            FigureOnScreen rightFigure = createEmpty();
+            FigureOnScreen rightFigure = createEmpty(getShapeIndex());
             rightFigure.setCurrentPositionPixels(rightPixels);
             return rightFigure;
         } else {
@@ -88,7 +93,7 @@ public abstract class FigureOnScreen {
                     .map(pixel -> new Pixel(pixel.x - 1, pixel.y))
                     .collect(Collectors.toList());
 
-            FigureOnScreen leftFigure = createEmpty();
+            FigureOnScreen leftFigure = createEmpty(getShapeIndex());
             leftFigure.setCurrentPositionPixels(leftPixels);
             return leftFigure;
         } else {
@@ -114,17 +119,45 @@ public abstract class FigureOnScreen {
         return leftestX == 0;
     }
 
-    public abstract FigureOnScreen rotate();
+    public FigureOnScreen rotate() {
 
+        Pixel topLeftestPixel = findTopLeftestPixel();
 
-    public static FigureOnScreen build(FigureOnScreen figure) {
-
-        return null;
+        setShapeIndex(getShapeIndex() + 1);
+        List<Pixel> rotatePixels = getFigureShapes().get(getShapeIndex() % getFigureShapes().size())
+                .stream()
+                .map(p -> new Pixel(p.x + topLeftestPixel.x, p.y + topLeftestPixel.y))
+                .collect(Collectors.toList());
+        FigureOnScreen rotateFigure = this.createEmpty(getShapeIndex());
+        rotateFigure.setCurrentPositionPixels(rotatePixels);
+        return rotateFigure;
     }
 
     public FigureOnScreen make(FigureOnScreen figure) {
-        FigureOnScreen newFigure = createEmpty();
+        FigureOnScreen newFigure = createEmpty(getShapeIndex());
         newFigure.setCurrentPositionPixels(figure.getPixels());
         return newFigure;
+    }
+
+    public int getShapeIndex() {
+        return shapeIndex;
+    }
+
+    public void setShapeIndex(int shapeIndex) {
+        this.shapeIndex = shapeIndex;
+    }
+
+    private Pixel findTopLeftestPixel() {
+        int minX = GameScreen.GAME_SCREEN_WIDTH;
+        int minY = GameScreen.GAME_SCREEN_HEIGHT;
+
+        for (Pixel pixel : getPixels()) {
+            minX = Math.min(pixel.x, minX);
+            minY = Math.min(pixel.y, minY);
+        }
+
+        int[] vector = getPivotVectors().get(getShapeIndex() % getPivotVectors().size());
+
+        return new Pixel(minX + vector[0], minY + vector[1]);
     }
 }
