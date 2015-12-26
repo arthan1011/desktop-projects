@@ -34,6 +34,8 @@ public class TestGui extends GuiTest {
     protected static final String TEST_LAUNCH_STICK = "#test_launchStick";
     protected static final String DO_ROTATE = "#doRotate";
     protected static final String TEST_LAUNCH_L_FIGURE = "#test_launch_L_figure";
+    protected static final String TEST_LAUNCH3_STICKS_NEAR_BOUNDARIES = "#test_launch3SticksNearBoundaries";
+    protected static final String TEST_SET_BLOCKS_ON_RIGHT_SIDE = "#test_set_blocks_on_right_side";
 
     protected String readFile(String path) {
         String expectedScreenArray;

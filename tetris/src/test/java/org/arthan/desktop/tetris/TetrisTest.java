@@ -55,6 +55,9 @@ public class TetrisTest extends TestGui {
     private static final String L_FIGURE_ROTATED_THREE_TIMES_AND_MOVED_LEFT_IN_THE_BOTTOM = "/L-figure_rotated_three_times_and_moved_left_in_the_bottom.txt";
     private static final String L_FIGURE_ON_RIGHT_3PXBT = "/L-figure_on_right_3pxbt.txt";
     private static final String L_FIGURE_MOVED_RIGHT_IN_THE_BOTTOM = "/L-figure_moved_right_in_the_bottom.txt";
+    private static final String STICK_NEAR_LEFT_BORDER_1PBT = "/stick_near_left_border_1pbt.txt";
+    private static final String STICK_NEAR_RIGHT_BORDER_2PBT = "/stick_near_right_border_2pbt.txt";
+    private static final String STICK_2PAB = "/stick_2pab.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -369,6 +372,43 @@ public class TetrisTest extends TestGui {
                 "L-figure ghost should be moved right",
                 readFile(L_FIGURE_MOVED_RIGHT_IN_THE_BOTTOM),
                 getGameGhost()
+        );
+    }
+
+    @Test
+    public void stickFigureShouldNotRotateNearBlocksAndBoundaries() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_SET_BLOCKS_ON_RIGHT_SIDE);
+        click(TEST_LAUNCH3_STICKS_NEAR_BOUNDARIES);
+        waitFor(stepsBeyond(1));
+        click(DO_ROTATE);
+
+        assertEquals(
+                "Stick should not rotate near left border",
+                readFile(STICK_NEAR_LEFT_BORDER_1PBT),
+                getGameData()
+        );
+
+        click(GO_BOTTOM);
+        waitFor(steps(1));
+        click(DO_ROTATE);
+
+        assertEquals(
+                "Stick should not rotate near right border",
+                readFile(STICK_NEAR_RIGHT_BORDER_2PBT),
+                getGameData()
+        );
+
+        click(GO_BOTTOM);
+        waitFor(steps(1));
+        click(DO_ROTATE);
+        waitFor(steps(1));
+        click(DO_ROTATE);
+
+        assertEquals(
+                "Stick should not rotate near the bottom",
+                readFile(STICK_2PAB),
+                getGameData()
         );
     }
 

@@ -6,12 +6,14 @@ import org.arthan.desktop.tetris.TestUtils;
 import org.arthan.desktop.tetris.model.figure.Figure;
 import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
 import org.arthan.desktop.tetris.model.figure.Pixel;
+import org.arthan.desktop.tetris.model.figure.Stick;
 import org.arthan.desktop.tetris.model.provider.FigureListProvider;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.arthan.desktop.tetris.model.provider.InfiniteFigureProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,6 +22,7 @@ import java.util.List;
  */
 public class GameScreenTest {
 
+    private static final FigureProvider UNUSED_PROVIDER = null;
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -175,5 +178,26 @@ public class GameScreenTest {
                 ),
                 gameScreen.getGameData()
         );
+    }
+
+    @Test
+    public void figureShouldCollide() throws Exception {
+        GameScreen gameScreen = new GameScreen(new GridPane(), UNUSED_PROVIDER);
+        ArrayList<Pixel> blocksOnTop = Lists.newArrayList(
+                new Pixel(4, 0),
+                new Pixel(4, 1),
+                new Pixel(4, 2),
+                new Pixel(4, 3)
+        );
+        gameScreen.setBlocks(blocksOnTop);
+        FigureOnScreen stickOnTop = Stick.build(Lists.newArrayList(
+                new Pixel(2, 1),
+                new Pixel(3, 1),
+                new Pixel(4, 1),
+                new Pixel(5, 1)
+        ));
+
+        Assert.assertTrue("Figure should collide", gameScreen.figureCollides(stickOnTop));
+
     }
 }

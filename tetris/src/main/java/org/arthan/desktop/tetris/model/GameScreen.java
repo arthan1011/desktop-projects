@@ -131,8 +131,8 @@ public class GameScreen {
         return Lists.newArrayList(blocks);
     }
 
-    public void setBlocks(List<Pixel> blocksInBottom) {
-        blocks = Lists.newArrayList(blocksInBottom);
+    public void setBlocks(List<Pixel> blocksList) {
+        blocks = Lists.newArrayList(blocksList);
     }
 
     public void setProvider(FigureProvider provider) {
@@ -165,7 +165,23 @@ public class GameScreen {
     }
 
     public void doRotate() {
-        figure = figure.rotate();
-        updateScreen();
+        FigureOnScreen rotateFigure = figure.rotate();
+        if (!figureCollides(rotateFigure)) {
+            figure = rotateFigure;
+            updateScreen();
+        }
+    }
+
+    public boolean figureCollides(FigureOnScreen stickOnTop) {
+        boolean figureIntersectsWithBlocks = stickOnTop.getPixels()
+                .stream()
+                .anyMatch(blocks::contains);
+        boolean figureHasPixelsBeyondBoundaries = stickOnTop.getPixels()
+                .stream()
+                .anyMatch(p ->
+                        (p.x < 0 || p.x > GAME_SCREEN_WIDTH - 1) ||
+                        (p.y < 0 || p.y > GAME_SCREEN_HEIGHT - 1));
+
+        return figureIntersectsWithBlocks || figureHasPixelsBeyondBoundaries;
     }
 }

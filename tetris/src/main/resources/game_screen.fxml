@@ -58,6 +58,12 @@
         <Hyperlink fx:id="test_launch_L_figure"
                    onAction="#test_launch_L_figure"
                    text="Launch L-figure" />
+        <Hyperlink fx:id="test_launch3SticksNearBoundaries"
+                   onAction="#test_launch3SticksNearBoundaries"
+                   text="Launch 3 Sticks" />
+        <Hyperlink fx:id="test_set_blocks_on_right_side"
+                   onAction="#test_setBlocksOnRightSide"
+                   text="Set blocks on right side" />
 
         <Separator />
         <Hyperlink fx:id="test_setSpeed_5"

@@ -1,6 +1,7 @@
 package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -117,5 +118,27 @@ public class GameScreenController {
         game.launch(new FigureListProvider(
                 Figure.L_FIGURE_ON_TOP
         ));
+    }
+
+    public void test_launch3SticksNearBoundaries() {
+        game.launch(new FigureListProvider(
+                Figure.STICK_NEAR_LEFT_ON_TOP,
+                Figure.STICK_NEAR_RIGHT_ON_TOP,
+                Figure.STICK_ABOVE_BOTTOM
+        ));
+    }
+
+    public void test_setBlocksOnRightSide() {
+        game.getGameScreen().setBlocks(
+                Lists.newArrayList(
+                        new Pixel(9, 0),
+                        new Pixel(9, 1),
+                        new Pixel(9, 2),
+                        new Pixel(9, 3),
+                        new Pixel(9, 4),
+                        new Pixel(9, 5),
+                        new Pixel(9, 6),
+                        new Pixel(8, 19))
+        );
     }
 }

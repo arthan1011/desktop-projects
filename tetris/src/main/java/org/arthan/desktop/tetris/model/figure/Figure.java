@@ -44,4 +44,22 @@ public class Figure {
             new Pixel(4, 2),
             new Pixel(5, 2)
     ));
+    public static final FigureOnScreen STICK_NEAR_LEFT_ON_TOP = Stick.build(Lists.newArrayList(
+            new Pixel(1, 0),
+            new Pixel(1, 1),
+            new Pixel(1, 2),
+            new Pixel(1, 3)
+    ));
+    public static final FigureOnScreen STICK_NEAR_RIGHT_ON_TOP = Stick.build(Lists.newArrayList(
+            new Pixel(8, 2),
+            new Pixel(8, 3),
+            new Pixel(8, 4),
+            new Pixel(8, 5)
+    ));
+    public static final FigureOnScreen STICK_ABOVE_BOTTOM = Stick.build(Lists.newArrayList(
+            new Pixel(4, 16),
+            new Pixel(4, 17),
+            new Pixel(4, 18),
+            new Pixel(4, 19)
+    ));
 }
