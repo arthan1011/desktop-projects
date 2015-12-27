@@ -34,12 +34,12 @@ public class GameScreenController {
     }
 
     public void launchSquare() {
-        FigureOnScreen square = Figure.SQUARE_ON_TOP;
+        FigureOnScreen square = Figure.getSquareOnTop();
         game.launch(new InfiniteFigureProvider(square));
     }
 
     public void test_launchSquareNearBottom() {
-        FigureOnScreen square_near_bottom = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
+        FigureOnScreen square_near_bottom = Figure.getTestSquareAbove2Bottom();
         game.launch(new FigureListProvider(square_near_bottom));
     }
 
@@ -56,15 +56,15 @@ public class GameScreenController {
 
     public void test_launch2Squares3PixelAboveBottom() {
         game.launch(new FigureListProvider(
-                Figure.TEST_SQUARE_ABOVE_3_BOTTOM,
-                Figure.TEST_SQUARE_ABOVE_3_BOTTOM
+                Figure.getTestSquareAbove3Bottom(),
+                Figure.getTestSquareAbove3Bottom()
         ));
     }
 
     public void testLaunchSquare2PixelAboveBottom__withFigureProvider() {
         game.launch(new FigureListProvider(
-                Figure.TEST_SQUARE_ABOVE_2_BOTTOM,
-                Figure.SQUARE_ON_TOP
+                Figure.getTestSquareAbove2Bottom(),
+                Figure.getSquareOnTop()
         ));
     }
 
@@ -78,9 +78,9 @@ public class GameScreenController {
 
     public void test_launch_three_squares_3_pixel_above_bottom() {
         game.launch(new FigureListProvider(
-                Figure.TEST_SQUARE_ABOVE_3_BOTTOM,
-                Figure.TEST_SQUARE_ABOVE_3_BOTTOM,
-                Figure.TEST_SQUARE_ABOVE_3_BOTTOM
+                Figure.getTestSquareAbove3Bottom(),
+                Figure.getTestSquareAbove3Bottom(),
+                Figure.getTestSquareAbove3Bottom()
         ));
     }
 
@@ -106,7 +106,7 @@ public class GameScreenController {
 
     public void test_launchStick() {
         game.launch(new FigureListProvider(
-                Figure.STICK_ON_TOP
+                Figure.getStickOnTop()
         ));
     }
 
@@ -116,15 +116,15 @@ public class GameScreenController {
 
     public void test_launch_L_figure() {
         game.launch(new FigureListProvider(
-                Figure.L_FIGURE_ON_TOP
+                Figure.getLFigureOnTop()
         ));
     }
 
     public void test_launch3SticksNearBoundaries() {
         game.launch(new FigureListProvider(
-                Figure.STICK_NEAR_LEFT_ON_TOP,
-                Figure.STICK_NEAR_RIGHT_ON_TOP,
-                Figure.STICK_ABOVE_BOTTOM
+                Figure.getStickNearLeftOnTop(),
+                Figure.getStickNearRightOnTop(),
+                Figure.getStickAboveBottom()
         ));
     }
 

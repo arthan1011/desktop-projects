@@ -40,19 +40,19 @@ public class GameScreenTest {
     public void shouldPreserveBlocksAfterFigurePositionUpdated() throws Exception {
         GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
-        FigureOnScreen square = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
+        FigureOnScreen square = Figure.getTestSquareAbove2Bottom();
         gameScreen.setProvider(new FigureListProvider(square));
         gameScreen.nextStep();
 
         List<Pixel> expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
-        expectedArray.addAll(Figure.TEST_SQUARE_ABOVE_2_BOTTOM.getPixels());
+        expectedArray.addAll(Figure.getTestSquareAbove2Bottom().getPixels());
         TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getGameData());
 
         gameScreen.nextStep();
         gameScreen.nextStep();
 
         expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
-        expectedArray.addAll(Figure.TEST_SQUARE_ABOVE_1_BOTTOM.getPixels());
+        expectedArray.addAll(Figure.getTestSquareAbove1Bottom().getPixels());
         TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getBlocks());
     }
 
@@ -60,7 +60,7 @@ public class GameScreenTest {
     public void shouldFindOutIfFigureReachedBlocks() throws Exception {
         GameScreen gameScreen = new GameScreen(new GridPane(), null);
         gameScreen.setBlocks(BLOCKS_IN_BOTTOM);
-        FigureOnScreen square = Figure.TEST_SQUARE_ABOVE_2_BOTTOM;
+        FigureOnScreen square = Figure.getTestSquareAbove2Bottom();
         gameScreen.setProvider(new FigureListProvider(square));
 
         gameScreen.nextStep();
@@ -76,7 +76,7 @@ public class GameScreenTest {
     public void shouldBecomePartOfBlocksAfterFell() throws Exception {
         GameScreen gameScreen = new GameScreen(
                 new GridPane(),
-                new FigureListProvider(Figure.TEST_SQUARE_ABOVE_1_BOTTOM)
+                new FigureListProvider(Figure.getTestSquareAbove1Bottom())
         );
         gameScreen.nextStep();
         gameScreen.nextStep();
@@ -97,8 +97,8 @@ public class GameScreenTest {
     @Test
     public void shouldAutomaticallyLaunchNewFigureOnTop() throws Exception {
         FigureProvider figureProvider = new FigureListProvider(
-                Figure.TEST_SQUARE_ABOVE_2_BOTTOM,
-                Figure.SQUARE_ON_TOP
+                Figure.getTestSquareAbove2Bottom(),
+                Figure.getSquareOnTop()
         );
         GameScreen gameScreen = new GameScreen(new GridPane(), figureProvider);
 
@@ -139,7 +139,7 @@ public class GameScreenTest {
     public void shouldGoToBottom() throws Exception {
         GameScreen gameScreen = new GameScreen(
                 new GridPane(),
-                new InfiniteFigureProvider(Figure.SQUARE_ON_TOP)
+                new InfiniteFigureProvider(Figure.getSquareOnTop())
         );
 
         gameScreen.nextStep();
@@ -162,7 +162,7 @@ public class GameScreenTest {
     public void shouldRotateStick() throws Exception {
         GameScreen gameScreen = new GameScreen(
                 new GridPane(),
-                new FigureListProvider(Figure.STICK_ON_TOP)
+                new FigureListProvider(Figure.getStickOnTop())
         );
         gameScreen.nextStep();
         gameScreen.nextStep();
