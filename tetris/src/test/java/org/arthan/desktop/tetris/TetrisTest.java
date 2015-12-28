@@ -312,7 +312,7 @@ public class TetrisTest extends TestGui {
     }
 
     @Test
-    public void ShouldRotateAndMoveLFigureWithGhost() throws Exception {
+    public void shouldRotateAndMoveLFigureWithGhost() throws Exception {
         click(START_BUTTON_ID);
         click(TEST_LAUNCH_L_FIGURE);
         waitFor(stepsBeyond(0));
