@@ -10,8 +10,8 @@ import org.arthan.desktop.tetris.model.figure.Pixel;
 import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import org.arthan.desktop.tetris.util.UIBuilder;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.arthan.desktop.tetris.util.UIBuilder.createBlock;
 import static org.arthan.desktop.tetris.util.UIBuilder.createGhostBlock;
@@ -93,17 +93,68 @@ public class GameScreen {
     public void nextStep() {
         if (figure == null || figureArrived(figure)) {
             addFigureToBlocks();
+            eraseFilledRows();
             Optional<FigureOnScreen> nextFigure = provider.next();
             if (nextFigure.isPresent()) {
                 figure = nextFigure.get();
-            } else {
-                return;
             }
         } else {
             figure = figure.goDown();
         }
 
         updateScreen();
+    }
+
+    // TODO: this method should be tested
+    private void eraseFilledRows() {
+        Collection<Pixel> blocksInFilledRows = findBlocksInFilledRows();
+        if (blocksInFilledRows.isEmpty()) {
+            return;
+        }
+
+        int highestYInFilledRows = blocksInFilledRows
+                .stream()
+                .mapToInt(p -> p.y)
+                .max().getAsInt();
+        int numberOfFilledRows = (int)blocksInFilledRows
+                .stream()
+                .mapToInt(p -> p.y)
+                .distinct()
+                .count();
+
+        blocks.removeAll(blocksInFilledRows);
+
+        List<Pixel> blocksAboveFilledRows = blocks.stream()
+                .filter(p -> p.y < highestYInFilledRows)
+                .collect(Collectors.toList());
+        blocks.removeAll(blocksAboveFilledRows);
+        blocks.addAll(blocksAboveFilledRows
+                        .stream()
+                        .map(pixel -> new Pixel(pixel.x, pixel.y + numberOfFilledRows))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private Collection<Pixel> findBlocksInFilledRows() {
+        Map<Integer, List<Pixel>> pixelListMap = new HashMap<>();
+        for (int i = 0; i < GAME_SCREEN_HEIGHT; i++) {
+            pixelListMap.put(i, new ArrayList<>());
+        }
+
+        for (Pixel pixel : blocks) {
+            pixelListMap.get(pixel.y).add(pixel);
+        }
+
+        Collection<Pixel> resultSet = new HashSet<>();
+        Set<Integer> integers = pixelListMap.keySet();
+        for (Integer rowNum : integers) {
+            List<Pixel> rowPixels = pixelListMap.get(rowNum);
+            if (rowPixels.size() == GAME_SCREEN_WIDTH) {
+                resultSet.addAll(rowPixels);
+            }
+        }
+
+        return resultSet;
     }
 
     private boolean figureReachedBlocks(FigureOnScreen figure) {
