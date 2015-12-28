@@ -191,18 +191,24 @@ public class GameScreen {
     }
 
     public void goRight() {
-        figure = figure.goRight();
-        updateScreen();
+        if (!figureArrived(figure)) {
+            figure = figure.goRight();
+            updateScreen();
+        }
     }
 
     public void goLeft() {
-        figure = figure.goLeft();
-        updateScreen();
+        if (!figureArrived(figure)) {
+            figure = figure.goLeft();
+            updateScreen();
+        }
     }
 
     public void goBottom() {
-        figure = getFallenFigure();
-        updateScreen();
+        if (!figureArrived(figure)) {
+            figure = getFallenFigure();
+            updateScreen();
+        }
     }
 
     private FigureOnScreen getFallenFigure() {
