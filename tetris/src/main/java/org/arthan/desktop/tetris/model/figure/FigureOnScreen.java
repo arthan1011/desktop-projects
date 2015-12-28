@@ -37,6 +37,8 @@ public abstract class FigureOnScreen {
         return downFigure;
     }
 
+    public abstract FigureOnScreen onTop();
+
     public abstract List<List<Pixel>> getFigureShapes();
 
     public abstract List<int[]> getPivotVectors();

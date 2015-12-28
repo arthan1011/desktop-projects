@@ -50,6 +50,10 @@ public class Stick extends FigureOnScreen {
         return stick;
     }
 
+    @Override
+    public FigureOnScreen onTop() {
+        return Figure.getStickOnTop();
+    }
 
     @Override
     protected FigureOnScreen createEmpty(int shapeIndex) {

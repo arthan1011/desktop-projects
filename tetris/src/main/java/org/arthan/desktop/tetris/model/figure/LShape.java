@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by Артур on 24.12.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅ on 24.12.2015.
  * Next to Ufa.
  */
 public class LShape extends FigureOnScreen {
@@ -62,6 +62,11 @@ public class LShape extends FigureOnScreen {
         LShape figure = new LShape();
         figure.setCurrentPositionPixels(pixels);
         return figure;
+    }
+
+    @Override
+    public FigureOnScreen onTop() {
+        return Figure.getLFigureOnTop();
     }
 
     @Override

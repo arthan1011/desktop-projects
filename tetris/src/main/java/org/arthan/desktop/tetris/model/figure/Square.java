@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by Артур on 20.12.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅ on 20.12.2015.
  * Next to Ufa.
  */
 public class Square extends FigureOnScreen {
@@ -31,6 +31,11 @@ public class Square extends FigureOnScreen {
         Square square = new Square();
         square.setShapeIndex(shapeIndex);
         return square;
+    }
+
+    @Override
+    public FigureOnScreen onTop() {
+        return Figure.getSquareOnTop();
     }
 
     @Override

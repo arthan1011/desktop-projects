@@ -2,8 +2,11 @@ package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.figure.Figure;
 import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
@@ -31,6 +34,22 @@ public class GameScreenController {
     public void initialize() {
         game = new Game(gameGrid);
         currentSpeedLabel.textProperty().bind(game.getSpeedProperty().asString());
+
+        gameGrid.getParent().getParent().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.UP) {
+                doRotate();
+            }
+            if (event.getCode() == KeyCode.RIGHT) {
+                goRight();
+            }
+            if (event.getCode() == KeyCode.LEFT) {
+                goLeft();
+            }
+            if (event.getCode() == KeyCode.CONTROL) {
+                goBottom();
+            }
+
+        });
     }
 
     public void launchSquare() {
@@ -153,5 +172,9 @@ public class GameScreenController {
                         new Pixel(0, 19), new Pixel(1, 19), new Pixel(2, 19), new Pixel(3, 19), new Pixel(4, 19), new Pixel(5, 19), new Pixel(6, 19), new Pixel(7, 19),                   new Pixel(9, 19)
                 )
         );
+    }
+
+    public void launchInfinite() {
+        game.launch(new InfiniteFigureProvider());
     }
 }

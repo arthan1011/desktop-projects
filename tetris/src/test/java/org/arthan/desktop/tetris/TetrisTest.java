@@ -429,6 +429,8 @@ public class TetrisTest extends TestGui {
         );
     }
 
+    // TODO: test figure moved to blocks bug
+
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;
     }

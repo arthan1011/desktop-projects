@@ -31,6 +31,9 @@
           BorderPane.alignment="CENTER">
       <children>
         <Label text="Test"/>
+        <Hyperlink fx:id="launchInfinite"
+                   onAction="#launchInfinite"
+                   text="Launch" />
         <Hyperlink fx:id="test_LaunchSquareButton"
                    onAction="#launchSquare"
                    text="Launch square"/>
