@@ -164,17 +164,27 @@ public class GameScreenController {
     public void test_set_blocks_for_erasure() {
         game.getGameScreen().setBlocks(
                 Lists.newArrayList(
-                        new Pixel(0, 14),                   new Pixel(2, 14), new Pixel(3, 14),                                     new Pixel(6, 14), new Pixel(7, 14), new Pixel(8, 14), new Pixel(9, 14),
-                        new Pixel(0, 15),                   new Pixel(2, 15), new Pixel(3, 15),                                     new Pixel(6, 15), new Pixel(7, 15), new Pixel(8, 15), new Pixel(9, 15),
-                        new Pixel(0, 16),                   new Pixel(2, 16), new Pixel(3, 16),                                     new Pixel(6, 16), new Pixel(7, 16), new Pixel(8, 16), new Pixel(9, 16),
-                        new Pixel(0, 17), new Pixel(1, 17), new Pixel(2, 17), new Pixel(3, 17),                                     new Pixel(6, 17), new Pixel(7, 17), new Pixel(8, 17), new Pixel(9, 17),
-                        new Pixel(0, 18), new Pixel(1, 18), new Pixel(2, 18), new Pixel(3, 18), new Pixel(4, 18), new Pixel(5, 18), new Pixel(6, 18), new Pixel(7, 18),                   new Pixel(9, 18),
-                        new Pixel(0, 19), new Pixel(1, 19), new Pixel(2, 19), new Pixel(3, 19), new Pixel(4, 19), new Pixel(5, 19), new Pixel(6, 19), new Pixel(7, 19),                   new Pixel(9, 19)
+                        new Pixel(0, 14), new Pixel(2, 14), new Pixel(3, 14), new Pixel(6, 14), new Pixel(7, 14), new Pixel(8, 14), new Pixel(9, 14),
+                        new Pixel(0, 15), new Pixel(2, 15), new Pixel(3, 15), new Pixel(6, 15), new Pixel(7, 15), new Pixel(8, 15), new Pixel(9, 15),
+                        new Pixel(0, 16), new Pixel(2, 16), new Pixel(3, 16), new Pixel(6, 16), new Pixel(7, 16), new Pixel(8, 16), new Pixel(9, 16),
+                        new Pixel(0, 17), new Pixel(1, 17), new Pixel(2, 17), new Pixel(3, 17), new Pixel(6, 17), new Pixel(7, 17), new Pixel(8, 17), new Pixel(9, 17),
+                        new Pixel(0, 18), new Pixel(1, 18), new Pixel(2, 18), new Pixel(3, 18), new Pixel(4, 18), new Pixel(5, 18), new Pixel(6, 18), new Pixel(7, 18), new Pixel(9, 18),
+                        new Pixel(0, 19), new Pixel(1, 19), new Pixel(2, 19), new Pixel(3, 19), new Pixel(4, 19), new Pixel(5, 19), new Pixel(6, 19), new Pixel(7, 19), new Pixel(9, 19)
                 )
         );
     }
 
     public void launchInfinite() {
         game.launch(new InfiniteFigureProvider());
+    }
+
+    public void test_set_blocks_on_top() {
+        game.getGameScreen().setBlocks(
+                Lists.newArrayList(
+                        new Pixel(6, 1),
+                        new Pixel(6, 2),
+                        new Pixel(6, 3)
+                )
+        );
     }
 }

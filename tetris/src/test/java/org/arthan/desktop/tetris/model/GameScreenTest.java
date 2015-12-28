@@ -31,7 +31,6 @@ public class GameScreenTest {
             new Pixel(4, 19),
             new Pixel(5, 19),
             new Pixel(6, 19),
-            new Pixel(7, 19),
             new Pixel(8, 19),
             new Pixel(9, 19)
     );

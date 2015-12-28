@@ -191,15 +191,17 @@ public class GameScreen {
     }
 
     public void goRight() {
-        if (!figureArrived(figure)) {
-            figure = figure.goRight();
+        FigureOnScreen figureRight = figure.goRight();
+        if (!figureArrived(figure) && !figureCollides(figureRight)) {
+            figure = figureRight;
             updateScreen();
         }
     }
 
     public void goLeft() {
-        if (!figureArrived(figure)) {
-            figure = figure.goLeft();
+        FigureOnScreen figureLeft = figure.goLeft();
+        if (!figureArrived(figure) && !figureCollides(figureLeft)) {
+            figure = figureLeft;
             updateScreen();
         }
     }
@@ -229,11 +231,16 @@ public class GameScreen {
         }
     }
 
-    public boolean figureCollides(FigureOnScreen stickOnTop) {
-        boolean figureIntersectsWithBlocks = stickOnTop.getPixels()
+    /**
+     * Checks if figure is positioned beyond boundaries of the game board or intersects with blocks
+     * @param figure figure for checking
+     * @return check result
+     */
+    public boolean figureCollides(FigureOnScreen figure) {
+        boolean figureIntersectsWithBlocks = figure.getPixels()
                 .stream()
                 .anyMatch(blocks::contains);
-        boolean figureHasPixelsBeyondBoundaries = stickOnTop.getPixels()
+        boolean figureHasPixelsBeyondBoundaries = figure.getPixels()
                 .stream()
                 .anyMatch(p ->
                         (p.x < 0 || p.x > GAME_SCREEN_WIDTH - 1) ||

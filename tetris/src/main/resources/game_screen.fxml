@@ -70,6 +70,9 @@
         <Hyperlink fx:id="test_set_blocks_for_erasure"
                    onAction="#test_set_blocks_for_erasure"
                    text="Set blocks for erasure" />
+        <Hyperlink fx:id="test_set_blocks_on_top"
+                   onAction="#test_set_blocks_on_top"
+                   text="Set blocks on top" />
 
         <Separator />
         <Hyperlink fx:id="test_setSpeed_5"

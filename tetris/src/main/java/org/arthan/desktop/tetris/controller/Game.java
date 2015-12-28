@@ -13,7 +13,7 @@ import org.arthan.desktop.tetris.model.provider.FigureProvider;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Артур on 20.12.2015.
+ * Created by Artur on 20.12.2015.
  * Next to Ufa.
  */
 public class Game {

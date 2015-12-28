@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
 /**
- * Created by Артур on 21.12.2015.
+ * Created by Artur on 21.12.2015.
  * Next to Ufa.
  */
 public class Figure {

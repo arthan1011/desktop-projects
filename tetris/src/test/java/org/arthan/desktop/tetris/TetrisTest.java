@@ -59,6 +59,7 @@ public class TetrisTest extends TestGui {
     private static final String STICK_NEAR_RIGHT_BORDER_2PBT = "/stick_near_right_border_2pbt.txt";
     private static final String STICK_2PAB = "/stick_2pab.txt";
     private static final String AFTER_ROWS_DISAPPEARED = "/after_rows_disappeared.txt";
+    private static final String STICK_1PBT_AND_BLOCKS_ON_TOP = "/stick_1pbt_and_blocks_on_top.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -430,6 +431,23 @@ public class TetrisTest extends TestGui {
     }
 
     // TODO: test figure moved to blocks bug
+
+
+    @Test
+    public void figureShouldNotMoveIntoBlocks() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_SET_BLOCKS_ON_TOP);
+        click(TEST_LAUNCH_STICK);
+
+        click(GO_RIGHT);
+        waitFor(stepsBeyond(1));
+
+        assertEquals(
+                "Figure should not go into blocks",
+                readFile(STICK_1PBT_AND_BLOCKS_ON_TOP),
+                getGameData()
+        );
+    }
 
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;
