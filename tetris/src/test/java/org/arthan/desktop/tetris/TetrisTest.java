@@ -58,6 +58,7 @@ public class TetrisTest extends TestGui {
     private static final String STICK_NEAR_LEFT_BORDER_1PBT = "/stick_near_left_border_1pbt.txt";
     private static final String STICK_NEAR_RIGHT_BORDER_2PBT = "/stick_near_right_border_2pbt.txt";
     private static final String STICK_2PAB = "/stick_2pab.txt";
+    private static final String AFTER_ROWS_DISAPPEARED = "/after_rows_disappeared.txt";
 
     @Test
     public void shouldStartGameWithBlankScreen() throws Exception {
@@ -408,6 +409,22 @@ public class TetrisTest extends TestGui {
         assertEquals(
                 "Stick should not rotate near the bottom",
                 readFile(STICK_2PAB),
+                getGameData()
+        );
+    }
+
+    @Test
+    public void shouldEraseBlocksWhenRowFilled() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_SET_BLOCKS_FOR_ERASURE);
+        click(TEST_LAUNCH_SQUARE_BUTTON);
+
+        click(GO_BOTTOM);
+        waitFor(stepsBeyond(1));
+
+        assertEquals(
+                "Filled rows should disappear",
+                readFile(AFTER_ROWS_DISAPPEARED),
                 getGameData()
         );
     }

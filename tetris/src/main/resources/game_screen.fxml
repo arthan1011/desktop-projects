@@ -64,6 +64,9 @@
         <Hyperlink fx:id="test_set_blocks_on_right_side"
                    onAction="#test_setBlocksOnRightSide"
                    text="Set blocks on right side" />
+        <Hyperlink fx:id="test_set_blocks_for_erasure"
+                   onAction="#test_set_blocks_for_erasure"
+                   text="Set blocks for erasure" />
 
         <Separator />
         <Hyperlink fx:id="test_setSpeed_5"
