@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by ����� on 24.12.2015.
+ * Created by Artur on 24.12.2015.
  * Next to Ufa.
  */
 public class LShape extends FigureOnScreen {

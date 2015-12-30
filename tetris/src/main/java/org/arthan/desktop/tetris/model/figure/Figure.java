@@ -3,6 +3,7 @@ package org.arthan.desktop.tetris.model.figure;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Artur on 21.12.2015.
@@ -64,6 +65,12 @@ public class Figure {
             new Pixel(4, 18),
             new Pixel(4, 19)
     );
+    private static final List<Pixel> J_FIGURE_ON_TOP = Lists.newArrayList(
+            new Pixel(5, 0),
+            new Pixel(5, 1),
+            new Pixel(5, 2),
+            new Pixel(4, 2)
+    );
 
     public static FigureOnScreen getStickOnTop() {
         return Stick.build(STICK_ON_TOP_ARRAY);
@@ -99,5 +106,9 @@ public class Figure {
 
     public static FigureOnScreen getSquareOnTop() {
         return Square.build(SQUARE_ON_TOP_ARRAY);
+    }
+
+    public static FigureOnScreen getJFigureOnTop() {
+        return JShape.build(J_FIGURE_ON_TOP);
     }
 }

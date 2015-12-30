@@ -1,10 +1,7 @@
 package org.arthan.desktop.tetris.model.provider;
 
 import com.google.common.collect.Lists;
-import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
-import org.arthan.desktop.tetris.model.figure.LShape;
-import org.arthan.desktop.tetris.model.figure.Square;
-import org.arthan.desktop.tetris.model.figure.Stick;
+import org.arthan.desktop.tetris.model.figure.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +19,8 @@ public class InfiniteFigureProvider implements FigureProvider {
     private final List<Class<? extends FigureOnScreen>> figureClasses = Lists.newArrayList(
             Square.class,
             Stick.class,
-            LShape.class
+            LShape.class,
+            JShape.class
     );
 
     public InfiniteFigureProvider(FigureOnScreen figure) {

@@ -33,6 +33,10 @@ public class GameScreenTest {
     private static final String BLOCKS_BEFORE_ONE_BOTTOM_ROW_ERASURE = "/blocks_before_one_bottom_row_erasure.txt";
     private static final String BLOCKS_BEFORE_THREE_BOTTOM_ROWS_ERASURE = "/blocks_before_three_bottom_rows_erasure.txt";
     private static final String BLOCKS_AFTER_THREE_BOTTOM_ROWS_ERASURE = "/blocks_after_three_bottom_rows_erasure.txt";
+    private static final String J_FIGURE_ROTATED_ONE_TIME = "/j_figure_rotated_one_time.txt";
+    private static final String J_FIGURE_ROTATED_TWO_TIMES = "/j_figure_rotated_two_times.txt";
+    private static final String J_FIGURE_ROTATED_THREE_TIMES = "/j_figure_rotated_three_times.txt";
+    private static final String J_FIGURE_ROTATE_FULL_CIRCLE = "/j_figure_rotate_full_circle.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -186,6 +190,46 @@ public class GameScreenTest {
                         new Pixel(5, 2),
                         new Pixel(6, 2)
                 ),
+                gameScreen.getGameData()
+        );
+    }
+
+    @Test
+    public void shouldRotateJFigure() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(Figure.getJFigureOnTop())
+        );
+        gameScreen.nextStep();
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "J-Figure should rotate one time",
+                readBlocksFromFile(J_FIGURE_ROTATED_ONE_TIME),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "J-Figure should rotate two times",
+                readBlocksFromFile(J_FIGURE_ROTATED_TWO_TIMES),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "J-Figure should rotate three times",
+                readBlocksFromFile(J_FIGURE_ROTATED_THREE_TIMES),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "J-Figure should rotate full circle",
+                readBlocksFromFile(J_FIGURE_ROTATE_FULL_CIRCLE),
                 gameScreen.getGameData()
         );
     }
