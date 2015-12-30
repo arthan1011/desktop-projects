@@ -37,6 +37,8 @@ public class GameScreenTest {
     private static final String J_FIGURE_ROTATED_TWO_TIMES = "/j_figure_rotated_two_times.txt";
     private static final String J_FIGURE_ROTATED_THREE_TIMES = "/j_figure_rotated_three_times.txt";
     private static final String J_FIGURE_ROTATE_FULL_CIRCLE = "/j_figure_rotate_full_circle.txt";
+    private static final String S_FIGURE_ROTATED_ONE_TIME = "/s_figure_rotated_one_time.txt";
+    private static final String S_FIGURE_ROTATED_FULL_CIRCLE = "/s_figure_rotated_full_circle.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -230,6 +232,30 @@ public class GameScreenTest {
         assertPixelListEquals(
                 "J-Figure should rotate full circle",
                 readBlocksFromFile(J_FIGURE_ROTATE_FULL_CIRCLE),
+                gameScreen.getGameData()
+        );
+    }
+
+    @Test
+    public void shouldRotateSShape() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(Figure.getSFigureOnTop())
+        );
+        gameScreen.nextStep();
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "S-Figure should rotate",
+                readBlocksFromFile(S_FIGURE_ROTATED_ONE_TIME),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "S-Figure should rotate full circle",
+                readBlocksFromFile(S_FIGURE_ROTATED_FULL_CIRCLE),
                 gameScreen.getGameData()
         );
     }

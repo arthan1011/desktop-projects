@@ -20,7 +20,8 @@ public class InfiniteFigureProvider implements FigureProvider {
             Square.class,
             Stick.class,
             LShape.class,
-            JShape.class
+            JShape.class,
+            SShape.class
     );
 
     public InfiniteFigureProvider(FigureOnScreen figure) {
