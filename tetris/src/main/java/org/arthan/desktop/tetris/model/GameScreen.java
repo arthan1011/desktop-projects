@@ -1,5 +1,6 @@
 package org.arthan.desktop.tetris.model;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -105,34 +106,52 @@ public class GameScreen {
         updateScreen();
     }
 
-    // TODO: this method should be tested
-    private void eraseFilledRows() {
+    @VisibleForTesting
+    void eraseFilledRows() {
         Collection<Pixel> blocksInFilledRows = findBlocksInFilledRows();
         if (blocksInFilledRows.isEmpty()) {
             return;
         }
 
-        int highestYInFilledRows = blocksInFilledRows
-                .stream()
-                .mapToInt(p -> p.y)
-                .max().getAsInt();
-        int numberOfFilledRows = (int)blocksInFilledRows
-                .stream()
-                .mapToInt(p -> p.y)
-                .distinct()
-                .count();
-
         blocks.removeAll(blocksInFilledRows);
 
-        List<Pixel> blocksAboveFilledRows = blocks.stream()
-                .filter(p -> p.y < highestYInFilledRows)
+
+        if (!blocks.isEmpty()) {
+            int yIndex = GAME_SCREEN_HEIGHT - 1;
+            while (yIndex != 0) {
+                if (hasEmptyRowAt(yIndex) && highestYInBlocks() < yIndex) {
+                    lowerAllBlocksAbove(yIndex);
+                    yIndex = GAME_SCREEN_HEIGHT - 1;
+                } else {
+                    yIndex--;
+                }
+            }
+        }
+    }
+
+    private void lowerAllBlocksAbove(int yIndex) {
+        List<Pixel> blocksAboveEmptyRow = blocks
+                .stream()
+                .filter(p -> p.y < yIndex)
                 .collect(Collectors.toList());
-        blocks.removeAll(blocksAboveFilledRows);
-        blocks.addAll(blocksAboveFilledRows
-                        .stream()
-                        .map(pixel -> new Pixel(pixel.x, pixel.y + numberOfFilledRows))
-                        .collect(Collectors.toList())
-        );
+        blocks.removeAll(blocksAboveEmptyRow);
+
+        List<Pixel> loweredBlocks = blocksAboveEmptyRow
+                .stream()
+                .map(p -> new Pixel(p.x, p.y + 1))
+                .collect(Collectors.toList());
+        blocks.addAll(loweredBlocks);
+    }
+
+    private int highestYInBlocks() {
+        return blocks.stream()
+                .mapToInt(p -> p.y)
+                .min().getAsInt();
+    }
+
+    private boolean hasEmptyRowAt(int yIndex) {
+        return blocks.stream()
+                .noneMatch(pixel -> pixel.y == yIndex);
     }
 
     private Collection<Pixel> findBlocksInFilledRows() {

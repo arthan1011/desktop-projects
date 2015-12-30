@@ -2,7 +2,6 @@ package org.arthan.desktop.tetris.model;
 
 import com.google.common.collect.Lists;
 import javafx.scene.layout.GridPane;
-import org.arthan.desktop.tetris.TestUtils;
 import org.arthan.desktop.tetris.model.figure.Figure;
 import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
 import org.arthan.desktop.tetris.model.figure.Pixel;
@@ -16,13 +15,24 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.arthan.desktop.tetris.TestUtils.assertPixelListEquals;
+import static org.arthan.desktop.tetris.TestUtils.readBlocksFromFile;
+
 
 /**
  * Created by ashamsiev on 10.12.2015
  */
 public class GameScreenTest {
 
-    private static final FigureProvider UNUSED_PROVIDER = null;
+    private static final String BLOCKS_BEFORE_SEPARATE_ROW_ERASURE = "/blocks_before_separate_row_erasure.txt";
+    private static final String BLOCKS_AFTER_SEPARATE_ROW_ERASURE = "/blocks_after_separate_row_erasure.txt";
+    private static final String BLOCKS_BEFORE_BLOCKS_IN_BOTTOM_ERASURE = "/blocks_before_blocks_in_bottom_erasure.txt";
+    private static final String BLOCKS_AFTER_BLOCKS_IN_BOTTOM_ERASURE = "/blocks_after_blocks_in_bottom_erasure.txt";
+    private static final GridPane UNUSED_GAME_GRID = null;
+    private static final String BLOCKS_AFTER_ONE_BOTTOM_ROW_ERASURE = "/blocks_after_one_bottom_row_erasure.txt";
+    private static final String BLOCKS_BEFORE_ONE_BOTTOM_ROW_ERASURE = "/blocks_before_one_bottom_row_erasure.txt";
+    private static final String BLOCKS_BEFORE_THREE_BOTTOM_ROWS_ERASURE = "/blocks_before_three_bottom_rows_erasure.txt";
+    private static final String BLOCKS_AFTER_THREE_BOTTOM_ROWS_ERASURE = "/blocks_after_three_bottom_rows_erasure.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -34,6 +44,7 @@ public class GameScreenTest {
             new Pixel(8, 19),
             new Pixel(9, 19)
     );
+    private final FigureProvider UNUSED_PROVIDER = null;
 
     @Test
     public void shouldPreserveBlocksAfterFigurePositionUpdated() throws Exception {
@@ -45,14 +56,14 @@ public class GameScreenTest {
 
         List<Pixel> expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
         expectedArray.addAll(Figure.getTestSquareAbove2Bottom().getPixels());
-        TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getGameData());
+        assertPixelListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getGameData());
 
         gameScreen.nextStep();
         gameScreen.nextStep();
 
         expectedArray = Lists.newArrayList(BLOCKS_IN_BOTTOM);
         expectedArray.addAll(Figure.getTestSquareAbove1Bottom().getPixels());
-        TestUtils.assertListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getBlocks());
+        assertPixelListEquals("Blocks state wasn't preserved", expectedArray, gameScreen.getBlocks());
     }
 
     @Test
@@ -81,13 +92,13 @@ public class GameScreenTest {
         gameScreen.nextStep();
         gameScreen.nextStep();
 
-        TestUtils.assertListEquals(
+        assertPixelListEquals(
                 "Figure didn't become part of blocks after reaching bottom",
                 Lists.newArrayList(
-                    new Pixel(4, 18),
-                    new Pixel(5, 18),
-                    new Pixel(4, 19),
-                    new Pixel(5, 19)
+                        new Pixel(4, 18),
+                        new Pixel(5, 18),
+                        new Pixel(4, 19),
+                        new Pixel(5, 19)
                 ),
                 gameScreen.getBlocks()
         );
@@ -103,7 +114,7 @@ public class GameScreenTest {
 
         gameScreen.nextStep();
 
-        TestUtils.assertListEquals(
+        assertPixelListEquals(
                 "Should show first figure from figure provider",
                 Lists.newArrayList(
                         new Pixel(4, 16),
@@ -118,7 +129,7 @@ public class GameScreenTest {
         gameScreen.nextStep();
         gameScreen.nextStep();
 
-        TestUtils.assertListEquals(
+        assertPixelListEquals(
                 "Second square provided by figure provider should appear on top",
                 Lists.newArrayList(
                         new Pixel(4, 0),
@@ -144,7 +155,7 @@ public class GameScreenTest {
         gameScreen.nextStep();
         gameScreen.goBottom();
 
-        TestUtils.assertListEquals(
+        assertPixelListEquals(
                 "Square should be in the bottom",
                 Lists.newArrayList(
                         new Pixel(4, 18),
@@ -167,7 +178,7 @@ public class GameScreenTest {
         gameScreen.nextStep();
         gameScreen.doRotate();
 
-        TestUtils.assertListEquals(
+        assertPixelListEquals(
                 "Stick should rotate",
                 Lists.newArrayList(
                         new Pixel(3, 2),
@@ -198,5 +209,61 @@ public class GameScreenTest {
 
         Assert.assertTrue("Figure should collide", gameScreen.figureCollides(stickOnTop));
 
+    }
+
+    @Test
+    public void shouldEraseSeparatedRows() throws Exception {
+        GameScreen gameScreen = new GameScreen(new GridPane(), UNUSED_PROVIDER);
+        gameScreen.setBlocks(readBlocksFromFile(BLOCKS_BEFORE_SEPARATE_ROW_ERASURE));
+
+        gameScreen.eraseFilledRows();
+
+        assertPixelListEquals(
+                "Separated filled rows should properly disappear",
+                readBlocksFromFile(BLOCKS_AFTER_SEPARATE_ROW_ERASURE),
+                gameScreen.getBlocks()
+        );
+    }
+
+    @Test
+    public void shouldEraseRowsInBottom() throws Exception {
+        GameScreen gameScreen = new GameScreen(new GridPane(), UNUSED_PROVIDER);
+        gameScreen.setBlocks(readBlocksFromFile(BLOCKS_BEFORE_BLOCKS_IN_BOTTOM_ERASURE));
+
+        gameScreen.eraseFilledRows();
+
+        assertPixelListEquals(
+                "Blocks in the bottom should be erased",
+                readBlocksFromFile(BLOCKS_AFTER_BLOCKS_IN_BOTTOM_ERASURE),
+                gameScreen.getBlocks()
+        );
+    }
+
+    @Test
+    public void shouldEraseOneBottomRow() throws Exception {
+        GameScreen gameScreen = new GameScreen(UNUSED_GAME_GRID, UNUSED_PROVIDER);
+        gameScreen.setBlocks(readBlocksFromFile(BLOCKS_BEFORE_ONE_BOTTOM_ROW_ERASURE));
+
+        gameScreen.eraseFilledRows();
+
+        assertPixelListEquals(
+                "Should erase one row in the bottom",
+                readBlocksFromFile(BLOCKS_AFTER_ONE_BOTTOM_ROW_ERASURE),
+                gameScreen.getBlocks()
+        );
+    }
+
+    @Test
+    public void shouldEraseThreeBottomRows() throws Exception {
+        GameScreen gameScreen = new GameScreen(UNUSED_GAME_GRID, UNUSED_PROVIDER);
+        gameScreen.setBlocks(readBlocksFromFile(BLOCKS_BEFORE_THREE_BOTTOM_ROWS_ERASURE));
+
+        gameScreen.eraseFilledRows();
+
+        assertPixelListEquals(
+                "Should erase two rows in the bottom",
+                readBlocksFromFile(BLOCKS_AFTER_THREE_BOTTOM_ROWS_ERASURE),
+                gameScreen.getBlocks()
+        );
     }
 }

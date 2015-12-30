@@ -14,7 +14,7 @@ public class UIBuilder {
 
     public static final Color BLOCK_COLOR = Color.RED;
     public static final Color CELL_COLOR = Color.LIGHTGREY;
-    public static final Color GHOST_COLOR = Color.LIGHTYELLOW;
+    public static final Color GHOST_COLOR = Color.YELLOWGREEN;
 
     public static Parent createGameScreen() {
         return UILoader.loadGameScreen();

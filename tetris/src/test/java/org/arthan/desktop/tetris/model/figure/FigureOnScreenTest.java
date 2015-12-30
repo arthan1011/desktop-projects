@@ -2,7 +2,6 @@ package org.arthan.desktop.tetris.model.figure;
 
 import com.google.common.collect.Lists;
 import org.arthan.desktop.tetris.TestUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class FigureOnScreenTest {
 
         figureOnScreen = figureOnScreen.goDown();
 
-        TestUtils.assertListEquals("Figure wasn't moved down",
+        TestUtils.assertPixelListEquals("Figure wasn't moved down",
                 Lists.newArrayList(
                         new Pixel(4, 1),
                         new Pixel(5, 1),
@@ -48,7 +47,7 @@ public class FigureOnScreenTest {
         List<Pixel> expectedPixelsUnderFigure = Lists.newArrayList(new Pixel(4, 18), new Pixel(5, 18));
         List<Pixel> actualPixelsUnderFigure = figure.getPixelsUnderneath();
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Pixels under figure wasn't calculated properly",
                 expectedPixelsUnderFigure,
                 actualPixelsUnderFigure);
@@ -61,7 +60,7 @@ public class FigureOnScreenTest {
         List<Pixel> expectedPixelsUnderFigure = Lists.newArrayList(new Pixel(4, 17), new Pixel(5, 17));
         List<Pixel> actualPixelsUnderFigure = figure.findLowestPixels();
 
-        TestUtils.assertListEquals("Lowest pixels in figure wasn't calculated properly", expectedPixelsUnderFigure, actualPixelsUnderFigure);
+        TestUtils.assertPixelListEquals("Lowest pixels in figure wasn't calculated properly", expectedPixelsUnderFigure, actualPixelsUnderFigure);
     }
 
     @Test
@@ -76,7 +75,7 @@ public class FigureOnScreenTest {
                 new Pixel(6, 17)
         );
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure didn't move to the right",
                 expectedPixelsAfterGoRight,
                 figure.getPixels()
@@ -99,7 +98,7 @@ public class FigureOnScreenTest {
                 new Pixel(9, 17)
         );
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure should be by right border",
                 expectedPixelsByRightBorder,
                 figure.getPixels()
@@ -107,7 +106,7 @@ public class FigureOnScreenTest {
 
         figure = figure.goRight();
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure should still be by right border",
                 expectedPixelsByRightBorder,
                 figure.getPixels()
@@ -126,7 +125,7 @@ public class FigureOnScreenTest {
                 new Pixel(4, 17)
         );
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure should go left",
                 expectedPixelsAfterGoLeft,
                 figure.getPixels()
@@ -149,7 +148,7 @@ public class FigureOnScreenTest {
                 new Pixel(1, 17)
         );
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure should be by left border",
                 expectedPixelsByLeftBorder,
                 figure.getPixels()
@@ -157,7 +156,7 @@ public class FigureOnScreenTest {
 
         figure = figure.goLeft();
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Figure should still be by left border",
                 expectedPixelsByLeftBorder,
                 figure.getPixels()
@@ -169,7 +168,7 @@ public class FigureOnScreenTest {
         FigureOnScreen figure = Figure.getStickOnTop();
         figure = figure.rotate();
 
-        TestUtils.assertListEquals(
+        TestUtils.assertPixelListEquals(
                 "Stick should rotate",
                 Lists.newArrayList(
                         new Pixel(3, 1),

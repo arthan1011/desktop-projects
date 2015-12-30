@@ -39,18 +39,6 @@ public class TestGui extends GuiTest {
     protected static final String TEST_SET_BLOCKS_FOR_ERASURE = "#test_set_blocks_for_erasure";
     protected static final String TEST_SET_BLOCKS_ON_TOP = "#test_set_blocks_on_top";
 
-    protected String readFile(String path) {
-        String expectedScreenArray;
-        try {
-            expectedScreenArray = FileUtils.readFileToString(new File(TestGui.class.getResource(path).toURI()));
-            // code need to be cross-platform
-            expectedScreenArray = expectedScreenArray.replace("\r", "");
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        return expectedScreenArray;
-    }
-
     @Override
     protected Parent getRootNode() {
         return UIBuilder.createRoot();

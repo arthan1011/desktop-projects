@@ -12,6 +12,7 @@ import org.arthan.desktop.tetris.util.UIBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.arthan.desktop.tetris.TestUtils.readFile;
 import static org.arthan.desktop.tetris.model.GameScreen.GAME_SCREEN_HEIGHT;
 import static org.arthan.desktop.tetris.model.GameScreen.GAME_SCREEN_WIDTH;
 import static org.junit.Assert.assertEquals;
@@ -430,9 +431,6 @@ public class TetrisTest extends TestGui {
         );
     }
 
-    // TODO: test figure moved to blocks bug
-
-
     @Test
     public void figureShouldNotMoveIntoBlocks() throws Exception {
         click(START_BUTTON_ID);
@@ -448,6 +446,8 @@ public class TetrisTest extends TestGui {
                 getGameData()
         );
     }
+
+    // TODO: test separated rows erasure bug
 
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;
@@ -504,7 +504,7 @@ public class TetrisTest extends TestGui {
         }
     }
 
-    private String stringifyScreenArray(int[][] screenArray) {
+    private static String stringifyScreenArray(int[][] screenArray) {
         String result = "";
 
         for (int[] row : screenArray) {
