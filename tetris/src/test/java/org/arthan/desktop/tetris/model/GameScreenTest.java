@@ -45,6 +45,8 @@ public class GameScreenTest {
     private static final String T_FIGURE_ROTATED_TWO_TIMES = "/t_figure_rotated_two_times.txt";
     private static final String T_FIGURE_ROTATED_THREE_TIMES = "/t_figure_rotated_three_times.txt";
     private static final String T_FIGURE_ROTATED_FULL_CIRCLE = "/t_figure_rotated_full_circle.txt";
+    private static final String ONE_ALMOST_FILLED_ROW_IN_THE_BOTTOM = "/one_almost_filled_row_in_the_bottom.txt";
+    private static final String T_FIGURE_IN_THE_BOTTOM_MOVED_RIGHT = "/t_figure_in_the_bottom_moved_right.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -404,6 +406,25 @@ public class GameScreenTest {
                 "Should erase two rows in the bottom",
                 readBlocksFromFile(BLOCKS_AFTER_THREE_BOTTOM_ROWS_ERASURE),
                 gameScreen.getBlocks()
+        );
+    }
+
+    @Test
+    public void shouldMoveFigureInTheBottom() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(Figure.getTFigure2PAB())
+        );
+        gameScreen.setBlocks(readBlocksFromFile(ONE_ALMOST_FILLED_ROW_IN_THE_BOTTOM));
+
+        gameScreen.nextStep();
+        gameScreen.nextStep();
+        gameScreen.goRight();
+
+        assertPixelListEquals(
+                "T-Figure should be in the bottom moved right",
+                readBlocksFromFile(T_FIGURE_IN_THE_BOTTOM_MOVED_RIGHT),
+                gameScreen.getGameData()
         );
     }
 }

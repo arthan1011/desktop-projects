@@ -447,7 +447,7 @@ public class TetrisTest extends TestGui {
         );
     }
 
-    // TODO: test separated rows erasure bug
+    // TODO: game score test
 
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;

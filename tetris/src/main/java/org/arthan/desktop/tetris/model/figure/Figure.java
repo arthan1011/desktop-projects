@@ -89,6 +89,12 @@ public class Figure {
             new Pixel(4, 1),
             new Pixel(5, 1)
     );
+    private static final List<Pixel> T_FIGURE_2PAB = Lists.newArrayList(
+            new Pixel(4, 16),
+            new Pixel(3, 17),
+            new Pixel(4, 17),
+            new Pixel(5, 17)
+    );
 
     public static FigureOnScreen getStickOnTop() {
         return Stick.build(STICK_ON_TOP_ARRAY);
@@ -140,5 +146,9 @@ public class Figure {
 
     public static FigureOnScreen getTFigureOnTop() {
         return TShape.build(T_FIGURE_ON_TOP);
+    }
+
+    public static FigureOnScreen getTFigure2PAB() {
+        return TShape.build(T_FIGURE_2PAB);
     }
 }

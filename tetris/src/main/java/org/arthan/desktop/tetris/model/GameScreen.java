@@ -211,7 +211,7 @@ public class GameScreen {
 
     public void goRight() {
         FigureOnScreen figureRight = figure.goRight();
-        if (!figureArrived(figure) && !figureCollides(figureRight)) {
+        if (!figureCollides(figureRight)) {
             figure = figureRight;
             updateScreen();
         }
@@ -219,7 +219,7 @@ public class GameScreen {
 
     public void goLeft() {
         FigureOnScreen figureLeft = figure.goLeft();
-        if (!figureArrived(figure) && !figureCollides(figureLeft)) {
+        if (!figureCollides(figureLeft)) {
             figure = figureLeft;
             updateScreen();
         }
