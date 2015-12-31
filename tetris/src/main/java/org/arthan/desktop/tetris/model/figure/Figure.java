@@ -83,6 +83,12 @@ public class Figure {
             new Pixel(5, 1),
             new Pixel(6, 1)
     );
+    private static final List<Pixel> T_FIGURE_ON_TOP = Lists.newArrayList(
+            new Pixel(4, 0),
+            new Pixel(3, 1),
+            new Pixel(4, 1),
+            new Pixel(5, 1)
+    );
 
     public static FigureOnScreen getStickOnTop() {
         return Stick.build(STICK_ON_TOP_ARRAY);
@@ -130,5 +136,9 @@ public class Figure {
 
     public static FigureOnScreen getZFigureOnTop() {
         return ZShape.build(Z_FIGURE_ON_TOP);
+    }
+
+    public static FigureOnScreen getTFigureOnTop() {
+        return TShape.build(T_FIGURE_ON_TOP);
     }
 }

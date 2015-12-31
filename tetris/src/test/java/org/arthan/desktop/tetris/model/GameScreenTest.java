@@ -41,6 +41,10 @@ public class GameScreenTest {
     private static final String S_FIGURE_ROTATED_FULL_CIRCLE = "/s_figure_rotated_full_circle.txt";
     private static final String Z_FIGURE_ROTATED_ONE_TIME = "/z_figure_rotated_one_time.txt";
     private static final String Z_FIGURE_ROTATED_FULL_CIRCLE = "/z_figure_rotated_full_circle.txt";
+    private static final String T_FIGURE_ROTATED_ONE_TIME = "/t_figure_rotated_one_time.txt";
+    private static final String T_FIGURE_ROTATED_TWO_TIMES = "/t_figure_rotated_two_times.txt";
+    private static final String T_FIGURE_ROTATED_THREE_TIMES = "/t_figure_rotated_three_times.txt";
+    private static final String T_FIGURE_ROTATED_FULL_CIRCLE = "/t_figure_rotated_full_circle.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -282,6 +286,46 @@ public class GameScreenTest {
         assertPixelListEquals(
                 "Z-Figure should rotate full circle",
                 readBlocksFromFile(Z_FIGURE_ROTATED_FULL_CIRCLE),
+                gameScreen.getGameData()
+        );
+    }
+
+    @Test
+    public void shouldRotateTShape() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                new GridPane(),
+                new FigureListProvider(Figure.getTFigureOnTop())
+        );
+        gameScreen.nextStep();
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "T-Figure should rotate one time",
+                readBlocksFromFile(T_FIGURE_ROTATED_ONE_TIME),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "T-Figure should rotate two times",
+                readBlocksFromFile(T_FIGURE_ROTATED_TWO_TIMES),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "T-Figure should rotate three times",
+                readBlocksFromFile(T_FIGURE_ROTATED_THREE_TIMES),
+                gameScreen.getGameData()
+        );
+
+        gameScreen.doRotate();
+
+        assertPixelListEquals(
+                "T-Figure should rotate full circle",
+                readBlocksFromFile(T_FIGURE_ROTATED_FULL_CIRCLE),
                 gameScreen.getGameData()
         );
     }
