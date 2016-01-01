@@ -1,6 +1,7 @@
 package org.arthan.desktop.tetris.model;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -25,10 +26,12 @@ public class GameScreen {
 
     public static final int GAME_SCREEN_WIDTH = 10;
     public static final int GAME_SCREEN_HEIGHT = 20;
+    public static final int SCORE_FOR_2_ROWS = 5;
     private final GridPane gameGrid;
     private List<Pixel> blocks = Lists.newArrayList();
     private FigureOnScreen figure;
     private FigureProvider provider;
+    private int score;
 
     public GameScreen(GridPane gameGrid, FigureProvider figureProvider) {
         this.gameGrid = gameGrid;
@@ -112,6 +115,7 @@ public class GameScreen {
         if (blocksInFilledRows.isEmpty()) {
             return;
         }
+        increaseScore(blocksInFilledRows);
 
         blocks.removeAll(blocksInFilledRows);
 
@@ -126,6 +130,32 @@ public class GameScreen {
                     yIndex--;
                 }
             }
+        }
+    }
+
+    private void increaseScore(Collection<Pixel> blocksInFilledRows) {
+        Preconditions.checkArgument(
+                blocksInFilledRows.size() % GAME_SCREEN_WIDTH == 0,
+                "Illegal number of filled blocks"
+        );
+
+        final int numberFilledRows = blocksInFilledRows.size() / GAME_SCREEN_WIDTH;
+
+        switch (numberFilledRows) {
+            case 1:
+                score += 1;
+                break;
+            case 2:
+                score += 5;
+                break;
+            case 3:
+                score += 10;
+                break;
+            case 4:
+                score += 20;
+                break;
+            default:
+                throw new IllegalArgumentException("Number of filled rows should be from 1 to 4");
         }
     }
 
@@ -266,5 +296,9 @@ public class GameScreen {
                         (p.y < 0 || p.y > GAME_SCREEN_HEIGHT - 1));
 
         return figureIntersectsWithBlocks || figureHasPixelsBeyondBoundaries;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

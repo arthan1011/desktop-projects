@@ -21,7 +21,8 @@ public class Game {
     static final long ONE_SECOND = TimeUnit.SECONDS.toNanos(1);
     private GameScreen innerGameScreen;
 
-    private IntegerProperty speedProperty = new SimpleIntegerProperty(1);
+    private IntegerProperty speed = new SimpleIntegerProperty(1);
+    private IntegerProperty score = new SimpleIntegerProperty(0);
     private ObjectProperty<MOVE> gameMoveProperty = new SimpleObjectProperty<>();
     long startTime;
 
@@ -68,12 +69,18 @@ public class Game {
     }
 
     void performNextStep(long now) {
-        long interval = ONE_SECOND / getSpeedProperty().get();
+        long interval = ONE_SECOND / getSpeed();
         boolean isTimeForNextStep = (now - startTime) / interval >= 1;
         if (isTimeForNextStep) {
             getGameScreen().nextStep();
             startTime += interval;
         }
+
+        updateScore();
+    }
+
+    private void updateScore() {
+        setScore(getGameScreen().getScore());
     }
 
     void refreshStartTime() {
@@ -81,16 +88,8 @@ public class Game {
     }
 
     void changeSpeed(int newSpeed) {
-        getSpeedProperty().set(newSpeed);
+        setSpeed(newSpeed);
         refreshStartTime();
-    }
-
-    public IntegerProperty getSpeedProperty() {
-        return speedProperty;
-    }
-
-    public void setSpeedProperty(IntegerProperty speedProperty) {
-        this.speedProperty = speedProperty;
     }
 
     public ObjectProperty<MOVE> getGameMoveProperty() {
@@ -99,5 +98,29 @@ public class Game {
 
     public void setGameMoveProperty(ObjectProperty<MOVE> gameMoveProperty) {
         this.gameMoveProperty = gameMoveProperty;
+    }
+
+    public int getScore() {
+        return score.get();
+    }
+
+    public IntegerProperty scoreProperty() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score.set(score);
+    }
+
+    public int getSpeed() {
+        return speed.get();
+    }
+
+    public IntegerProperty speedProperty() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed.set(speed);
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.arthan.desktop.tetris.controller.GameScreenController;
+import org.arthan.desktop.tetris.model.GameScreen;
 import org.arthan.desktop.tetris.util.UIBuilder;
 import org.junit.Assert;
 import org.junit.Test;
@@ -447,7 +448,27 @@ public class TetrisTest extends TestGui {
         );
     }
 
-    // TODO: game score test
+    @Test
+    public void shouldGainPoints() throws Exception {
+        click(START_BUTTON_ID);
+        click(TEST_SET_BLOCKS_FOR_SCORE_GAIN);
+        click(TEST_LAUNCH_SQUARE_BUTTON);
+
+        waitFor(stepsBeyond(0));
+        click(GO_BOTTOM);
+        waitFor(steps(1));
+
+        assertEquals(
+                "Game score should increase",
+                GameScreen.SCORE_FOR_2_ROWS,
+                getCurrentScore()
+        );
+    }
+
+    private int getCurrentScore() {
+        Label scoreLabel = find("#currentScoreLabel");
+        return Integer.parseInt(scoreLabel.getText());
+    }
 
     private int stepsBeyond(int number) {
         return steps(number) + INTERVAL_LT_FASTEST_STEP;

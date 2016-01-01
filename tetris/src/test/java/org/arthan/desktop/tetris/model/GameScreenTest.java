@@ -47,6 +47,7 @@ public class GameScreenTest {
     private static final String T_FIGURE_ROTATED_FULL_CIRCLE = "/t_figure_rotated_full_circle.txt";
     private static final String ONE_ALMOST_FILLED_ROW_IN_THE_BOTTOM = "/one_almost_filled_row_in_the_bottom.txt";
     private static final String T_FIGURE_IN_THE_BOTTOM_MOVED_RIGHT = "/t_figure_in_the_bottom_moved_right.txt";
+    private static final String FILLED_ROWS = "/2_filled_rows.txt";
     private final List<Pixel> BLOCKS_IN_BOTTOM = Lists.newArrayList(
             new Pixel(0, 19),
             new Pixel(1, 19),
@@ -59,6 +60,7 @@ public class GameScreenTest {
             new Pixel(9, 19)
     );
     private final FigureProvider UNUSED_PROVIDER = null;
+    private static final int EXPECTED_INITIAL_SCORE = 0;
 
     @Test
     public void shouldPreserveBlocksAfterFigurePositionUpdated() throws Exception {
@@ -425,6 +427,29 @@ public class GameScreenTest {
                 "T-Figure should be in the bottom moved right",
                 readBlocksFromFile(T_FIGURE_IN_THE_BOTTOM_MOVED_RIGHT),
                 gameScreen.getGameData()
+        );
+    }
+
+    @Test
+    public void shouldGainScoreFor2Rows() throws Exception {
+        GameScreen gameScreen = new GameScreen(
+                UNUSED_GAME_GRID,
+                UNUSED_PROVIDER
+        );
+        gameScreen.setBlocks(readBlocksFromFile(FILLED_ROWS));
+
+        Assert.assertEquals(
+                "Should properly set initial score",
+                EXPECTED_INITIAL_SCORE,
+                gameScreen.getScore()
+        );
+
+        gameScreen.eraseFilledRows();
+
+        Assert.assertEquals(
+                "Should increase game score",
+                EXPECTED_INITIAL_SCORE + GameScreen.SCORE_FOR_2_ROWS,
+                gameScreen.getScore()
         );
     }
 }

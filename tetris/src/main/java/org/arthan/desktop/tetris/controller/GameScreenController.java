@@ -1,12 +1,9 @@
 package org.arthan.desktop.tetris.controller;
 
 import com.google.common.collect.Lists;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import org.arthan.desktop.tetris.model.figure.Figure;
 import org.arthan.desktop.tetris.model.figure.FigureOnScreen;
@@ -25,6 +22,8 @@ public class GameScreenController {
     public static final int FASTEST_STEP_MILLIS = 100;
 
     @FXML
+    public Label currentScoreLabel;
+    @FXML
     private Label currentSpeedLabel;
     @FXML
     GridPane gameGrid;
@@ -33,7 +32,8 @@ public class GameScreenController {
 
     public void initialize() {
         game = new Game(gameGrid);
-        currentSpeedLabel.textProperty().bind(game.getSpeedProperty().asString());
+        currentSpeedLabel.textProperty().bind(game.speedProperty().asString());
+        currentScoreLabel.textProperty().bind(game.scoreProperty().asString());
 
         gameGrid.getParent().getParent().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.UP) {
@@ -184,6 +184,15 @@ public class GameScreenController {
                         new Pixel(6, 1),
                         new Pixel(6, 2),
                         new Pixel(6, 3)
+                )
+        );
+    }
+
+    public void test_set_blocks_for_score_gain() {
+        game.getGameScreen().setBlocks(
+                Lists.newArrayList(
+                        new Pixel(0, 18), new Pixel(1, 18), new Pixel(2, 18), new Pixel(3, 18), new Pixel(6, 18), new Pixel(7, 18), new Pixel(8, 18), new Pixel(9, 18),
+                        new Pixel(0, 19), new Pixel(1, 19), new Pixel(2, 19), new Pixel(3, 19), new Pixel(6, 19), new Pixel(7, 19), new Pixel(8, 19), new Pixel(9, 19)
                 )
         );
     }
