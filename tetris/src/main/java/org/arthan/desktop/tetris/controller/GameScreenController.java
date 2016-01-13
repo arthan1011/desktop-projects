@@ -29,6 +29,7 @@ public class GameScreenController {
     GridPane gameGrid;
 
     Game game;
+    private int currentSpeed;
 
     public void initialize() {
         game = new Game(gameGrid);
@@ -48,7 +49,16 @@ public class GameScreenController {
             if (event.getCode() == KeyCode.CONTROL) {
                 goBottom();
             }
+            if (event.getCode() == KeyCode.DOWN) {
+                currentSpeed = game.getSpeed();
+                game.changeSpeed(9);
+            }
+        });
 
+        gameGrid.getParent().getParent().setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.DOWN) {
+                game.changeSpeed(1);
+            }
         });
     }
 
